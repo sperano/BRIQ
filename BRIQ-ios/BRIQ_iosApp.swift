@@ -9,6 +9,12 @@ import SwiftUI
 
 @main
 struct BRIQ_iosApp: App {
+    @StateObject private var initializationState = InitializationState()
+
+    init() {
+        initThemesTree()
+    }
+
     var body: some Scene {
         WindowGroup {
             ContentView()

@@ -1,0 +1,42 @@
+//
+//  SetDetail.swift
+//  BRIQ
+//
+//  Created by Éric Spérano on 7/25/25.
+//
+
+import SwiftUI
+import SwiftData
+
+struct SetDetail: View {
+    @Bindable var set: Set
+    var selectedSet: Binding<Set?>? = nil
+    
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                #if os(iOS)
+                SetImageDisplay(set: set)
+                SetDetailFields(set: set, selectedSet: selectedSet)
+                #elseif os(macOS)
+                HStack(alignment: .top) {
+                    SetImageDisplay(set: set)
+                    SetDetailFields(set: set, selectedSet: selectedSet)
+                        .padding(.leading, 10)
+                }
+                #endif
+                SetContentSection(set: set)
+                Spacer()
+            }
+            .navigationTitle("\(set.number): \(set.name)")
+        }
+        .padding()
+    }
+}
+
+#if DEBUG
+//#Preview {
+//    SetDetail(set: Set.sampleData[0])
+//        .modelContainer(SampleData.shared.modelContainer)
+//}
+#endif
