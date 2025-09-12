@@ -18,6 +18,8 @@ struct SetList: View {
 
     #if os(macOS)
     @AppStorage("viewMode") private var viewMode: SetListViewMode = .icon
+    #elseif os(iOS)
+    @AppStorage("viewMode") private var viewMode: SetListViewMode = .icon
     #endif
     @AppStorage("filterFavoriteThemes") private var filterFavoriteThemes = true
     @AppStorage("filterOwnedState") private var filterOwnedState = 0 // 0=all, 1=owned, 2=not owned
@@ -30,18 +32,6 @@ struct SetList: View {
     public var favoriteThemes: Swift.Set<Int> {
         Swift.Set(favoriteThemesString.split(separator: ",").compactMap { Int($0) })
     }
-
-//    private var totalMinifigs: Int {
-//        baseSetList.sets.reduce(0) { total, set in
-//            total + set.minifigsCount
-//        }
-//    }
-//
-//    private var totalParts: Int {
-//        baseSetList.sets.reduce(0) { total, set in
-//            total + set.actualPartsCount
-//        }
-//    }
 
     var body: some View {
         VStack {
@@ -56,6 +46,12 @@ struct SetList: View {
                     SetListTableView(sets: sets, viewMode: $viewMode, showFilter: $showFilter, selectedTheme: $selectedTheme)
                 }
                 #elseif os(iOS)
+                switch viewMode {
+                case .icon:
+                    SetListIconView(sets: sets, viewMode: $viewMode, showFilter: $showFilter, selectedTheme: $selectedTheme)
+                case .list:
+                    SetListIconView(sets: sets, viewMode: $viewMode, showFilter: $showFilter, selectedTheme: $selectedTheme)
+                }
                 #endif
             }
             .navigationTitle("Sets")
