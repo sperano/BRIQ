@@ -68,7 +68,15 @@ struct SetList: View {
         .onChange(of: selectedTheme) { loadSets() }
         #if os(iOS)
         .popover(isPresented: $showSettings) {
-            SettingsPopover()
+            SettingsPopover(
+                filterFavoriteThemes: $filterFavoriteThemes,
+                filterOwnedState: $filterOwnedState,
+                filterFavoriteState: $filterFavoriteState,
+                excludePackages: $excludePackages,
+                excludeUnreleased: $excludeUnreleased,
+                excludeAccessories: $excludeAccessories,
+                displayUSNumbers: $displayUSNumbers
+            )
         }
         #endif
     }

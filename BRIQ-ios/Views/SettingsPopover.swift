@@ -10,23 +10,40 @@ import SwiftUI
 struct SettingsPopover: View {
     @Environment(\.dismiss) private var dismiss
 
+    // Pass bindings from parent
+    @Binding var filterFavoriteThemes: Bool
+    @Binding var filterOwnedState: Int
+    @Binding var filterFavoriteState: Int
+    @Binding var excludePackages: Bool
+    @Binding var excludeUnreleased: Bool
+    @Binding var excludeAccessories: Bool
+    @Binding var displayUSNumbers: Bool
+
     var body: some View {
         NavigationView {
             List {
                 NavigationLink {
-                    OwnershipFiltersSettings()
+                    OwnershipFiltersSettings(
+                        filterFavoriteThemes: $filterFavoriteThemes,
+                        filterOwnedState: $filterOwnedState,
+                        filterFavoriteState: $filterFavoriteState
+                    )
                 } label: {
                     Label("Ownership", systemImage: "person.circle")
                 }
 
                 NavigationLink {
-                    ExclusionFiltersSettings()
+                    ExclusionFiltersSettings(
+                        excludePackages: $excludePackages,
+                        excludeUnreleased: $excludeUnreleased,
+                        excludeAccessories: $excludeAccessories
+                    )
                 } label: {
                     Label("Exclusions", systemImage: "eye.slash")
                 }
 
                 NavigationLink {
-                    DisplaySettings()
+                    DisplaySettings(displayUSNumbers: $displayUSNumbers)
                 } label: {
                     Label("US Numbers", systemImage: "eye")
                 }
@@ -51,9 +68,9 @@ struct SettingsPopover: View {
 }
 
 struct OwnershipFiltersSettings: View {
-    @AppStorage("filterFavoriteThemes") private var filterFavoriteThemes = false
-    @AppStorage("filterOwnedState") private var filterOwnedState = 0 // 0=all, 1=owned, 2=not owned
-    @AppStorage("filterFavoriteState") private var filterFavoriteState = 0 // 0=all, 1=favorite, 2=not favorite
+    @Binding var filterFavoriteThemes: Bool
+    @Binding var filterOwnedState: Int
+    @Binding var filterFavoriteState: Int
 
     var body: some View {
         List {
@@ -93,9 +110,9 @@ struct OwnershipFiltersSettings: View {
 }
 
 struct ExclusionFiltersSettings: View {
-    @AppStorage("excludePackages") private var excludePackages = true
-    @AppStorage("excludeUnreleased") private var excludeUnreleased = true
-    @AppStorage("excludeAccessories") private var excludeAccessories = true
+    @Binding var excludePackages: Bool
+    @Binding var excludeUnreleased: Bool
+    @Binding var excludeAccessories: Bool
 
     var body: some View {
         List {
@@ -119,7 +136,7 @@ struct ExclusionFiltersSettings: View {
 }
 
 struct DisplaySettings: View {
-    @AppStorage("displayUSNumbers") private var displayUSNumbers = false
+    @Binding var displayUSNumbers: Bool
 
     var body: some View {
         List {
@@ -147,5 +164,13 @@ struct ThemesSettings: View {
 }
 
 #Preview {
-    SettingsPopover()
+    SettingsPopover(
+        filterFavoriteThemes: .constant(false),
+        filterOwnedState: .constant(0),
+        filterFavoriteState: .constant(0),
+        excludePackages: .constant(true),
+        excludeUnreleased: .constant(true),
+        excludeAccessories: .constant(true),
+        displayUSNumbers: .constant(false)
+    )
 }

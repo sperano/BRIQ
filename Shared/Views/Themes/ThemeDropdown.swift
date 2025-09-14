@@ -19,8 +19,8 @@ struct ThemeDropdown: View {
     private func buildThemeMenu() -> [ThemeMenuItem] {
         var items: [ThemeMenuItem] = []
         
-        // Add "All Themes" option
-        items.append(ThemeMenuItem(theme: nil, indentLevel: 0))
+        // Add "All Themes" or "Favorite Themes" option
+        items.append(ThemeMenuItem(theme: nil, indentLevel: 0, showingFavorites: onlyShowFavorites))
         
         // Add hierarchical themes
         let filteredThemes = onlyShowFavorites ? ThemesTree.filter { hasSelectedDescendant($0) } : ThemesTree
@@ -36,8 +36,8 @@ struct ThemeDropdown: View {
         
         // Add current theme if it should be shown
         if !onlyShowFavorites || hasSelectedDescendant(theme) {
-            items.append(ThemeMenuItem(theme: theme, indentLevel: indentLevel))
-            
+            items.append(ThemeMenuItem(theme: theme, indentLevel: indentLevel, showingFavorites: onlyShowFavorites))
+
             // Add children recursively
             for child in theme.sortedChildren {
                 items.append(contentsOf: buildThemeMenuItems(theme: child, indentLevel: indentLevel + 1))
@@ -70,7 +70,7 @@ struct ThemeDropdown: View {
         } label: {
             HStack(spacing: 4) {
                 Image(systemName: "tag")
-                Text(selectedTheme?.name ?? "All Themes")
+                Text(selectedTheme?.name ?? (onlyShowFavorites ? "Favorite Themes" : "All Themes"))
                 Image(systemName: "chevron.down")
                     .font(.caption2)
             }
@@ -83,9 +83,13 @@ struct ThemeMenuItem: Identifiable {
     let id = UUID()
     let theme: Theme?
     let indentLevel: Int
-    
+    let showingFavorites: Bool
+
     var displayName: String {
         let prefix = String(repeating: "  ", count: indentLevel)
+        if theme == nil {
+            return prefix + (showingFavorites ? "Favorite Themes" : "All Themes")
+        }
         return prefix + (theme?.name ?? "All Themes")
     }
 }
