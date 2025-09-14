@@ -6,11 +6,11 @@
 //
 
 import SwiftUI
-import SwiftData
+import CoreData
 
 struct SetList: View {
-    @Environment(\.modelContext) private var context
-    
+    @Environment(\.managedObjectContext) private var context
+
     @State private var sets: [Set] = []
     @State private var searchText = ""
     @State private var showFilter = false
@@ -76,45 +76,78 @@ struct SetList: View {
 
     private func loadSets() {
         do {
-            self.sets = try context.fetch(fetchDescriptor())
+            let request = createFetchRequest()
+            self.sets = try context.fetch(request)
         } catch {
             print("Failed to fetch sets:", error)
         }
     }
 
-    private func fetchDescriptor() -> FetchDescriptor<Set> {
-        let selectedThemeIDs = selectedTheme?.getAllThemeIDs() ?? []
-        let predicateText = #Predicate<Set> { set in
-            (searchText.isEmpty || set.number.localizedStandardContains(searchText)
-            || set.name.localizedStandardContains(searchText))
+    private func createFetchRequest() -> NSFetchRequest<Set> {
+        let request = Set.fetchRequest()
+
+        var predicates: [NSPredicate] = []
+
+        // Search text filter
+        if !searchText.isEmpty {
+            let searchPredicate = NSPredicate(format: "number CONTAINS[cd] %@ OR name CONTAINS[cd] %@", searchText, searchText)
+            predicates.append(searchPredicate)
         }
-        let predicateOwned = #Predicate<Set> { set in
-            (filterOwnedState == 0 || (filterOwnedState == 1 && set.userData?.owned == true) || (filterOwnedState == 2 && (set.userData == nil || set.userData?.owned == false)))
+
+        // Owned state filter
+        switch filterOwnedState {
+        case 1: // owned only
+            predicates.append(NSPredicate(format: "userData.owned == YES"))
+        case 2: // not owned only
+            predicates.append(NSPredicate(format: "userData.owned == NO OR userData == nil"))
+        default: break // all
         }
-        let predicateFavorite = #Predicate<Set> { set in
-            (filterFavoriteState == 0 || (filterFavoriteState == 1 && set.userData?.favorite == true) || (filterFavoriteState == 2 && (set.userData == nil || set.userData?.favorite == false)))
+
+        // Favorite state filter
+        switch filterFavoriteState {
+        case 1: // favorites only
+            predicates.append(NSPredicate(format: "userData.favorite == YES"))
+        case 2: // not favorites only
+            predicates.append(NSPredicate(format: "userData.favorite == NO OR userData == nil"))
+        default: break // all
         }
-        let predicateFromFavoriteThemes = #Predicate<Set> { set in
-            (!filterFavoriteThemes || favoriteThemes.contains(set.themeID))
+
+        // Theme filter
+        if let selectedTheme = selectedTheme {
+            let themeIDs = selectedTheme.getAllThemeIDs()
+            let themeArray = Array(themeIDs).map { NSNumber(value: $0) }
+            predicates.append(NSPredicate(format: "themeID IN %@", themeArray))
+        } else if filterFavoriteThemes {
+            let themeArray = Array(favoriteThemes).map { NSNumber(value: $0) }
+            predicates.append(NSPredicate(format: "themeID IN %@", themeArray))
         }
-        let predicateFlags = #Predicate<Set> { set in
-            (!excludePackages || !set.isPack) &&
-            (!excludeUnreleased || !set.isUnreleased) &&
-            (!excludeAccessories || !set.isAccessory)
+
+        // Exclusion filters
+        if excludePackages {
+            predicates.append(NSPredicate(format: "isPack == NO"))
         }
-        let predicateUSNumbers = #Predicate<Set> { set in
-            (displayUSNumbers || !set.isUSNumber)
+        if excludeUnreleased {
+            predicates.append(NSPredicate(format: "isUnreleased == NO"))
         }
-        let predicateSelectedTheme = #Predicate<Set> { set in
-            selectedThemeIDs.contains(set.themeID)
+        if excludeAccessories {
+            predicates.append(NSPredicate(format: "isAccessory == NO"))
         }
-        let themeFilterPredicate = selectedTheme == nil ? predicateFromFavoriteThemes : predicateSelectedTheme
-        let complexPredicate = #Predicate<Set> { set in
-            predicateText.evaluate(set) && predicateOwned.evaluate(set) && predicateFavorite.evaluate(set) && themeFilterPredicate.evaluate(set) && predicateFlags.evaluate(set) && predicateUSNumbers.evaluate(set)
+
+        // US numbers filter
+        if !displayUSNumbers {
+            predicates.append(NSPredicate(format: "isUSNumber == NO"))
         }
-        return FetchDescriptor(
-            predicate: complexPredicate,
-            sortBy: [SortDescriptor(\Set.year), SortDescriptor(\Set.number)]
-        )
+
+        if !predicates.isEmpty {
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+        }
+
+        // Sort descriptors
+        request.sortDescriptors = [
+            NSSortDescriptor(key: "year", ascending: true),
+            NSSortDescriptor(key: "number", ascending: true)
+        ]
+
+        return request
     }
 }

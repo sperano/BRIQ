@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import SwiftData
+import CoreData
 import ZIPFoundation
 
 struct JSONPart: Decodable {
@@ -57,31 +57,41 @@ struct JSONData: Decodable {
     let sets: [JSONSet]
 }
 
-func loadMinifigs(_ backgroundContext: ModelContext, data: JSONData) -> [String: Minifig] {
+func loadMinifigs(_ context: NSManagedObjectContext, data: JSONData) -> [String: Minifig] {
     var minifigs = [String: Minifig]()
     for minifig in data.minifigs {
-        let minif = Minifig(number: minifig.number, name: minifig.name, partsCount: minifig.parts_count, imageURL: minifig.img_url)
-        backgroundContext.insert(minif)
+        let minif = Minifig.create(
+            in: context,
+            number: minifig.number,
+            name: minifig.name,
+            partsCount: Int32(minifig.parts_count),
+            imageURL: minifig.img_url
+        )
         minifigs[minif.number] = minif
     }
     return minifigs
 }
 
-func loadParts(_ backgroundContext: ModelContext, data: JSONData) -> [String: Part] {
+func loadParts(_ context: NSManagedObjectContext, data: JSONData) -> [String: Part] {
     var parts = [String: Part]()
     for part in data.parts {
-        let p = Part(number: part.number, name: part.name, material: part.material, category: part.part_category_id)
-        backgroundContext.insert(p)
+        let p = Part.create(
+            in: context,
+            number: part.number,
+            name: part.name,
+            material: part.material,
+            category: Int32(part.part_category_id)
+        )
         parts[p.number] = p
     }
     return parts
 }
 
 struct BundledData {
-    static func loadAll(modelContainer: ModelContainer, progress: @escaping (Int, Double) async -> Void) async {
+    static func loadAll(coreDataStack: CoreDataStack, progress: @escaping (Int, Double) async -> Void) async {
         // Create background context for heavy data operations
-        let backgroundContext = ModelContext(modelContainer)
-        let batch_size = 500  // Increased batch size
+        let backgroundContext = coreDataStack.newBackgroundContext()
+        let batch_size = 1250  // Increased batch size
         let progress_interval = 100  // Update UI less frequently
         let fileManager = FileManager.default
         if let zipURL = Bundle.main.url(forResource: "init", withExtension: "zip") {
@@ -96,10 +106,10 @@ struct BundledData {
                 let decoded = try JSONDecoder().decode(JSONData.self, from: jsonData)
                 
                 let minifigs = loadMinifigs(backgroundContext, data: decoded)
-                try? backgroundContext.save()
+                try await coreDataStack.saveBackgroundContext(backgroundContext)
 
                 let parts = loadParts(backgroundContext, data: decoded)
-                try? backgroundContext.save()
+                try await coreDataStack.saveBackgroundContext(backgroundContext)
 
                 let total = Double(decoded.sets.count)
                 var i = 1
@@ -110,50 +120,58 @@ struct BundledData {
                 setsBatch.reserveCapacity(batch_size)
                 
                 for set in decoded.sets {
-                    // Pre-allocate collections
-                    var setMinifigs = [SetMinifig]()
-                    setMinifigs.reserveCapacity(set.minifigs.count)
-                    for minifigData in set.minifigs {
-                        if let minifig = minifigs[minifigData.number] {
-                            setMinifigs.append(SetMinifig(minifig: minifig, quantity: minifigData.quantity))
-                        }
-                    }
-                    
-                    var setParts = [SetPart]()
-                    setParts.reserveCapacity(set.parts.count)
-                    for partData in set.parts {
-                        if let part = parts[partData.number] {
-                            setParts.append(SetPart(part: part, colorID: partData.color_id, quantity: partData.quantity, imageURL: partData.img_url))
-                        }
-                    }
-                    
-                    let newSet = Set(
+                    // Create the set entity
+                    let newSet = Set.create(
+                        in: backgroundContext,
                         number: set.number,
                         isUSNumber: set.is_us_number,
                         name: set.name,
-                        year: set.year,
+                        year: Int32(set.year),
                         imageURL: set.img_url,
-                        partsCount: set.parts_count,
-                        themeID: Int(set.theme_id),
-                        minifigs: setMinifigs,
-                        parts: setParts,
+                        partsCount: Int32(set.parts_count),
+                        themeID: Int32(set.theme_id),
                         sameAsNumber: set.same_as_number,
                         isPack: set.is_pack,
                         isUnreleased: set.is_unreleased,
                         isAccessory: set.is_accessories
                     )
-                    
+
+                    // Add minifigs to set
+                    for minifigData in set.minifigs {
+                        if let minifig = minifigs[minifigData.number] {
+                            let setMinifig = SetMinifig.create(
+                                in: backgroundContext,
+                                minifig: minifig,
+                                quantity: Int32(minifigData.quantity)
+                            )
+                            setMinifig.set = newSet
+                        }
+                    }
+
+                    // Add parts to set
+                    for partData in set.parts {
+                        if let part = parts[partData.number] {
+                            let setPart = SetPart.create(
+                                in: backgroundContext,
+                                part: part,
+                                colorID: Int32(partData.color_id),
+                                quantity: Int32(partData.quantity),
+                                imageURL: partData.img_url
+                            )
+                            setPart.set = newSet
+                        }
+                    }
+
                     // Update progress less frequently
                     if i % progress_interval == 0 {
                         let ix = i
                         await progress(ix, Double(ix)/total)
                     }
-                    
-                    backgroundContext.insert(newSet)
+
                     j += 1
-                    
+
                     if j == batch_size {
-                        try? backgroundContext.save()
+                        try await coreDataStack.saveBackgroundContext(backgroundContext)
                         j = 0
                     }
                     i += 1
@@ -161,7 +179,7 @@ struct BundledData {
                 
                 // Save any remaining items
                 if j > 0 {
-                    try? backgroundContext.save()
+                    try await coreDataStack.saveBackgroundContext(backgroundContext)
                 }
                 
                 await progress(decoded.sets.count, 1.0)

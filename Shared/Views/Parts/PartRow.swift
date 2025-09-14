@@ -14,7 +14,7 @@ struct PartRow: View {
         HStack {
             Text("\(part.quantity) x")
             RowImage(url: part.imageURL ?? "placeholder.png")
-            Text(part.part.name)
+            Text(part.part?.name ?? "Unknown Part")
         }
         //.padding(.horizontal)
     }

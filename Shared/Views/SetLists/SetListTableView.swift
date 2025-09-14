@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import SwiftData
+import CoreData
 
 struct SetListTableView: View {
     var sets: [Set]
@@ -116,7 +116,7 @@ struct SetListTableView: View {
     private var instructionsQualityColumn: some TableColumnContent<Set, Never> {
         TableColumn("Instr. Quality") { set in
             NavigationLink(destination: SetDetail(set: set)) {
-                StarRatingView(rating: .constant(set.userData?.instructionsQuality ?? 0), isInteractive: false)
+                StarRatingView(rating: .constant(Int(set.userData?.instructionsQuality ?? 0)), isInteractive: false)
                     .font(.caption)
             }
             .buttonStyle(.plain)

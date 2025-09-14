@@ -6,50 +6,22 @@
 //
 
 import Foundation
-import SwiftData
+import CoreData
 
-public func resetDefaultStore(modelTypes: [any PersistentModel.Type]) throws -> ModelContainer {
-    print("Resetting default store...")
-    
-    // 1. Figure out where SwiftData puts default.store
-    let supportURL = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-    let storeURL = supportURL.appendingPathComponent("default.store")
-    print("Store location: \(storeURL.path)")
-
-    // 2. Delete old store files if they exist
-    let fm = FileManager.default
-    var deletedFiles: [String] = []
-    for ext in ["", "-wal", "-shm"] {
-        let url = URL(fileURLWithPath: storeURL.path + ext)
-        if fm.fileExists(atPath: url.path) {
-            try fm.removeItem(at: url)
-            deletedFiles.append(url.lastPathComponent)
-        }
-    }
-    
-    if !deletedFiles.isEmpty {
-        print("Deleted old store files: \(deletedFiles.joined(separator: ", "))")
-    } else {
-        print("No existing store files found to delete")
-    }
-
-    // 3. Create a fresh container (like app launch)
-    let config = ModelConfiguration(url: storeURL)
-    let schema = Schema(modelTypes)
-    let container = try ModelContainer(for: schema, configurations: config)
-    
-    print("Successfully created new model container")
-    return container
+// This function is no longer needed - CoreDataStack handles reset functionality
+@available(*, deprecated, message: "Use CoreDataStack.resetStore() instead")
+public func resetDefaultStore() throws {
+    try CoreDataStack.shared.resetStore()
 }
 
-public func exportUserData(modelContext: ModelContext) -> String? {
+public func exportUserData(context: NSManagedObjectContext) -> String? {
     do {
-        let request = FetchDescriptor<SetUserData>()
-        let userDataList = try modelContext.fetch(request)
-        
+        let request = SetUserData.fetchRequest()
+        let userDataList = try context.fetch(request)
+
         var exportData: [String: Any] = [:]
         var userData: [[String: Any]] = []
-        
+
         for setUserData in userDataList {
             let data: [String: Any] = [
                 "number": setUserData.number,
@@ -60,11 +32,11 @@ public func exportUserData(modelContext: ModelContext) -> String? {
             ]
             userData.append(data)
         }
-        
+
         exportData["userData"] = userData
         exportData["exportDate"] = ISO8601DateFormatter().string(from: Date())
         exportData["version"] = "1.0"
-        
+
         let jsonData = try JSONSerialization.data(withJSONObject: exportData, options: .prettyPrinted)
         return String(data: jsonData, encoding: .utf8)
     } catch {
@@ -73,43 +45,42 @@ public func exportUserData(modelContext: ModelContext) -> String? {
     }
 }
 
-public func importUserData(modelContext: ModelContext, jsonString: String) {
+public func importUserData(context: NSManagedObjectContext, jsonString: String) {
     do {
         guard let jsonData = jsonString.data(using: .utf8) else {
             print("Failed to convert string to data")
             return
         }
-        
+
         let importData = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any]
         guard let importData = importData,
               let userData = importData["userData"] as? [[String: Any]] else {
             print("Invalid import data format")
             return
         }
-        
+
         // Clear existing user data
-        let deleteRequest = FetchDescriptor<SetUserData>()
-        let existingUserData = try modelContext.fetch(deleteRequest)
+        let deleteRequest = SetUserData.fetchRequest()
+        let existingUserData = try context.fetch(deleteRequest)
         for data in existingUserData {
-            modelContext.delete(data)
+            context.delete(data)
         }
-        
+
         // Import new user data
         for data in userData {
             guard let number = data["number"] as? String else { continue }
-            
-            let setUserData = SetUserData(
+
+            _ = SetUserData.create(
+                in: context,
                 number: number,
                 owned: data["owned"] as? Bool ?? false,
                 favorite: data["favorite"] as? Bool ?? false,
                 ownsInstructions: data["ownsInstructions"] as? Bool ?? false,
-                instructionsQuality: data["instructionsQuality"] as? Int ?? 0
+                instructionsQuality: Int32(data["instructionsQuality"] as? Int ?? 0)
             )
-            
-            modelContext.insert(setUserData)
         }
-        
-        try modelContext.save()
+
+        try context.save()
         print("Successfully imported \(userData.count) user data entries")
     } catch {
         print("Failed to import user data: \(error)")
