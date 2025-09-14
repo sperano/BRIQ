@@ -14,9 +14,9 @@ struct PartsIconView: View {
         IconGridView(
             items: parts,
             imageURL: { $0.imageURL ?? "placeholder.png" },
-            quantity: { $0.quantity },
-            number: { $0.part.number },
-            name: { $0.part.name }
+            quantity: { Int($0.quantity) },
+            number: { $0.part?.number ?? "Unknown" },
+            name: { $0.part?.name ?? "Unknown Part" }
         )
     }
 }

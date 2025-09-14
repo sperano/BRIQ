@@ -13,10 +13,10 @@ struct MinifigsIconView: View {
     var body: some View {
         IconGridView(
             items: minifigs,
-            imageURL: { $0.minifig.imageURL ?? "" },
-            quantity: { $0.quantity },
-            number: { $0.minifig.number },
-            name: { $0.minifig.name }
+            imageURL: { $0.minifig?.imageURL ?? "placeholder.png" },
+            quantity: { Int($0.quantity) },
+            number: { $0.minifig?.number ?? "Unknown" },
+            name: { $0.minifig?.name ?? "Unknown Minifig" }
         )
     }
 }

@@ -13,8 +13,8 @@ struct MinifigRow: View {
     var body: some View {
         HStack {
             Text("\(minifig.quantity) x")
-            RowImage(url: minifig.minifig.imageURL ?? "") // TODO
-            Text(minifig.minifig.name)
+            RowImage(url: minifig.minifig?.imageURL ?? "placeholder.png")
+            Text(minifig.minifig?.name ?? "Unknown Minifig")
         }
         //.padding(.horizontal)
     }

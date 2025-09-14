@@ -6,11 +6,11 @@
 //
 
 import SwiftUI
-import SwiftData
+import CoreData
 
 struct SetUserDataManager {
     let set: Set
-    let context: ModelContext
+    let context: NSManagedObjectContext
     
     var ownedBinding: Binding<Bool> {
         Binding(
@@ -19,7 +19,7 @@ struct SetUserDataManager {
                 ensureUserData()
                 set.userData?.owned = newValue
                 cleanupIfNeeded()
-                try? context.save()
+                do { try context.save() } catch { print("Save error: \(error)") }
             }
         )
     }
@@ -31,7 +31,7 @@ struct SetUserDataManager {
                 ensureUserData()
                 set.userData?.favorite = newValue
                 cleanupIfNeeded()
-                try? context.save()
+                do { try context.save() } catch { print("Save error: \(error)") }
             }
         )
     }
@@ -43,27 +43,26 @@ struct SetUserDataManager {
                 ensureUserData()
                 set.userData?.ownsInstructions = newValue
                 cleanupIfNeeded()
-                try? context.save()
+                do { try context.save() } catch { print("Save error: \(error)") }
             }
         )
     }
     
     var instructionsQualityBinding: Binding<Int> {
         Binding(
-            get: { set.userData?.instructionsQuality ?? 0 },
+            get: { Int(set.userData?.instructionsQuality ?? 0) },
             set: { newValue in
                 ensureUserData()
-                set.userData?.instructionsQuality = newValue
+                set.userData?.instructionsQuality = Int32(newValue)
                 cleanupIfNeeded()
-                try? context.save()
+                do { try context.save() } catch { print("Save error: \(error)") }
             }
         )
     }
     
     private func ensureUserData() {
         if set.userData == nil {
-            let userData = SetUserData(number: set.number)
-            context.insert(userData)
+            let userData = SetUserData.create(in: context, number: set.number)
             set.userData = userData
         }
     }

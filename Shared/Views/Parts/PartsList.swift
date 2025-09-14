@@ -12,7 +12,7 @@ struct PartsList: View {
     let viewMode: ViewMode
     
     private var sortedParts: [SetPart] {
-        parts.sorted { $0.part.number < $1.part.number }
+        parts.sorted { ($0.part?.number ?? "") < ($1.part?.number ?? "") }
     }
     
     var body: some View {

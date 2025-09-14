@@ -6,7 +6,7 @@
 //
 
 import UniformTypeIdentifiers
-import SwiftData
+import CoreData
 import SwiftUI
 
 public func saveUserDataToFile(_ data: String) {

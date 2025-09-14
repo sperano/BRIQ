@@ -6,10 +6,10 @@
 //
 
 import SwiftUI
-import SwiftData
+import CoreData
 
 struct SetDetail: View {
-    @Bindable var set: Set
+    @ObservedObject var set: Set
     var selectedSet: Binding<Set?>? = nil
     
     var body: some View {

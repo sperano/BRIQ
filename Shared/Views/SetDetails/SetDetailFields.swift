@@ -6,20 +6,19 @@
 //
 
 import SwiftUI
-import SwiftData
+import CoreData
 
 struct SetDetailFields: View {
-    @Bindable var set: Set
+    @ObservedObject var set: Set
     var selectedSet: Binding<Set?>? = nil
-    @Environment(\.modelContext) private var context
-    
+    @Environment(\.managedObjectContext) private var context
+
     private var userDataManager: SetUserDataManager {
         SetUserDataManager(set: set, context: context)
     }
-    
+
     private func findSetByNumber(_ number: String) -> Set? {
-        let descriptor = FetchDescriptor<Set>(predicate: #Predicate { $0.number == number })
-        return try? context.fetch(descriptor).first
+        return Set.fetch(byNumber: number, in: context)
     }
 
     var body: some View {
@@ -52,7 +51,7 @@ struct SetDetailFields: View {
                 )),
                 ("Year Released", AnyView(Text(String(set.year)))),
                 ("Pieces", AnyView(Text("\(set.partsCount)"))),
-                ("Theme", AnyView(Text(AllThemes[set.themeID].name))),
+                ("Theme", AnyView(Text(set.themeName))),
                 ("In Collection", AnyView(
                     Toggle("", isOn: userDataManager.ownedBinding)
                 )),

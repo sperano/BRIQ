@@ -6,14 +6,14 @@
 //
 
 import SwiftUI
-import SwiftData
+import CoreData
 
 struct ContentView: View {
-    let modelContainer: ModelContainer
-    @Environment(\.modelContext) private var context
+    @Environment(\.managedObjectContext) private var context
+    @EnvironmentObject var coreDataStack: CoreDataStack
     @AppStorage("hasInitialized") private var hasInitialized: Bool = false
     @EnvironmentObject var initializationState: InitializationState
-    
+
     @State private var count: Int = 0
     @State private var progress: Double = 0
 
@@ -47,7 +47,7 @@ struct ContentView: View {
     }
     
     func initDB() async {
-        await BundledData.loadAll(modelContainer: modelContainer) { newCount, newProgress in
+        await BundledData.loadAll(coreDataStack: coreDataStack) { newCount, newProgress in
             await MainActor.run {
                 self.count = newCount
                 self.progress = newProgress

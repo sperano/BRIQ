@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import SwiftData
+import CoreData
 
 struct SetListIconView: View {
     var sets: [Set]

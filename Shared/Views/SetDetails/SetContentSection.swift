@@ -22,11 +22,11 @@ struct SetContentSection: View {
     }
     
     private var totalMinifigs: Int {
-        return set.minifigs.reduce(0) { sum, minifig in sum + minifig.quantity }
+        return set.minifigsCount
     }
-    
+
     private var totalParts: Int {
-        return set.parts.reduce(0) { sum, part in sum + part.quantity }
+        return set.actualPartsCount
     }
     
     var body: some View {
@@ -45,11 +45,11 @@ struct SetContentSection: View {
             Text("\(totalMinifigs) mini-figurines:")
                 .font(.title2)
                 .fontWeight(.bold)
-            MinifigList(minifigs: set.minifigs, viewMode: viewMode)
+            MinifigList(minifigs: (set.minifigs?.allObjects as? [SetMinifig]) ?? [], viewMode: viewMode)
             Text("\(totalParts) parts:")
                 .font(.title2)
                 .fontWeight(.bold)
-            PartsList(parts: set.parts, viewMode: viewMode)
+            PartsList(parts: (set.parts?.allObjects as? [SetPart]) ?? [], viewMode: viewMode)
         }
     }
 }
