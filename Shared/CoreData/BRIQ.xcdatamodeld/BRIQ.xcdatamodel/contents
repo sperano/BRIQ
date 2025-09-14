@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22522" systemVersion="23G93" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="Minifig" representedClassName="Minifig" syncable="YES">
+    <entity name="Foo" representedClassName="Foo" syncable="YES">
+        <attribute name="babeu" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="Minifig" representedClassName="Minifig" syncable="NO">
         <attribute name="imageURL" optional="YES" attributeType="String"/>
         <attribute name="name" attributeType="String"/>
         <attribute name="number" attributeType="String"/>
         <attribute name="partsCount" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="setMinifigs" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="SetMinifig" inverseName="minifig" inverseEntity="SetMinifig"/>
     </entity>
-    <entity name="Part" representedClassName="Part" syncable="YES">
+    <entity name="Part" representedClassName="Part" syncable="NO">
         <attribute name="categoryRawValue" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="material" attributeType="String"/>
         <attribute name="name" attributeType="String"/>
         <attribute name="number" attributeType="String"/>
         <relationship name="setParts" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="SetPart" inverseName="part" inverseEntity="SetPart"/>
     </entity>
-    <entity name="Set" representedClassName="Set" syncable="YES">
+    <entity name="Set" representedClassName="Set" syncable="NO">
         <attribute name="imageURL" optional="YES" attributeType="String"/>
         <attribute name="isAccessory" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="isPack" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
@@ -30,19 +33,19 @@
         <relationship name="parts" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="SetPart" inverseName="set" inverseEntity="SetPart"/>
         <relationship name="userData" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="SetUserData" inverseName="set" inverseEntity="SetUserData"/>
     </entity>
-    <entity name="SetMinifig" representedClassName="SetMinifig" syncable="YES">
+    <entity name="SetMinifig" representedClassName="SetMinifig" syncable="NO">
         <attribute name="quantity" attributeType="Integer 32" defaultValueString="1" usesScalarValueType="YES"/>
         <relationship name="minifig" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Minifig" inverseName="setMinifigs" inverseEntity="Minifig"/>
         <relationship name="set" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Set" inverseName="minifigs" inverseEntity="Set"/>
     </entity>
-    <entity name="SetPart" representedClassName="SetPart" syncable="YES">
+    <entity name="SetPart" representedClassName="SetPart" syncable="NO">
         <attribute name="colorID" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="imageURL" optional="YES" attributeType="String"/>
         <attribute name="quantity" attributeType="Integer 32" defaultValueString="1" usesScalarValueType="YES"/>
         <relationship name="part" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Part" inverseName="setParts" inverseEntity="Part"/>
         <relationship name="set" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Set" inverseName="parts" inverseEntity="Set"/>
     </entity>
-    <entity name="SetUserData" representedClassName="SetUserData" syncable="YES">
+    <entity name="SetUserData" representedClassName="SetUserData" syncable="NO">
         <attribute name="favorite" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="instructionsQuality" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="number" attributeType="String"/>

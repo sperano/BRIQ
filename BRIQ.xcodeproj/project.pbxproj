@@ -26,6 +26,7 @@
 				BundledData.swift,
 				CoreData/BRIQ.xcdatamodeld,
 				CoreData/CoreDataStack.swift,
+				"CoreData/Foo+CoreDataClass.swift",
 				"CoreData/Minifig+CoreDataClass.swift",
 				"CoreData/Part+CoreDataClass.swift",
 				"CoreData/Set+CoreDataClass.swift",
@@ -81,6 +82,7 @@
 				BundledData.swift,
 				CoreData/BRIQ.xcdatamodeld,
 				CoreData/CoreDataStack.swift,
+				"CoreData/Foo+CoreDataClass.swift",
 				"CoreData/Minifig+CoreDataClass.swift",
 				"CoreData/Part+CoreDataClass.swift",
 				"CoreData/Set+CoreDataClass.swift",
@@ -462,6 +464,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "BRIQ-macos/BRIQ-macos.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -506,6 +509,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "BRIQ-macos/BRIQ-macos.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;

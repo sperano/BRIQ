@@ -237,6 +237,35 @@ extension NSManagedObjectContext {
     }
 }
 
+// MARK: - Foo Sample Data
+extension Foo {
+    @MainActor
+    static var sampleData: [Foo] {
+        let context = SampleDataHelper.shared.context
+        let request = Foo.fetchRequest()
+
+        do {
+            return try context.fetch(request)
+        } catch {
+            print("Failed to fetch sample Foo: \(error)")
+            return []
+        }
+    }
+
+    @MainActor
+    static var sampleFoo: Foo {
+        return sampleData.first ?? createFallbackFoo()
+    }
+
+    @MainActor
+    private static func createFallbackFoo() -> Foo {
+        let context = SampleDataHelper.shared.context
+        let foo = Foo(context: context)
+        foo.babeu = 42
+        return foo
+    }
+}
+
 // MARK: - Theme Sample Data
 extension Theme {
     static var sampleTheme: Theme {

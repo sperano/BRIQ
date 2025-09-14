@@ -49,6 +49,9 @@ class SampleDataProvider {
         // Create sample sets
         let sets = createSampleSets(in: context)
 
+        // Create sample Foo entities
+        let foos = createSampleFoos(in: context)
+
         // Create relationships
         createSampleRelationships(sets: sets, parts: parts, minifigs: minifigs, in: context)
 
@@ -180,6 +183,22 @@ class SampleDataProvider {
             }
 
             return set
+        }
+    }
+
+    private func createSampleFoos(in context: NSManagedObjectContext) -> [Foo] {
+        let foosData: [Int32] = [
+            42,    // The answer to everything
+            100,   // A nice round number
+            7,     // Lucky number
+            1337,  // Leet speak
+            256,   // Power of 2
+        ]
+
+        return foosData.map { babeuValue in
+            let foo = Foo(context: context)
+            foo.babeu = babeuValue
+            return foo
         }
     }
 

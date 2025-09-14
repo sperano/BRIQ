@@ -7,21 +7,31 @@
 
 import Foundation
 import CoreData
+import CloudKit
 import Combine
 
 @MainActor
 class CoreDataStack: ObservableObject {
     static let shared = CoreDataStack()
 
-    lazy var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "BRIQ")
+    lazy var persistentContainer: NSPersistentCloudKitContainer = {
+        let container = NSPersistentCloudKitContainer(name: "BRIQ")
 
-        // Configure for better performance
-        let description = container.persistentStoreDescriptions.first
-        description?.shouldInferMappingModelAutomatically = true
-        description?.shouldMigrateStoreAutomatically = true
-        description?.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
-        description?.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
+        // Get the default store description
+        guard let description = container.persistentStoreDescriptions.first else {
+            fatalError("Failed to retrieve a persistent store description.")
+        }
+
+        // Configure CloudKit container for syncable entities (Foo)
+        description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
+        description.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
+
+        // Set CloudKit container identifier - replace with your actual container ID
+        description.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(containerIdentifier: "iCloud.sperano.BRIQ")
+
+        // Configure for better performance and migration
+        description.shouldInferMappingModelAutomatically = true
+        description.shouldMigrateStoreAutomatically = true
 
         container.loadPersistentStores { _, error in
             if let error = error as NSError? {
