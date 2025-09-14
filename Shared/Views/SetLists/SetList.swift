@@ -16,11 +16,7 @@ struct SetList: View {
     @State private var showFilter = false
     @State public var selectedTheme: Theme?
 
-    #if os(macOS)
     @AppStorage("viewMode") private var viewMode: SetListViewMode = .icon
-    #elseif os(iOS)
-    @AppStorage("viewMode") private var viewMode: SetListViewMode = .icon
-    #endif
     @AppStorage("filterFavoriteThemes") private var filterFavoriteThemes = true
     @AppStorage("filterOwnedState") private var filterOwnedState = 0 // 0=all, 1=owned, 2=not owned
     @AppStorage("filterFavoriteState") private var filterFavoriteState = 0 // 0=all, 1=favorite, 2=not favorite
