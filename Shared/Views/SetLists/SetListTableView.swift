@@ -140,29 +140,11 @@ struct SetListTableView: View {
             }
         }
         .toolbar {
-            ToolbarItemGroup(placement: .primaryAction) {
-                ThemeDropdown(selectedTheme: $selectedTheme)
-                
-                Menu {
-                    ForEach(SetListViewMode.allCases, id: \.self) { mode in
-                        Button(action: {
-                            viewMode = mode
-                        }) {
-                            Label(mode.displayName, systemImage: mode.systemImage)
-                        }
-                    }
-                } label: {
-                    Image(systemName: viewMode.systemImage)
-                }
-                
-                #if os(iOS)
-                Button(action: {
-                    showFilter.toggle()
-                }) {
-                    Image(systemName: "line.3.horizontal.decrease.circle")
-                }
-                #endif
-            }
+            ThemeDropdownToolbarItem(selectedTheme: $selectedTheme)
+            ViewModeMenuToolbarItem(viewMode: $viewMode)
+            #if os(iOS)
+            SettingsButtonToolbarItem(showFilter: $showFilter)
+            #endif
         }
     }
 }

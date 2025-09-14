@@ -36,44 +36,15 @@ struct SetListIconView: View {
             .padding()
         }
         .toolbar {
-            ToolbarItemGroup(placement: .primaryAction) {
-                ThemeDropdown(selectedTheme: $selectedTheme)
-                
-                HStack(spacing: 4) {
-                    Image(systemName: "minus.magnifyingglass")
-                        .foregroundStyle(Color.secondary)
-                        .font(.caption)
-                    
-                    Slider(value: $iconSize, in: 80...400, step: 20)
-                        .frame(width: 80)
-                    
-                    Image(systemName: "plus.magnifyingglass")
-                        .foregroundStyle(Color.secondary)
-                        .font(.caption)
-                }
-                
-                Menu {
-                    ForEach(SetListViewMode.allCases, id: \.self) { mode in
-                        Button(action: {
-                            viewMode = mode
-                        }) {
-                            Label(mode.displayName, systemImage: mode.systemImage)
-                        }
-                    }
-                } label: {
-                    Image(systemName: viewMode.systemImage)
-                }
-                
-#if os(iOS)
-                Button(action: {
-                    showFilter.toggle()
-                }) {
-                    Image(systemName: "line.3.horizontal.decrease.circle")
-                }
-#endif
-            }
-        }
-        
+            ThemeDropdownToolbarItem(selectedTheme: $selectedTheme)
+            #if !os(iOS)
+            IconSizeSliderToolbarItem(iconSize: $iconSize)
+            #endif
+            ViewModeMenuToolbarItem(viewMode: $viewMode)
+            #if os(iOS)
+            SettingsButtonToolbarItem(showFilter: $showFilter)
+            #endif
+        }       
     }
 }
 
