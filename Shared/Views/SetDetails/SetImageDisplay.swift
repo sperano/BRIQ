@@ -6,6 +6,9 @@
 //
 
 import SwiftUI
+#if DEBUG
+import CoreData
+#endif
 
 struct SetImageDisplay: View {
     let set: Set
@@ -34,3 +37,11 @@ struct SetImageDisplay: View {
         #endif
     }
 }
+
+#if DEBUG
+#Preview {
+    SetImageDisplay(set: Set.sampleData[0])
+        .frame(width: 300, height: 400)
+        .environment(\.managedObjectContext, NSManagedObjectContext.preview)
+}
+#endif

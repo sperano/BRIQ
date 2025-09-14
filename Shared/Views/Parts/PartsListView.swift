@@ -6,6 +6,9 @@
 //
 
 import SwiftUI
+#if DEBUG
+import CoreData
+#endif
 
 struct PartsListView: View {
     let parts: [SetPart]
@@ -22,3 +25,10 @@ struct PartsListView: View {
         .cornerRadius(8)
     }
 }
+
+#if DEBUG
+#Preview {
+    PartsListView(parts: SetPart.sampleData)
+        .environment(\.managedObjectContext, NSManagedObjectContext.preview)
+}
+#endif

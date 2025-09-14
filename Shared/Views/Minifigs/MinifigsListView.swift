@@ -6,6 +6,9 @@
 //
 
 import SwiftUI
+#if DEBUG
+import CoreData
+#endif
 
 struct MinifigsListView: View {
     let minifigs: [SetMinifig]
@@ -22,3 +25,10 @@ struct MinifigsListView: View {
         .cornerRadius(8)
     }
 }
+
+#if DEBUG
+#Preview {
+    MinifigsListView(minifigs: SetMinifig.sampleData)
+        .environment(\.managedObjectContext, NSManagedObjectContext.preview)
+}
+#endif

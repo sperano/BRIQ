@@ -6,6 +6,9 @@
 //
 
 import SwiftUI
+#if DEBUG
+import CoreData
+#endif
 
 struct SetExternalLinks: View {
     let set: Set
@@ -28,8 +31,9 @@ struct SetExternalLinks: View {
 }
 
 #if DEBUG
-//#Preview {
-//    SetExternalLinks(set: Set.sampleData[0])
-//        .modelContainer(SampleData.shared.modelContainer)
-//}
+#Preview {
+    SetExternalLinks(set: Set.sampleData[0])
+        .padding()
+        .environment(\.managedObjectContext, NSManagedObjectContext.preview)
+}
 #endif

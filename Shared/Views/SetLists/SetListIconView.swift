@@ -50,10 +50,6 @@ struct SetListIconView: View {
 }
 
 #if DEBUG
-//#Preview {
-//    NavigationStack {
-//        SetList()
-//            .modelContainer(SampleData.shared.modelContainer)
-//    }
-//}
+#Preview {
+}
 #endif

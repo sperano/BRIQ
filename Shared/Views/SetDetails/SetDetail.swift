@@ -35,8 +35,10 @@ struct SetDetail: View {
 }
 
 #if DEBUG
-//#Preview {
-//    SetDetail(set: Set.sampleData[0])
-//        .modelContainer(SampleData.shared.modelContainer)
-//}
+#Preview {
+    NavigationView {
+        SetDetail(set: Set.sampleData[0])
+    }
+    .environment(\.managedObjectContext, NSManagedObjectContext.preview)
+}
 #endif

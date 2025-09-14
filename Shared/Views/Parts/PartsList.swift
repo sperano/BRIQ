@@ -6,6 +6,9 @@
 //
 
 import SwiftUI
+#if DEBUG
+import CoreData
+#endif
 
 struct PartsList: View {
     let parts: [SetPart]
@@ -27,8 +30,16 @@ struct PartsList: View {
 }
 
 #if DEBUG
-//#Preview {
-//    PartsList(parts: SetPart.sampleData, viewMode: .list)
-//        .modelContainer(SampleData.shared.modelContainer)
-//}
+#Preview("List") {
+    PartsList(parts: SetPart.sampleData, viewMode: .list)
+        .environment(\.managedObjectContext, NSManagedObjectContext.preview)
+        .frame(width: 400, height: 600)
+}
+
+#Preview("Icon") {
+    PartsList(parts: SetPart.sampleData, viewMode: .icon)
+        .environment(\.managedObjectContext, NSManagedObjectContext.preview)
+        .frame(width: 400, height: 600)
+}
+
 #endif

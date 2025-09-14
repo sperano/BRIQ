@@ -6,6 +6,9 @@
 //
 
 import SwiftUI
+#if DEBUG
+import CoreData
+#endif
 
 struct SetIconView: View {
     var set: Set
@@ -72,8 +75,12 @@ struct SetIconView: View {
 }
 
 #if DEBUG
-//#Preview {
-//    SetIconView(set: Set.sampleData[0])
-//        .padding()
-//}
+#Preview {
+    Group {
+        SetIconView(set: Set.sampleData[0])
+        SetIconView(set: Set.sampleData[1], size: 150)
+    }
+    .padding()
+    .environment(\.managedObjectContext, NSManagedObjectContext.preview)
+}
 #endif

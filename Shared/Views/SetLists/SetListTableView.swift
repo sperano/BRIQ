@@ -153,15 +153,14 @@ struct SetListTableView: View {
 }
 
 #if DEBUG
-//#Preview {
-//    NavigationStack {
-//        SetListTableView(
-//            sets: Set.sampleData,
-//            viewMode: .constant(.table),
-//            showFilter: .constant(false),
-//            selectedTheme: .constant(nil),
-//        )
-//        .modelContainer(SampleData.shared.modelContainer)
-//    }
-//}
+#Preview {
+    NavigationStack {
+        SetListTableView(
+            sets: Set.sampleData,
+            viewMode: .constant(.table),
+            selectedTheme: .constant(nil)
+        )
+    }
+    .environment(\.managedObjectContext, NSManagedObjectContext.preview)
+}
 #endif

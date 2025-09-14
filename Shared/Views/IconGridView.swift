@@ -37,3 +37,60 @@ struct IconGridView<Item: Identifiable>: View {
         .cornerRadius(8)
     }
 }
+
+#if DEBUG
+import CoreData
+//#Preview("Parts Grid") {
+//    IconGridView(
+//        items: SetPart.sampleData,
+//        imageURL: { $0.part?.imageURL ?? "" },
+//        quantity: { Int($0.quantity) },
+//        number: { $0.part?.number ?? "" },
+//        name: { $0.part?.name ?? "" }
+//    )
+//    .environment(\.managedObjectContext, NSManagedObjectContext.preview)
+//    .frame(width: 400, height: 300)
+//}
+//
+//#Preview("Minifigs Grid") {
+//    IconGridView(
+//        items: SetMinifig.sampleData,
+//        imageURL: { $0.minifig?.imageURL ?? "" },
+//        quantity: { Int($0.quantity) },
+//        number: { $0.minifig?.number ?? "" },
+//        name: { $0.minifig?.name ?? "" }
+//    )
+//    .environment(\.managedObjectContext, NSManagedObjectContext.preview)
+//    .frame(width: 400, height: 300)
+//}
+//
+//#Preview("Mixed Content") {
+//    VStack(spacing: 20) {
+//        Text("Parts")
+//            .font(.headline)
+//
+//        IconGridView(
+//            items: Array(SetPart.sampleData.prefix(6)),
+//            imageURL: { $0.part?.imageURL ?? "" },
+//            quantity: { Int($0.quantity) },
+//            number: { $0.part?.number ?? "" },
+//            name: { $0.part?.name ?? "" }
+//        )
+//        .frame(height: 150)
+//
+//        Text("Minifigs")
+//            .font(.headline)
+//
+//        IconGridView(
+//            items: Array(SetMinifig.sampleData.prefix(4)),
+//            imageURL: { $0.minifig?.imageURL ?? "" },
+//            quantity: { Int($0.quantity) },
+//            number: { $0.minifig?.number ?? "" },
+//            name: { $0.minifig?.name ?? "" }
+//        )
+//        .frame(height: 120)
+//    }
+//    .environment(\.managedObjectContext, NSManagedObjectContext.preview)
+//    .padding()
+//}
+#endif

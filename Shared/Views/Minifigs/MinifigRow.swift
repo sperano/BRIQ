@@ -6,6 +6,9 @@
 //
 
 import SwiftUI
+#if DEBUG
+import CoreData
+#endif
 
 struct MinifigRow: View {
     var minifig: SetMinifig
@@ -21,9 +24,11 @@ struct MinifigRow: View {
 }
 
 #if DEBUG
-//#Preview {
-//    Group {
-//        MinifigRow(minifig: SetMinifig.sampleData[0])
-//    }
-//}
+#Preview {
+    Group {
+        MinifigRow(minifig: SetMinifig.sampleData[0])
+        MinifigRow(minifig: SetMinifig.sampleData[1])
+    }
+    .environment(\.managedObjectContext, NSManagedObjectContext.preview)
+}
 #endif

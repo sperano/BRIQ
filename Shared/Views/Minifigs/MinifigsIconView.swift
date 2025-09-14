@@ -6,6 +6,9 @@
 //
 
 import SwiftUI
+#if DEBUG
+import CoreData
+#endif
 
 struct MinifigsIconView: View {
     let minifigs: [SetMinifig]
@@ -20,3 +23,11 @@ struct MinifigsIconView: View {
         )
     }
 }
+
+#if DEBUG
+#Preview {
+    MinifigsIconView(minifigs: SetMinifig.sampleData)
+        .frame(width: 400, height: 600)
+        .environment(\.managedObjectContext, NSManagedObjectContext.preview)
+}
+#endif

@@ -6,6 +6,9 @@
 //
 
 import SwiftUI
+#if DEBUG
+import CoreData
+#endif
 
 enum ViewMode: String, CaseIterable {
     case list
@@ -53,3 +56,13 @@ struct SetContentSection: View {
         }
     }
 }
+
+#if DEBUG
+#Preview {
+    ScrollView {
+        SetContentSection(set: Set.sampleData[0])
+            .padding()
+    }
+    .environment(\.managedObjectContext, NSManagedObjectContext.preview)
+}
+#endif

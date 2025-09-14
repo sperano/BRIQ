@@ -12,9 +12,83 @@ struct SetDetailFields: View {
     @ObservedObject var set: Set
     var selectedSet: Binding<Set?>? = nil
     @Environment(\.managedObjectContext) private var context
+    @State private var refreshTrigger: Bool = false
 
-    private var userDataManager: SetUserDataManager {
-        SetUserDataManager(set: set, context: context)
+    // Direct Core Data bindings with UI refresh
+    private var ownedBinding: Binding<Bool> {
+        Binding(
+            get: {
+                _ = refreshTrigger // Force dependency on refresh trigger
+                return set.userData?.owned ?? false
+            },
+            set: { newValue in
+                ensureUserData()
+                set.userData?.owned = newValue
+                saveContext()
+                refreshTrigger.toggle() // Force UI refresh
+            }
+        )
+    }
+
+    private var favoriteBinding: Binding<Bool> {
+        Binding(
+            get: {
+                _ = refreshTrigger // Force dependency on refresh trigger
+                return set.userData?.favorite ?? false
+            },
+            set: { newValue in
+                ensureUserData()
+                set.userData?.favorite = newValue
+                saveContext()
+                refreshTrigger.toggle() // Force UI refresh
+            }
+        )
+    }
+
+    private var ownsInstructionsBinding: Binding<Bool> {
+        Binding(
+            get: {
+                _ = refreshTrigger // Force dependency on refresh trigger
+                return set.userData?.ownsInstructions ?? false
+            },
+            set: { newValue in
+                ensureUserData()
+                set.userData?.ownsInstructions = newValue
+                saveContext()
+                refreshTrigger.toggle() // Force UI refresh
+            }
+        )
+    }
+
+    private var instructionsQualityBinding: Binding<Int> {
+        Binding(
+            get: {
+                _ = refreshTrigger // Force dependency on refresh trigger
+                return Int(set.userData?.instructionsQuality ?? 0)
+            },
+            set: { newValue in
+                ensureUserData()
+                set.userData?.instructionsQuality = Int32(newValue)
+                saveContext()
+                refreshTrigger.toggle() // Force UI refresh
+            }
+        )
+    }
+
+    private func ensureUserData() {
+        if set.userData == nil {
+            let userData = SetUserData.create(in: context, number: set.number)
+            set.userData = userData
+            userData.set = set
+        }
+    }
+
+    private func saveContext() {
+        do {
+            try context.save()
+        } catch {
+            print("Save error: \(error)")
+        }
     }
 
     private func findSetByNumber(_ number: String) -> Set? {
@@ -53,17 +127,17 @@ struct SetDetailFields: View {
                 ("Pieces", AnyView(Text("\(set.partsCount)"))),
                 ("Theme", AnyView(Text(set.themeName))),
                 ("In Collection", AnyView(
-                    Toggle("", isOn: userDataManager.ownedBinding)
+                    Toggle("", isOn: ownedBinding)
                 )),
                 ("Favorite", AnyView(
-                    Toggle("", isOn: userDataManager.favoriteBinding)
+                    Toggle("", isOn: favoriteBinding)
                 )),
                 ("Has Instructions", AnyView(
-                    Toggle("", isOn: userDataManager.ownsInstructionsBinding)
+                    Toggle("", isOn: ownsInstructionsBinding)
                 )),
                 ("Instr. Quality", AnyView(
                     StarRatingView(
-                        rating: userDataManager.instructionsQualityBinding, 
+                        rating: instructionsQualityBinding,
                         isInteractive: set.userData?.ownsInstructions ?? false
                     )
                     .opacity((set.userData?.ownsInstructions ?? false) ? 1.0 : 0.5)
@@ -73,3 +147,11 @@ struct SetDetailFields: View {
         }
     }
 }
+
+#if DEBUG
+#Preview {
+    SetDetailFields(set: Set.sampleData[0])
+        .padding()
+        .environment(\.managedObjectContext, NSManagedObjectContext.preview)
+}
+#endif

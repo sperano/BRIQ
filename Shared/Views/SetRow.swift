@@ -6,6 +6,9 @@
 //
 
 import SwiftUI
+#if DEBUG
+import CoreData
+#endif
 
 struct RowImage: View {
     let url: String
@@ -41,10 +44,11 @@ struct SetRow: View {
 }
 
 #if DEBUG
-//#Preview {
-//    Group {
-//        SetRow(set: Set.sampleData[0])
-//        //SetRow(set: Set.sampleData[1])
-//    }
-//}
+#Preview {
+    Group {
+        SetRow(set: Set.sampleData[0])
+        SetRow(set: Set.sampleData[1])
+    }
+    .environment(\.managedObjectContext, NSManagedObjectContext.preview)
+}
 #endif
