@@ -2,7 +2,7 @@
 //  SampleDataProvider.swift
 //  BRIQ
 //
-//  Created by Claude on 13/09/25.
+//  Created by Éric Spérano on 13/09/25.
 //
 
 #if DEBUG
