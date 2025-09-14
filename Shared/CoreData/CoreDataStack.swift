@@ -100,6 +100,7 @@ class CoreDataStack: ObservableObject {
     }
 }
 
+// MARK - Errors
 enum CoreDataError: Error {
     case storeNotFound
     case saveFailed(Error)
@@ -145,23 +146,6 @@ extension CoreDataStack {
         }
     }
 
-    func performBatchDelete(entityName: String, predicate: NSPredicate? = nil) async throws {
-        let context = newBackgroundContext()
-
-        try await context.perform {
-            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
-            fetchRequest.predicate = predicate
-
-            let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-            deleteRequest.resultType = .resultTypeObjectIDs
-
-            let result = try context.execute(deleteRequest) as? NSBatchDeleteResult
-            let objectIDArray = result?.result as? [NSManagedObjectID]
-            let changes = [NSDeletedObjectsKey: objectIDArray ?? []]
-
-            NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes, into: [self.viewContext])
-        }
-    }
 }
 
 // MARK: - Helper Extensions
