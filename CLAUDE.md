@@ -34,7 +34,7 @@ The app uses Core Data with these core entities:
 - `SetPart`/`SetMinifig`: Junction models linking sets to parts/minifigs with quantities
 - `SetUserData`: User preferences per set (owned, favorite, instructions)
 
-All models are defined in `Shared/CoreData/` with the data model at `Shared/CoreData/BRIQ.xcdatamodeld`. The Core Data stack is managed by `CoreDataStack.swift`.
+All models are defined in `Shared/CoreData/` with the data model at `Shared/CoreData/BRIQ.xcdatamodeld/BRIQ.xcdatamodel`. The Core Data stack is managed by `CoreDataStack.swift`.
 
 ### Database Initialization
 - First launch loads data from bundled `init.zip` file containing comprehensive LEGO database

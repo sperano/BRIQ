@@ -11,10 +11,12 @@ import CoreData
 struct SetListSplitView: View {
     var sets: [Set]
     @Binding var viewMode: SetListViewMode
-    @Binding var showFilter: Bool
     @Binding var selectedTheme: Theme?
+    #if os(iOS)
+    @Binding var showSettings: Bool
+    #endif
     @State private var selectedSet: Set?
-    
+
     var body: some View {
         NavigationSplitView {
             List(sets, selection: $selectedSet) { set in
@@ -26,7 +28,7 @@ struct SetListSplitView: View {
                 ThemeDropdownToolbarItem(selectedTheme: $selectedTheme)
                 ViewModeMenuToolbarItem(viewMode: $viewMode)
                 #if os(iOS)
-                SettingsButtonToolbarItem(showFilter: $showFilter)
+                SettingsButtonToolbarItem(showSettings: $showSettings)
                 #endif
             }
         } detail: {

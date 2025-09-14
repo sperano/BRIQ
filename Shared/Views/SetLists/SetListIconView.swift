@@ -11,9 +11,10 @@ import CoreData
 struct SetListIconView: View {
     var sets: [Set]
     @Binding var viewMode: SetListViewMode
-    @Binding var showFilter: Bool
     @Binding var selectedTheme: Theme?
-    
+    #if os(iOS)
+    @Binding var showSettings: Bool
+    #endif
     @State private var iconSize: CGFloat = 120
     
     var body: some View {
@@ -42,9 +43,9 @@ struct SetListIconView: View {
             #endif
             ViewModeMenuToolbarItem(viewMode: $viewMode)
             #if os(iOS)
-            SettingsButtonToolbarItem(showFilter: $showFilter)
+            SettingsButtonToolbarItem(showSettings: $showSettings)
             #endif
-        }       
+        }
     }
 }
 

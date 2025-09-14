@@ -11,8 +11,11 @@ import CoreData
 struct SetListTableView: View {
     var sets: [Set]
     @Binding var viewMode: SetListViewMode
-    @Binding var showFilter: Bool
     @Binding var selectedTheme: Theme?
+    #if os(iOS)
+    @Binding var showSettings: Bool
+    #endif
+
     // TODO should be year and then number
     @State private var sortOrder = [KeyPathComparator<Set>(\.number)]
     
@@ -143,7 +146,7 @@ struct SetListTableView: View {
             ThemeDropdownToolbarItem(selectedTheme: $selectedTheme)
             ViewModeMenuToolbarItem(viewMode: $viewMode)
             #if os(iOS)
-            SettingsButtonToolbarItem(showFilter: $showFilter)
+            SettingsButtonToolbarItem(showSettings: $showSettings)
             #endif
         }
     }

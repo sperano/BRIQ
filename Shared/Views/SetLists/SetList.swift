@@ -13,9 +13,10 @@ struct SetList: View {
 
     @State private var sets: [Set] = []
     @State private var searchText = ""
-    @State private var showFilter = false
     @State public var selectedTheme: Theme?
-
+    #if os(iOS)
+    @State private var showSettings = false
+    #endif
     @AppStorage("viewMode") private var viewMode: SetListViewMode = .icon
     @AppStorage("filterFavoriteThemes") private var filterFavoriteThemes = true
     @AppStorage("filterOwnedState") private var filterOwnedState = 0 // 0=all, 1=owned, 2=not owned
@@ -35,18 +36,18 @@ struct SetList: View {
                 #if os(macOS)
                 switch viewMode {
                 case .icon:
-                    SetListIconView(sets: sets, viewMode: $viewMode, showFilter: $showFilter, selectedTheme: $selectedTheme)
+                    SetListIconView(sets: sets, viewMode: $viewMode, selectedTheme: $selectedTheme)
                 case .split:
-                    SetListSplitView(sets: sets, viewMode: $viewMode, showFilter: $showFilter, selectedTheme: $selectedTheme)
+                    SetListSplitView(sets: sets, viewMode: $viewMode, selectedTheme: $selectedTheme)
                 case .table:
-                    SetListTableView(sets: sets, viewMode: $viewMode, showFilter: $showFilter, selectedTheme: $selectedTheme)
+                    SetListTableView(sets: sets, viewMode: $viewMode, selectedTheme: $selectedTheme)
                 }
                 #elseif os(iOS)
                 switch viewMode {
                 case .icon:
-                    SetListIconView(sets: sets, viewMode: $viewMode, showFilter: $showFilter, selectedTheme: $selectedTheme)
+                    SetListIconView(sets: sets, viewMode: $viewMode, selectedTheme: $selectedTheme, showSettings: $showSettings)
                 case .list:
-                    SetListIconView(sets: sets, viewMode: $viewMode, showFilter: $showFilter, selectedTheme: $selectedTheme)
+                    SetListIconView(sets: sets, viewMode: $viewMode, selectedTheme: $selectedTheme, showSettings: $showSettings)
                 }
                 #endif
             }
@@ -65,9 +66,11 @@ struct SetList: View {
         .onChange(of: excludeAccessories) { loadSets() }
         .onChange(of: displayUSNumbers) { loadSets() }
         .onChange(of: selectedTheme) { loadSets() }
-//        .popover(isPresented: $showFilter) {
-//            SetListFilterSetting()
-//        }
+        #if os(iOS)
+        .popover(isPresented: $showSettings) {
+            SettingsPopover()
+        }
+        #endif
     }
 
     private func loadSets() {
