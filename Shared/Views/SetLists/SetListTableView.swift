@@ -8,6 +8,25 @@
 import SwiftUI
 import CoreData
 
+extension Set {
+    var isOwnedStr: String {
+        if userData == nil { return "0" }
+        return String(userData!.owned)
+    }
+    var isFavoriteStr: String {
+        if userData == nil { return "0" }
+        return String(userData!.favorite)
+    }
+    var hasInstructionsStr: String {
+        if userData == nil { return "0" }
+        return String(userData!.ownsInstructions)
+    }
+    var instructionsQuality: Int32 {
+        if userData == nil { return 0 }
+        return userData!.instructionsQuality
+    }
+}
+
 struct SetListTableView: View {
     var sets: [Set]
     @Binding var viewMode: SetListViewMode
@@ -16,9 +35,8 @@ struct SetListTableView: View {
     @Binding var showSettings: Bool
     #endif
 
-    // TODO should be year and then number
     @State private var sortOrder = [KeyPathComparator<Set>(\.number)]
-    
+
     private var sortedSets: [Set] {
         sets.sorted(using: sortOrder)
     }
@@ -59,8 +77,8 @@ struct SetListTableView: View {
         .width(min: 100, ideal: 150, max: 200)
     }
 
-    private var ownedColumn: some TableColumnContent<Set, Never> {
-        TableColumn("Owned") { set in
+    private var ownedColumn: some TableColumnContent<Set, KeyPathComparator<Set>> {
+        TableColumn("Owned", value: \.isOwnedStr) { set in
             SetDetailNavigationLink(set: set) {
                 Image(systemName: (set.userData?.owned ?? false) ? "checkmark.circle.fill" : "circle")
                     .foregroundColor((set.userData?.owned ?? false) ? .green : .secondary)
@@ -69,8 +87,8 @@ struct SetListTableView: View {
         .width(min: 60, ideal: 80, max: 100)
     }
     
-    private var favoriteColumn: some TableColumnContent<Set, Never> {
-        TableColumn("Favorite") { set in
+    private var favoriteColumn: some TableColumnContent<Set, KeyPathComparator<Set>> {
+        TableColumn("Favorite", value: \.isFavoriteStr) { set in
             SetDetailNavigationLink(set: set) {
                 Image(systemName: (set.userData?.favorite ?? false) ? "heart.fill" : "heart")
                     .foregroundColor((set.userData?.favorite ?? false) ? .red : .secondary)
@@ -97,8 +115,8 @@ struct SetListTableView: View {
         .width(min: 80, ideal: 100, max: 120)
     }
     
-    private var instructionsColumn: some TableColumnContent<Set, Never> {
-        TableColumn("Has Instructions") { set in
+    private var instructionsColumn: some TableColumnContent<Set, KeyPathComparator<Set>> {
+        TableColumn("Has Instructions", value: \.hasInstructionsStr) { set in
             SetDetailNavigationLink(set: set) {
                 Image(systemName: (set.userData?.ownsInstructions ?? false) ? "doc.fill" : "doc")
                     .foregroundColor((set.userData?.ownsInstructions ?? false) ? .blue : .secondary)
@@ -107,8 +125,8 @@ struct SetListTableView: View {
         .width(min: 100, ideal: 120, max: 140)
     }
     
-    private var instructionsQualityColumn: some TableColumnContent<Set, Never> {
-        TableColumn("Instr. Quality") { set in
+    private var instructionsQualityColumn: some TableColumnContent<Set, KeyPathComparator<Set>> {
+        TableColumn("Instr. Quality", value: \.instructionsQuality) { set in
             SetDetailNavigationLink(set: set) {
                 StarRatingView(rating: .constant(Int(set.userData?.instructionsQuality ?? 0)), isInteractive: false)
                     .font(.caption)

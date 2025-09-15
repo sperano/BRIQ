@@ -2,7 +2,7 @@
 //  SetListSortOrder.swift
 //  BRIQ
 //
-//  Created by Claude on 14/09/25.
+//  Created by Éric Spérano on 14/09/25.
 //
 
 import Foundation
@@ -26,8 +26,6 @@ enum SetListSortOrder: String, CaseIterable {
         }
     }
 
-    /// Returns the sort descriptors for this sort order
-    /// Number is always secondary sort as specified
     var sortDescriptors: [NSSortDescriptor] {
         switch self {
         case .year:
