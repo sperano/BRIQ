@@ -13,6 +13,12 @@ struct SetDetail: View {
     var selectedSet: Binding<Set?>? = nil
     var onDisappear: (() -> Void)? = nil
     @State private var hasChanges = false
+    @AppStorage("partsMinifigsViewMode") private var viewModeRaw: String = "icon"
+
+    private var viewMode: ViewMode {
+        get { ViewMode(rawValue: viewModeRaw) ?? .list }
+        set { viewModeRaw = newValue.rawValue }
+    }
     
     var body: some View {
         ScrollView {
@@ -27,12 +33,21 @@ struct SetDetail: View {
                         .padding(.leading, 10)
                 }
                 #endif
-                SetContentSection(set: set)
+                SetContentSection(set: set, viewMode: viewMode)
                 Spacer()
             }
             .navigationTitle("\(set.number): \(set.name)")
         }
         .padding()
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Button {
+                    viewModeRaw = viewMode == .list ? ViewMode.icon.rawValue : ViewMode.list.rawValue
+                } label: {
+                    Image(systemName: viewMode == .list ? "square.grid.2x2" : "list.bullet")
+                }
+            }
+        }
         .onDisappear {
             if hasChanges {
                 onDisappear?()

@@ -17,12 +17,7 @@ enum ViewMode: String, CaseIterable {
 
 struct SetContentSection: View {
     let set: Set
-    @AppStorage("partsMinifigsViewMode") private var viewModeRaw: String = "list"
-    
-    private var viewMode: ViewMode {
-        get { ViewMode(rawValue: viewModeRaw) ?? .list }
-        set { viewModeRaw = newValue.rawValue }
-    }
+    let viewMode: ViewMode
     
     private var totalMinifigs: Int {
         return set.minifigsCount
@@ -34,35 +29,37 @@ struct SetContentSection: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            HStack {
-                Spacer()
-                Button {
-                    viewModeRaw = viewMode == .list ? ViewMode.icon.rawValue : ViewMode.list.rawValue
-                } label: {
-                    Image(systemName: viewMode == .list ? "square.grid.2x2" : "list.bullet")
-                        .foregroundColor(.blue)
-                }
-                .buttonStyle(BorderlessButtonStyle())
+            if set.minifigsCount > 0 {
+                Text("\(totalMinifigs) mini-figurines:")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                MinifigList(minifigs: (set.minifigs?.allObjects as? [SetMinifig]) ?? [], viewMode: viewMode)
             }
-            
-            Text("\(totalMinifigs) mini-figurines:")
-                .font(.title2)
-                .fontWeight(.bold)
-            MinifigList(minifigs: (set.minifigs?.allObjects as? [SetMinifig]) ?? [], viewMode: viewMode)
-            Text("\(totalParts) parts:")
-                .font(.title2)
-                .fontWeight(.bold)
-            PartsList(parts: (set.parts?.allObjects as? [SetPart]) ?? [], viewMode: viewMode)
+            if set.actualPartsCount > 0 {
+                Text("\(totalParts) parts:")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                PartsList(parts: (set.parts?.allObjects as? [SetPart]) ?? [], viewMode: viewMode)
+            }
         }
     }
 }
 
 #if DEBUG
-#Preview {
+#Preview("List") {
     ScrollView {
-        SetContentSection(set: Set.sampleData[0])
+        SetContentSection(set: Set.sampleData[0], viewMode: .list)
             .padding()
     }
     .environment(\.managedObjectContext, NSManagedObjectContext.preview)
 }
+
+#Preview("Icons") {
+    ScrollView {
+        SetContentSection(set: Set.sampleData[0], viewMode: .icon)
+            .padding()
+    }
+    .environment(\.managedObjectContext, NSManagedObjectContext.preview)
+}
+
 #endif
