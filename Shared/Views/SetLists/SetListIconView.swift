@@ -16,6 +16,7 @@ struct SetListIconView: View {
     @Binding var showSettings: Bool
     #endif
     @State private var iconSize: CGFloat = 120
+    @Environment(\.refreshSetList) private var refreshSetList
     
     var body: some View {
         ScrollView {
@@ -24,10 +25,7 @@ struct SetListIconView: View {
             ], spacing: 16) {
                 ForEach(sets) { set in
                     NavigationLink {
-                        SetDetail(set: set)
-                        //                            .onDisappear {
-                        //                                loadSets() TODO
-                        //                            }
+                        SetDetail(set: set, onDisappear: refreshSetList)
                     } label: {
                         SetIconView(set: set, size: iconSize)
                     }

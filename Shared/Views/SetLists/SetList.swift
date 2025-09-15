@@ -8,6 +8,17 @@
 import SwiftUI
 import CoreData
 
+private struct RefreshSetListKey: EnvironmentKey {
+    static let defaultValue: () -> Void = {}
+}
+
+extension EnvironmentValues {
+    var refreshSetList: () -> Void {
+        get { self[RefreshSetListKey.self] }
+        set { self[RefreshSetListKey.self] = newValue }
+    }
+}
+
 struct SetList: View {
     @Environment(\.managedObjectContext) private var context
 
@@ -56,6 +67,7 @@ struct SetList: View {
             .padding()
         }
         .searchable(text: $searchText)
+        .environment(\.refreshSetList, loadSets)
         .onAppear(perform: loadSets)
         .onChange(of: searchText) { loadSets() }
         .onChange(of: filterOwnedState) { loadSets() }

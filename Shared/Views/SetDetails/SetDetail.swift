@@ -11,6 +11,7 @@ import CoreData
 struct SetDetail: View {
     @ObservedObject var set: Set
     var selectedSet: Binding<Set?>? = nil
+    var onDisappear: (() -> Void)? = nil
     
     var body: some View {
         ScrollView {
@@ -31,6 +32,9 @@ struct SetDetail: View {
             .navigationTitle("\(set.number): \(set.name)")
         }
         .padding()
+        .onDisappear {
+            onDisappear?()
+        }
     }
 }
 

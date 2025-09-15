@@ -15,6 +15,7 @@ struct SetListTableView: View {
     #if os(iOS)
     @Binding var showSettings: Bool
     #endif
+    @Environment(\.refreshSetList) private var refreshSetList
 
     // TODO should be year and then number
     @State private var sortOrder = [KeyPathComparator<Set>(\.number)]
@@ -25,7 +26,7 @@ struct SetListTableView: View {
     
     private var numberColumn: some TableColumnContent<Set, KeyPathComparator<Set>> {
         TableColumn("Number", value: \.number) { set in
-            NavigationLink(destination: SetDetail(set: set)) {
+            NavigationLink(destination: SetDetail(set: set, onDisappear: refreshSetList)) {
                 Text(set.number)
             }
             .buttonStyle(.plain)
@@ -35,7 +36,7 @@ struct SetListTableView: View {
     
     private var nameColumn: some TableColumnContent<Set, KeyPathComparator<Set>> {
         TableColumn("Name", value: \.name) { set in
-            NavigationLink(destination: SetDetail(set: set)) {
+            NavigationLink(destination: SetDetail(set: set, onDisappear: refreshSetList)) {
                 Text(set.name)
             }
             .buttonStyle(.plain)
@@ -65,7 +66,7 @@ struct SetListTableView: View {
 
     private var ownedColumn: some TableColumnContent<Set, Never> {
         TableColumn("Owned") { set in
-            NavigationLink(destination: SetDetail(set: set)) {
+            NavigationLink(destination: SetDetail(set: set, onDisappear: refreshSetList)) {
                 Image(systemName: (set.userData?.owned ?? false) ? "checkmark.circle.fill" : "circle")
                     .foregroundColor((set.userData?.owned ?? false) ? .green : .secondary)
             }
@@ -76,7 +77,7 @@ struct SetListTableView: View {
     
     private var favoriteColumn: some TableColumnContent<Set, Never> {
         TableColumn("Favorite") { set in
-            NavigationLink(destination: SetDetail(set: set)) {
+            NavigationLink(destination: SetDetail(set: set, onDisappear: refreshSetList)) {
                 Image(systemName: (set.userData?.favorite ?? false) ? "heart.fill" : "heart")
                     .foregroundColor((set.userData?.favorite ?? false) ? .red : .secondary)
             }
