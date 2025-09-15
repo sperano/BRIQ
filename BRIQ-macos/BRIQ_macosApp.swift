@@ -84,8 +84,12 @@ struct MacBRIQApp: App {
                 }
         }
         .commands {
-            CommandMenu("View") {
+            CommandGroup(after: .toolbar) {
                 ViewModeCommands()
+                Divider()
+                Menu("Sort") {
+                    SortCommands()
+                }
             }
             CommandMenu("Database") {
                 Button("Re-Initialize") {

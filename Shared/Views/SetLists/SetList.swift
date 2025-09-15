@@ -26,6 +26,7 @@ struct SetList: View {
     @AppStorage("excludeAccessories") private var excludeAccessories = true
     @AppStorage("displayUSNumbers") private var displayUSNumbers = false
     @AppStorage("favoriteThemes") private var favoriteThemesString: String = ""
+    @AppStorage("sortOrder") private var sortOrder: SetListSortOrder = .year
     public var favoriteThemes: Swift.Set<Int> {
         Swift.Set(favoriteThemesString.split(separator: ",").compactMap { Int($0) })
     }
@@ -67,6 +68,7 @@ struct SetList: View {
         .onChange(of: excludeAccessories) { loadSets() }
         .onChange(of: displayUSNumbers) { loadSets() }
         .onChange(of: selectedTheme) { loadSets() }
+        .onChange(of: sortOrder) { loadSets() }
         #if os(iOS)
         .popover(isPresented: $showSettings) {
             SettingsPopover(
@@ -150,11 +152,8 @@ struct SetList: View {
             request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
         }
 
-        // Sort descriptors
-        request.sortDescriptors = [
-            NSSortDescriptor(key: "year", ascending: true),
-            NSSortDescriptor(key: "number", ascending: true)
-        ]
+        // Sort descriptors based on selected sort order
+        request.sortDescriptors = sortOrder.sortDescriptors
 
         return request
     }
