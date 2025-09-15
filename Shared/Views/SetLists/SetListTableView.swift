@@ -15,7 +15,6 @@ struct SetListTableView: View {
     #if os(iOS)
     @Binding var showSettings: Bool
     #endif
-    @Environment(\.refreshSetList) private var refreshSetList
 
     // TODO should be year and then number
     @State private var sortOrder = [KeyPathComparator<Set>(\.number)]
@@ -26,104 +25,94 @@ struct SetListTableView: View {
     
     private var numberColumn: some TableColumnContent<Set, KeyPathComparator<Set>> {
         TableColumn("Number", value: \.number) { set in
-            NavigationLink(destination: SetDetail(set: set, onDisappear: refreshSetList)) {
+            SetDetailNavigationLink(set: set) {
                 Text(set.number)
             }
-            .buttonStyle(.plain)
         }
         .width(min: 80, ideal: 100, max: 120)
     }
     
     private var nameColumn: some TableColumnContent<Set, KeyPathComparator<Set>> {
         TableColumn("Name", value: \.name) { set in
-            NavigationLink(destination: SetDetail(set: set, onDisappear: refreshSetList)) {
+            SetDetailNavigationLink(set: set) {
                 Text(set.name)
             }
-            .buttonStyle(.plain)
         }
         .width(min: 200, ideal: 300, max: 500)
     }
     
     private var yearColumn: some TableColumnContent<Set, KeyPathComparator<Set>> {
         TableColumn("Year", value: \.year) { set in
-            NavigationLink(destination: SetDetail(set: set)) {
+            SetDetailNavigationLink(set: set) {
                 Text(String(set.year))
             }
-            .buttonStyle(.plain)
         }
         .width(min: 60, ideal: 80, max: 100)
     }
 
     private var themeColumn: some TableColumnContent<Set, KeyPathComparator<Set>> {
         TableColumn("Theme", value: \.themeName) { set in
-            NavigationLink(destination: SetDetail(set: set)) {
+            SetDetailNavigationLink(set: set) {
                 Text(set.themeName)
             }
-            .buttonStyle(.plain)
         }
         .width(min: 100, ideal: 150, max: 200)
     }
 
     private var ownedColumn: some TableColumnContent<Set, Never> {
         TableColumn("Owned") { set in
-            NavigationLink(destination: SetDetail(set: set, onDisappear: refreshSetList)) {
+            SetDetailNavigationLink(set: set) {
                 Image(systemName: (set.userData?.owned ?? false) ? "checkmark.circle.fill" : "circle")
                     .foregroundColor((set.userData?.owned ?? false) ? .green : .secondary)
             }
-            .buttonStyle(.plain)
         }
         .width(min: 60, ideal: 80, max: 100)
     }
     
     private var favoriteColumn: some TableColumnContent<Set, Never> {
         TableColumn("Favorite") { set in
-            NavigationLink(destination: SetDetail(set: set, onDisappear: refreshSetList)) {
+            SetDetailNavigationLink(set: set) {
                 Image(systemName: (set.userData?.favorite ?? false) ? "heart.fill" : "heart")
                     .foregroundColor((set.userData?.favorite ?? false) ? .red : .secondary)
             }
-            .buttonStyle(.plain)
         }
         .width(min: 80, ideal: 100, max: 120)
     }
     
     private var minifigsColumn: some TableColumnContent<Set, KeyPathComparator<Set>> {
         TableColumn("Minifigs", value: \.minifigsCount) { set in
-            NavigationLink(destination: SetDetail(set: set)) {
+            SetDetailNavigationLink(set: set) {
                 Text(String(set.minifigsCount))
             }
-            .buttonStyle(.plain)
         }
         .width(min: 80, ideal: 100, max: 120)
     }
     
     private var partsColumn: some TableColumnContent<Set, KeyPathComparator<Set>> {
         TableColumn("Parts", value: \.actualPartsCount) { set in
-            NavigationLink(destination: SetDetail(set: set)) {
+            SetDetailNavigationLink(set: set) {
                 Text(String(set.actualPartsCount))
             }
-            .buttonStyle(.plain)
         }
         .width(min: 80, ideal: 100, max: 120)
     }
     
     private var instructionsColumn: some TableColumnContent<Set, Never> {
         TableColumn("Has Instructions") { set in
-            NavigationLink(destination: SetDetail(set: set)) {
+            SetDetailNavigationLink(set: set) {
                 Image(systemName: (set.userData?.ownsInstructions ?? false) ? "doc.fill" : "doc")
                     .foregroundColor((set.userData?.ownsInstructions ?? false) ? .blue : .secondary)
             }
-            .buttonStyle(.plain)
         }
         .width(min: 100, ideal: 120, max: 140)
     }
     
     private var instructionsQualityColumn: some TableColumnContent<Set, Never> {
         TableColumn("Instr. Quality") { set in
-            NavigationLink(destination: SetDetail(set: set)) {
+            SetDetailNavigationLink(set: set) {
                 StarRatingView(rating: .constant(Int(set.userData?.instructionsQuality ?? 0)), isInteractive: false)
                     .font(.caption)
             }
-            .buttonStyle(.plain)
         }
         .width(min: 100, ideal: 120, max: 140)
     }

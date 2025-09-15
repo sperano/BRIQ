@@ -16,7 +16,6 @@ struct SetListIconView: View {
     @Binding var showSettings: Bool
     #endif
     @State private var iconSize: CGFloat = 120
-    @Environment(\.refreshSetList) private var refreshSetList
     
     var body: some View {
         ScrollView {
@@ -24,12 +23,9 @@ struct SetListIconView: View {
                 GridItem(.adaptive(minimum: iconSize), spacing: 16)
             ], spacing: 16) {
                 ForEach(sets) { set in
-                    NavigationLink {
-                        SetDetail(set: set, onDisappear: refreshSetList)
-                    } label: {
+                    SetDetailNavigationLink(set: set) {
                         SetIconView(set: set, size: iconSize)
                     }
-                    .buttonStyle(.plain)
                 }
             }
             .padding()

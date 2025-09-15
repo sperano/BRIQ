@@ -12,6 +12,7 @@ struct SetDetailFields: View {
     @ObservedObject var set: Set
     var selectedSet: Binding<Set?>? = nil
     @Environment(\.managedObjectContext) private var context
+    @Environment(\.setDetailHasChanges) private var hasChangesBinding
     @State private var refreshTrigger: Bool = false
 
     // Direct Core Data bindings with UI refresh
@@ -86,6 +87,7 @@ struct SetDetailFields: View {
     private func saveContext() {
         do {
             try context.save()
+            hasChangesBinding?.wrappedValue = true
         } catch {
             print("Save error: \(error)")
         }
@@ -112,10 +114,10 @@ struct SetDetailFields: View {
                                 }
                                 .buttonStyle(.plain)
                             } else {
-                                NavigationLink(destination: SetDetail(set: sameAsSet)) {
+                                SetDetailNavigationLink(set: sameAsSet, selectedSet: selectedSet) {
                                     Text("\(set.sameAsNumber!) (\(set.isUSNumber ? "Intl" : "US")): \(sameAsSet.name)")
                                         .foregroundColor(.blue)
-                                }.buttonStyle(.plain)
+                                }
                             }
                         } else {
                             Text(set.sameAsNumber!)

@@ -11,7 +11,7 @@ import CoreData
 #endif
 
 struct SetIconView: View {
-    var set: Set
+    @ObservedObject var set: Set
     var size: CGFloat = 120
     
     var body: some View {

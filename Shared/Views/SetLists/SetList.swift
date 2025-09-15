@@ -8,17 +8,6 @@
 import SwiftUI
 import CoreData
 
-private struct RefreshSetListKey: EnvironmentKey {
-    static let defaultValue: () -> Void = {}
-}
-
-extension EnvironmentValues {
-    var refreshSetList: () -> Void {
-        get { self[RefreshSetListKey.self] }
-        set { self[RefreshSetListKey.self] = newValue }
-    }
-}
-
 struct SetList: View {
     @Environment(\.managedObjectContext) private var context
 

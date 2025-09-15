@@ -12,6 +12,7 @@ struct SetDetail: View {
     @ObservedObject var set: Set
     var selectedSet: Binding<Set?>? = nil
     var onDisappear: (() -> Void)? = nil
+    @State private var hasChanges = false
     
     var body: some View {
         ScrollView {
@@ -33,8 +34,11 @@ struct SetDetail: View {
         }
         .padding()
         .onDisappear {
-            onDisappear?()
+            if hasChanges {
+                onDisappear?()
+            }
         }
+        .environment(\.setDetailHasChanges, $hasChanges)
     }
 }
 

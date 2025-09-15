@@ -11,8 +11,19 @@
 		073301EB2E73C3140057EDBB /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 073301EA2E73C3140057EDBB /* ZIPFoundation */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		074180EE2E77C94B00B9FF22 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 070755F72E739D24007C1FA4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 073347F12E73BDC7006CBBAA;
+			remoteInfo = "BRIQ-macos";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		073347F22E73BDC7006CBBAA /* BRIQ.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BRIQ.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		074180EA2E77C94B00B9FF22 /* BRIQTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BRIQTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		075C34DC2E73BE4300CE4BC0 /* BRIQ-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BRIQ-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -33,6 +44,7 @@
 				"CoreData/SetPart+CoreDataClass.swift",
 				"CoreData/SetUserData+CoreDataClass.swift",
 				Database.swift,
+				EnvironmentKeys.swift,
 				InitializationState.swift,
 				PartColor.swift,
 				"SampleData/SampleData+Extensions.swift",
@@ -55,6 +67,7 @@
 				Views/SetDetails/SetDetailFields.swift,
 				Views/SetDetails/SetExternalLinks.swift,
 				Views/SetDetails/SetImageDisplay.swift,
+				Views/SetLists/SetDetailNavigationLink.swift,
 				Views/SetLists/SetIconView.swift,
 				Views/SetLists/SetList.swift,
 				Views/SetLists/SetListIconView.swift,
@@ -88,6 +101,7 @@
 				"CoreData/SetPart+CoreDataClass.swift",
 				"CoreData/SetUserData+CoreDataClass.swift",
 				Database.swift,
+				EnvironmentKeys.swift,
 				InitializationState.swift,
 				PartColor.swift,
 				"SampleData/SampleData+Extensions.swift",
@@ -110,6 +124,7 @@
 				Views/SetDetails/SetDetailFields.swift,
 				Views/SetDetails/SetExternalLinks.swift,
 				Views/SetDetails/SetImageDisplay.swift,
+				Views/SetLists/SetDetailNavigationLink.swift,
 				Views/SetLists/SetIconView.swift,
 				Views/SetLists/SetList.swift,
 				Views/SetLists/SetListIconView.swift,
@@ -156,6 +171,11 @@
 			path = "BRIQ-macos";
 			sourceTree = "<group>";
 		};
+		074180EB2E77C94B00B9FF22 /* BRIQTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = BRIQTests;
+			sourceTree = "<group>";
+		};
 		075C34DD2E73BE4300CE4BC0 /* BRIQ-ios */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = "BRIQ-ios";
@@ -169,6 +189,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				073301E82E73C3040057EDBB /* ZIPFoundation in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		074180E72E77C94B00B9FF22 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -190,6 +217,7 @@
 				073347ED2E73BDA3006CBBAA /* Shared */,
 				073347F32E73BDC7006CBBAA /* BRIQ-macos */,
 				075C34DD2E73BE4300CE4BC0 /* BRIQ-ios */,
+				074180EB2E77C94B00B9FF22 /* BRIQTests */,
 				073301E92E73C3140057EDBB /* Frameworks */,
 				070756002E739D24007C1FA4 /* Products */,
 			);
@@ -200,6 +228,7 @@
 			children = (
 				073347F22E73BDC7006CBBAA /* BRIQ.app */,
 				075C34DC2E73BE4300CE4BC0 /* BRIQ-ios.app */,
+				074180EA2E77C94B00B9FF22 /* BRIQTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -236,6 +265,29 @@
 			productName = "BRIQ-macos";
 			productReference = 073347F22E73BDC7006CBBAA /* BRIQ.app */;
 			productType = "com.apple.product-type.application";
+		};
+		074180E92E77C94B00B9FF22 /* BRIQTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 074180F02E77C94B00B9FF22 /* Build configuration list for PBXNativeTarget "BRIQTests" */;
+			buildPhases = (
+				074180E62E77C94B00B9FF22 /* Sources */,
+				074180E72E77C94B00B9FF22 /* Frameworks */,
+				074180E82E77C94B00B9FF22 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				074180EF2E77C94B00B9FF22 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				074180EB2E77C94B00B9FF22 /* BRIQTests */,
+			);
+			name = BRIQTests;
+			packageProductDependencies = (
+			);
+			productName = BRIQTests;
+			productReference = 074180EA2E77C94B00B9FF22 /* BRIQTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		075C34DB2E73BE4300CE4BC0 /* BRIQ-ios */ = {
 			isa = PBXNativeTarget;
@@ -274,6 +326,10 @@
 					073347F12E73BDC7006CBBAA = {
 						CreatedOnToolsVersion = 26.0;
 					};
+					074180E92E77C94B00B9FF22 = {
+						CreatedOnToolsVersion = 26.0;
+						TestTargetID = 073347F12E73BDC7006CBBAA;
+					};
 					075C34DB2E73BE4300CE4BC0 = {
 						CreatedOnToolsVersion = 26.0;
 					};
@@ -298,12 +354,20 @@
 			targets = (
 				073347F12E73BDC7006CBBAA /* BRIQ-macos */,
 				075C34DB2E73BE4300CE4BC0 /* BRIQ-ios */,
+				074180E92E77C94B00B9FF22 /* BRIQTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		073347F02E73BDC7006CBBAA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		074180E82E77C94B00B9FF22 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -327,6 +391,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		074180E62E77C94B00B9FF22 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		075C34D82E73BE4300CE4BC0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -335,6 +406,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		074180EF2E77C94B00B9FF22 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 073347F12E73BDC7006CBBAA /* BRIQ-macos */;
+			targetProxy = 074180EE2E77C94B00B9FF22 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		070756082E739D25007C1FA4 /* Debug */ = {
@@ -545,6 +624,46 @@
 			};
 			name = Release;
 		};
+		074180F12E77C94B00B9FF22 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = SGHB6DGT2T;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = sperano.BRIQTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BRIQ.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BRIQ";
+			};
+			name = Debug;
+		};
+		074180F22E77C94B00B9FF22 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = SGHB6DGT2T;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = sperano.BRIQTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BRIQ.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BRIQ";
+			};
+			name = Release;
+		};
 		075C34E52E73BE4400CE4BC0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -641,6 +760,15 @@
 			buildConfigurations = (
 				073347FB2E73BDC8006CBBAA /* Debug */,
 				073347FC2E73BDC8006CBBAA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		074180F02E77C94B00B9FF22 /* Build configuration list for PBXNativeTarget "BRIQTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				074180F12E77C94B00B9FF22 /* Debug */,
+				074180F22E77C94B00B9FF22 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
