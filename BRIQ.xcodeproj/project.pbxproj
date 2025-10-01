@@ -173,11 +173,6 @@
 			path = "BRIQ-macos";
 			sourceTree = "<group>";
 		};
-		074180EB2E77C94B00B9FF22 /* BRIQTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = BRIQTests;
-			sourceTree = "<group>";
-		};
 		075C34DD2E73BE4300CE4BC0 /* BRIQ-ios */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = "BRIQ-ios";
@@ -219,7 +214,6 @@
 				073347ED2E73BDA3006CBBAA /* Shared */,
 				073347F32E73BDC7006CBBAA /* BRIQ-macos */,
 				075C34DD2E73BE4300CE4BC0 /* BRIQ-ios */,
-				074180EB2E77C94B00B9FF22 /* BRIQTests */,
 				073301E92E73C3140057EDBB /* Frameworks */,
 				070756002E739D24007C1FA4 /* Products */,
 			);
@@ -280,9 +274,6 @@
 			);
 			dependencies = (
 				074180EF2E77C94B00B9FF22 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				074180EB2E77C94B00B9FF22 /* BRIQTests */,
 			);
 			name = BRIQTests;
 			packageProductDependencies = (
