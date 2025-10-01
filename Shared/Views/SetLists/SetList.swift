@@ -59,16 +59,17 @@ struct SetList: View {
         .searchable(text: $searchText)
         .environment(\.refreshSetList, loadSets)
         .onAppear(perform: loadSets)
-        .onChange(of: searchText) { loadSets() }
-        .onChange(of: filterOwnedState) { loadSets() }
-        .onChange(of: filterFavoriteState) { loadSets() }
-        .onChange(of: filterFavoriteThemes) { loadSets() }
-        .onChange(of: excludePackages) { loadSets() }
-        .onChange(of: excludeUnreleased) { loadSets() }
-        .onChange(of: excludeAccessories) { loadSets() }
-        .onChange(of: displayUSNumbers) { loadSets() }
-        .onChange(of: selectedTheme) { loadSets() }
-        .onChange(of: sortOrder) { loadSets() }
+        .onChange(of: searchText) { _, _ in loadSets() }
+        .onChange(of: filterOwnedState) { _, _ in loadSets() }
+        .onChange(of: filterFavoriteState) { _, _ in loadSets() }
+        .onChange(of: filterFavoriteThemes) { _, _ in loadSets() }
+        .onChange(of: favoriteThemesString) { _, _ in loadSets() }
+        .onChange(of: excludePackages) { _, _ in loadSets() }
+        .onChange(of: excludeUnreleased) { _, _ in loadSets() }
+        .onChange(of: excludeAccessories) { _, _ in loadSets() }
+        .onChange(of: displayUSNumbers) { _, _ in loadSets() }
+        .onChange(of: selectedTheme) { _, _ in loadSets() }
+        .onChange(of: sortOrder) { _, _ in loadSets() }
         #if os(iOS)
         .popover(isPresented: $showSettings) {
             SettingsPopover(
@@ -124,7 +125,11 @@ struct SetList: View {
 
         // Theme filter
         if let selectedTheme = selectedTheme {
-            let themeIDs = selectedTheme.getAllThemeIDs()
+            var themeIDs = selectedTheme.getAllThemeIDs()
+            // If filtering by favorites, only include favorite themes from the hierarchy
+            if filterFavoriteThemes {
+                themeIDs = themeIDs.intersection(favoriteThemes)
+            }
             let themeArray = Array(themeIDs).map { NSNumber(value: $0) }
             predicates.append(NSPredicate(format: "themeID IN %@", themeArray))
         } else if filterFavoriteThemes {
