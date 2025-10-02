@@ -1,0 +1,809 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		073301E82E73C3040057EDBB /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 073301E72E73C3040057EDBB /* ZIPFoundation */; };
+		073301EB2E73C3140057EDBB /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 073301EA2E73C3140057EDBB /* ZIPFoundation */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		074180EE2E77C94B00B9FF22 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 070755F72E739D24007C1FA4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 073347F12E73BDC7006CBBAA;
+			remoteInfo = "BRIQ-macos";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		073347F22E73BDC7006CBBAA /* BRIQ.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BRIQ.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		074180EA2E77C94B00B9FF22 /* BRIQTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BRIQTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		075C34DC2E73BE4300CE4BC0 /* BRIQ-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BRIQ-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		0733018E2E73BF5B0057EDBB /* Exceptions for "Shared" folder in "BRIQ-macos" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Auto-Generated/PartCategories.swift",
+				"Auto-Generated/PartColors.swift",
+				"Auto-Generated/Themes.swift",
+				BundledData.swift,
+				CoreData/BRIQ.xcdatamodeld,
+				CoreData/CoreDataStack.swift,
+				"CoreData/Minifig+CoreDataClass.swift",
+				"CoreData/Part+CoreDataClass.swift",
+				"CoreData/Set+CoreDataClass.swift",
+				"CoreData/SetMinifig+CoreDataClass.swift",
+				"CoreData/SetPart+CoreDataClass.swift",
+				"CoreData/SetUserData+CoreDataClass.swift",
+				Database.swift,
+				EnvironmentKeys.swift,
+				InitializationState.swift,
+				PartColor.swift,
+				"SampleData/SampleData+Extensions.swift",
+				SampleData/SampleDataProvider.swift,
+				SetListSortOrder.swift,
+				Theme.swift,
+				Views/ContentView.swift,
+				Views/IconGridView.swift,
+				Views/IconImage.swift,
+				Views/InfoTable.swift,
+				Views/Minifigs/MinifigRow.swift,
+				Views/Minifigs/MinifigsIconView.swift,
+				Views/Minifigs/MinifigsList.swift,
+				Views/Minifigs/MinifigsListView.swift,
+				Views/Parts/PartRow.swift,
+				Views/Parts/PartsIconView.swift,
+				Views/Parts/PartsList.swift,
+				Views/Parts/PartsListView.swift,
+				Views/SetDetails/SetContentSection.swift,
+				Views/SetDetails/SetDetail.swift,
+				Views/SetDetails/SetDetailFields.swift,
+				Views/SetDetails/SetExternalLinks.swift,
+				Views/SetDetails/SetImageDisplay.swift,
+				Views/SetLists/SetDetailNavigationLink.swift,
+				Views/SetLists/SetIconView.swift,
+				Views/SetLists/SetList.swift,
+				Views/SetLists/SetListIconView.swift,
+				Views/SetLists/SetListSplitView.swift,
+				Views/SetLists/SetListStatusBar.swift,
+				Views/SetLists/SetListTableView.swift,
+				Views/SetLists/ToolbarItems/IconSizeSliderToolbarItem.swift,
+				Views/SetLists/ToolbarItems/SettingsButtonToolbarItem.swift,
+				Views/SetLists/ToolbarItems/ThemeDropdownToolbarItem.swift,
+				Views/SetLists/ToolbarItems/ViewModeMenuToolbarItem.swift,
+				Views/SetRow.swift,
+				Views/StarRatingView.swift,
+				Views/Themes/FavoriteThemes.swift,
+				Views/Themes/ThemeDropdown.swift,
+			);
+			target = 073347F12E73BDC7006CBBAA /* BRIQ-macos */;
+		};
+		0733018F2E73BF5B0057EDBB /* Exceptions for "Shared" folder in "BRIQ-ios" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Auto-Generated/PartCategories.swift",
+				"Auto-Generated/PartColors.swift",
+				"Auto-Generated/Themes.swift",
+				BundledData.swift,
+				CoreData/BRIQ.xcdatamodeld,
+				CoreData/CoreDataStack.swift,
+				"CoreData/Minifig+CoreDataClass.swift",
+				"CoreData/Part+CoreDataClass.swift",
+				"CoreData/Set+CoreDataClass.swift",
+				"CoreData/SetMinifig+CoreDataClass.swift",
+				"CoreData/SetPart+CoreDataClass.swift",
+				"CoreData/SetUserData+CoreDataClass.swift",
+				Database.swift,
+				EnvironmentKeys.swift,
+				InitializationState.swift,
+				PartColor.swift,
+				"SampleData/SampleData+Extensions.swift",
+				SampleData/SampleDataProvider.swift,
+				SetListSortOrder.swift,
+				Theme.swift,
+				Views/ContentView.swift,
+				Views/IconGridView.swift,
+				Views/IconImage.swift,
+				Views/InfoTable.swift,
+				Views/Minifigs/MinifigRow.swift,
+				Views/Minifigs/MinifigsIconView.swift,
+				Views/Minifigs/MinifigsList.swift,
+				Views/Minifigs/MinifigsListView.swift,
+				Views/Parts/PartRow.swift,
+				Views/Parts/PartsIconView.swift,
+				Views/Parts/PartsList.swift,
+				Views/Parts/PartsListView.swift,
+				Views/SetDetails/SetContentSection.swift,
+				Views/SetDetails/SetDetail.swift,
+				Views/SetDetails/SetDetailFields.swift,
+				Views/SetDetails/SetExternalLinks.swift,
+				Views/SetDetails/SetImageDisplay.swift,
+				Views/SetLists/SetDetailNavigationLink.swift,
+				Views/SetLists/SetIconView.swift,
+				Views/SetLists/SetList.swift,
+				Views/SetLists/SetListIconView.swift,
+				Views/SetLists/SetListStatusBar.swift,
+				Views/SetLists/ToolbarItems/SettingsButtonToolbarItem.swift,
+				Views/SetLists/ToolbarItems/ThemeDropdownToolbarItem.swift,
+				Views/SetLists/ToolbarItems/ViewModeMenuToolbarItem.swift,
+				Views/SetRow.swift,
+				Views/StarRatingView.swift,
+				Views/Themes/FavoriteThemes.swift,
+				Views/Themes/ThemeDropdown.swift,
+			);
+			target = 075C34DB2E73BE4300CE4BC0 /* BRIQ-ios */;
+		};
+		073302582E73D80D0057EDBB /* Exceptions for "Resources" folder in "BRIQ-macos" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				init.zip,
+			);
+			target = 073347F12E73BDC7006CBBAA /* BRIQ-macos */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		073302542E73D7F90057EDBB /* Resources */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				073302582E73D80D0057EDBB /* Exceptions for "Resources" folder in "BRIQ-macos" target */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		073347ED2E73BDA3006CBBAA /* Shared */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				0733018E2E73BF5B0057EDBB /* Exceptions for "Shared" folder in "BRIQ-macos" target */,
+				0733018F2E73BF5B0057EDBB /* Exceptions for "Shared" folder in "BRIQ-ios" target */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		073347F32E73BDC7006CBBAA /* BRIQ-macos */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "BRIQ-macos";
+			sourceTree = "<group>";
+		};
+		075C34DD2E73BE4300CE4BC0 /* BRIQ-ios */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "BRIQ-ios";
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		073347EF2E73BDC7006CBBAA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				073301E82E73C3040057EDBB /* ZIPFoundation in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		074180E72E77C94B00B9FF22 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		075C34D92E73BE4300CE4BC0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				073301EB2E73C3140057EDBB /* ZIPFoundation in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		070755F62E739D24007C1FA4 = {
+			isa = PBXGroup;
+			children = (
+				073302542E73D7F90057EDBB /* Resources */,
+				073347ED2E73BDA3006CBBAA /* Shared */,
+				073347F32E73BDC7006CBBAA /* BRIQ-macos */,
+				075C34DD2E73BE4300CE4BC0 /* BRIQ-ios */,
+				073301E92E73C3140057EDBB /* Frameworks */,
+				070756002E739D24007C1FA4 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		070756002E739D24007C1FA4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				073347F22E73BDC7006CBBAA /* BRIQ.app */,
+				075C34DC2E73BE4300CE4BC0 /* BRIQ-ios.app */,
+				074180EA2E77C94B00B9FF22 /* BRIQTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		073301E92E73C3140057EDBB /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		073347F12E73BDC7006CBBAA /* BRIQ-macos */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 073347FA2E73BDC8006CBBAA /* Build configuration list for PBXNativeTarget "BRIQ-macos" */;
+			buildPhases = (
+				073347EE2E73BDC7006CBBAA /* Sources */,
+				073347EF2E73BDC7006CBBAA /* Frameworks */,
+				073347F02E73BDC7006CBBAA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				073347F32E73BDC7006CBBAA /* BRIQ-macos */,
+			);
+			name = "BRIQ-macos";
+			packageProductDependencies = (
+				073301E72E73C3040057EDBB /* ZIPFoundation */,
+			);
+			productName = "BRIQ-macos";
+			productReference = 073347F22E73BDC7006CBBAA /* BRIQ.app */;
+			productType = "com.apple.product-type.application";
+		};
+		074180E92E77C94B00B9FF22 /* BRIQTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 074180F02E77C94B00B9FF22 /* Build configuration list for PBXNativeTarget "BRIQTests" */;
+			buildPhases = (
+				074180E62E77C94B00B9FF22 /* Sources */,
+				074180E72E77C94B00B9FF22 /* Frameworks */,
+				074180E82E77C94B00B9FF22 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				074180EF2E77C94B00B9FF22 /* PBXTargetDependency */,
+			);
+			name = BRIQTests;
+			packageProductDependencies = (
+			);
+			productName = BRIQTests;
+			productReference = 074180EA2E77C94B00B9FF22 /* BRIQTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		075C34DB2E73BE4300CE4BC0 /* BRIQ-ios */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 075C34E42E73BE4400CE4BC0 /* Build configuration list for PBXNativeTarget "BRIQ-ios" */;
+			buildPhases = (
+				075C34D82E73BE4300CE4BC0 /* Sources */,
+				075C34D92E73BE4300CE4BC0 /* Frameworks */,
+				075C34DA2E73BE4300CE4BC0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				073302542E73D7F90057EDBB /* Resources */,
+				075C34DD2E73BE4300CE4BC0 /* BRIQ-ios */,
+			);
+			name = "BRIQ-ios";
+			packageProductDependencies = (
+				073301EA2E73C3140057EDBB /* ZIPFoundation */,
+			);
+			productName = "BRIQ-ios";
+			productReference = 075C34DC2E73BE4300CE4BC0 /* BRIQ-ios.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		070755F72E739D24007C1FA4 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2600;
+				LastUpgradeCheck = 2600;
+				TargetAttributes = {
+					073347F12E73BDC7006CBBAA = {
+						CreatedOnToolsVersion = 26.0;
+					};
+					074180E92E77C94B00B9FF22 = {
+						CreatedOnToolsVersion = 26.0;
+						TestTargetID = 073347F12E73BDC7006CBBAA;
+					};
+					075C34DB2E73BE4300CE4BC0 = {
+						CreatedOnToolsVersion = 26.0;
+					};
+				};
+			};
+			buildConfigurationList = 070755FA2E739D24007C1FA4 /* Build configuration list for PBXProject "BRIQ" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 070755F62E739D24007C1FA4;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				073301E62E73C3040057EDBB /* XCRemoteSwiftPackageReference "ZIPFoundation" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 070756002E739D24007C1FA4 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				073347F12E73BDC7006CBBAA /* BRIQ-macos */,
+				075C34DB2E73BE4300CE4BC0 /* BRIQ-ios */,
+				074180E92E77C94B00B9FF22 /* BRIQTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		073347F02E73BDC7006CBBAA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		074180E82E77C94B00B9FF22 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		075C34DA2E73BE4300CE4BC0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		073347EE2E73BDC7006CBBAA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		074180E62E77C94B00B9FF22 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		075C34D82E73BE4300CE4BC0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		074180EF2E77C94B00B9FF22 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 073347F12E73BDC7006CBBAA /* BRIQ-macos */;
+			targetProxy = 074180EE2E77C94B00B9FF22 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		070756082E739D25007C1FA4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = SGHB6DGT2T;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		070756092E739D25007C1FA4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = SGHB6DGT2T;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		073347FB2E73BDC8006CBBAA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 6;
+				DEVELOPMENT_TEAM = SGHB6DGT2T;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_INCOMING_NETWORK_CONNECTIONS = NO;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_BLUETOOTH = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
+				ENABLE_RESOURCE_ACCESS_PRINTING = NO;
+				ENABLE_RESOURCE_ACCESS_USB = NO;
+				ENABLE_USER_SELECTED_FILES = readwrite;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = BRIQ;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.reference";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2025 Éric Spérano";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "sperano.BRIQ-macos";
+				PRODUCT_NAME = BRIQ;
+				REGISTER_APP_GROUPS = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		073347FC2E73BDC8006CBBAA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 6;
+				DEVELOPMENT_TEAM = SGHB6DGT2T;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_INCOMING_NETWORK_CONNECTIONS = NO;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_BLUETOOTH = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
+				ENABLE_RESOURCE_ACCESS_PRINTING = NO;
+				ENABLE_RESOURCE_ACCESS_USB = NO;
+				ENABLE_USER_SELECTED_FILES = readwrite;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = BRIQ;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.reference";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2025 Éric Spérano";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "sperano.BRIQ-macos";
+				PRODUCT_NAME = BRIQ;
+				REGISTER_APP_GROUPS = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		074180F12E77C94B00B9FF22 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = SGHB6DGT2T;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = sperano.BRIQTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BRIQ.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BRIQ";
+			};
+			name = Debug;
+		};
+		074180F22E77C94B00B9FF22 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = SGHB6DGT2T;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = sperano.BRIQTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BRIQ.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BRIQ";
+			};
+			name = Release;
+		};
+		075C34E52E73BE4400CE4BC0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = SGHB6DGT2T;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = BRIQ;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.reference";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "sperano.BRIQ-ios";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		075C34E62E73BE4400CE4BC0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = SGHB6DGT2T;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = BRIQ;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.reference";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "sperano.BRIQ-ios";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		070755FA2E739D24007C1FA4 /* Build configuration list for PBXProject "BRIQ" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				070756082E739D25007C1FA4 /* Debug */,
+				070756092E739D25007C1FA4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		073347FA2E73BDC8006CBBAA /* Build configuration list for PBXNativeTarget "BRIQ-macos" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				073347FB2E73BDC8006CBBAA /* Debug */,
+				073347FC2E73BDC8006CBBAA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		074180F02E77C94B00B9FF22 /* Build configuration list for PBXNativeTarget "BRIQTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				074180F12E77C94B00B9FF22 /* Debug */,
+				074180F22E77C94B00B9FF22 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		075C34E42E73BE4400CE4BC0 /* Build configuration list for PBXNativeTarget "BRIQ-ios" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				075C34E52E73BE4400CE4BC0 /* Debug */,
+				075C34E62E73BE4400CE4BC0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		073301E62E73C3040057EDBB /* XCRemoteSwiftPackageReference "ZIPFoundation" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/weichsel/ZIPFoundation";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.9.19;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		073301E72E73C3040057EDBB /* ZIPFoundation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 073301E62E73C3040057EDBB /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
+			productName = ZIPFoundation;
+		};
+		073301EA2E73C3140057EDBB /* ZIPFoundation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 073301E62E73C3040057EDBB /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
+			productName = ZIPFoundation;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 070755F72E739D24007C1FA4 /* Project object */;
+}
