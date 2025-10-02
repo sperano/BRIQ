@@ -85,10 +85,10 @@ The app uses modern SwiftUI patterns with Core Data for persistence. Key compone
 - `Database.swift`: Utilities for database management and user data operations
 - `InitializationState`: Manages app startup and initialization flow
 
-## Contributing
+### AI Usage
 
-This is a personal project for managing LEGO collections. The codebase demonstrates SwiftUI best practices, Core Data integration, and cross-platform iOS/macOS development patterns.
+I also took the opportunity to try out and learn Claude Code and have been happy with the results.
 
 ## License
 
-[Add your license information here]
+[MIT License](LICENSE)
