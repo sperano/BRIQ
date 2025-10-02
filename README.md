@@ -2,6 +2,10 @@
 
 A cross-platform SwiftUI application for iOS and macOS that manages LEGO set data, including sets, parts, and minifigures.
 
+![Screenshot #1](./docs/assets/screenshot01.png)
+![Screenshot #2](./docs/assets/screenshot02.png)
+![Screenshot #3](./docs/assets/screenshot03.png)
+
 ## Features
 
 - **Comprehensive LEGO Database**: Browse and manage LEGO sets, parts, and minifigures

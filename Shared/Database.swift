@@ -70,7 +70,7 @@ public func importUserData(context: NSManagedObjectContext, jsonString: String) 
         for data in userData {
             guard let number = data["number"] as? String else { continue }
 
-            _ = SetUserData.create(
+            let newUserData = SetUserData.create(
                 in: context,
                 number: number,
                 owned: data["owned"] as? Bool ?? false,
@@ -78,10 +78,19 @@ public func importUserData(context: NSManagedObjectContext, jsonString: String) 
                 ownsInstructions: data["ownsInstructions"] as? Bool ?? false,
                 instructionsQuality: Int32(data["instructionsQuality"] as? Int ?? 0)
             )
+
+            // Link to the corresponding Set if it exists
+            if let set = Set.fetch(byNumber: number, in: context) {
+                newUserData.set = set
+                set.userData = newUserData
+            }
         }
 
         try context.save()
         print("Successfully imported \(userData.count) user data entries")
+
+        // Post notification to refresh UI
+        NotificationCenter.default.post(name: NSNotification.Name("UserDataImported"), object: nil)
     } catch {
         print("Failed to import user data: \(error)")
     }

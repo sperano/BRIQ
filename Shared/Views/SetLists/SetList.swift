@@ -59,6 +59,9 @@ struct SetList: View {
         .searchable(text: $searchText)
         .environment(\.refreshSetList, loadSets)
         .onAppear(perform: loadSets)
+        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("UserDataImported"))) { _ in
+            loadSets()
+        }
         .onChange(of: searchText) { _, _ in loadSets() }
         .onChange(of: filterOwnedState) { _, _ in loadSets() }
         .onChange(of: filterFavoriteState) { _, _ in loadSets() }
@@ -88,7 +91,40 @@ struct SetList: View {
     private func loadSets() {
         do {
             let request = createFetchRequest()
-            self.sets = try context.fetch(request)
+            var fetchedSets = try context.fetch(request)
+
+            // Apply custom sorting for number-based sorts
+            if sortOrder == .number || sortOrder == .year {
+                fetchedSets.sort { lhs, rhs in
+                    // If sorting by year, compare years first
+                    if sortOrder == .year && lhs.year != rhs.year {
+                        return lhs.year < rhs.year
+                    }
+
+                    // Parse and compare set numbers numerically
+                    let lhsComponents = lhs.number.components(separatedBy: "-")
+                    let rhsComponents = rhs.number.components(separatedBy: "-")
+
+                    let lhsFirst = Int(lhsComponents[0]) ?? 0
+                    let rhsFirst = Int(rhsComponents[0]) ?? 0
+
+                    if lhsFirst != rhsFirst {
+                        return lhsFirst < rhsFirst
+                    }
+
+                    // If first parts are equal, compare second parts
+                    if lhsComponents.count > 1 && rhsComponents.count > 1 {
+                        let lhsSecond = Int(lhsComponents[1]) ?? 0
+                        let rhsSecond = Int(rhsComponents[1]) ?? 0
+                        return lhsSecond < rhsSecond
+                    }
+
+                    // If one has a suffix and the other doesn't, the one without comes first
+                    return lhsComponents.count < rhsComponents.count
+                }
+            }
+
+            self.sets = fetchedSets
         } catch {
             print("Failed to fetch sets:", error)
         }
