@@ -2,15 +2,15 @@
 
 A cross-platform SwiftUI application for iOS and macOS that manages personal LEGO set collections.
 
-It uses the publicly available data from [Rebrickable](https://rebrickable.com/downloads/) that is adapted for this application by [briq-utils](https://github.com/sperano/briq-utils).
+## Screenshots
 
-<img src="docs/assets/screenshot01.png" alt="Screenshpt #1" width="300"/>
-<img src="docs/assets/screenshot02.png" alt="Screenshpt #2" width="300"/>
-<img src="docs/assets/screenshot03.png" alt="Screenshpt #3" width="300"/>
+![Screenshot #1](./docs/assets/screenshot01.png)
+![Screenshot #2](./docs/assets/screenshot02.png)
+![Screenshot #3](./docs/assets/screenshot03.png)
 
 ## Features
 
-- **Comprehensive LEGO Database**: Browse and manage LEGO sets, parts, and minifigures
+- **Comprehensive LEGO Database**: Browse and manage LEGO sets, parts, and minifigures. It uses the publicly available data from [Rebrickable](https://rebrickable.com/downloads/) that is adapted for this application by [briq-utils](https://github.com/sperano/briq-utils).
 - **Cross-Platform**: Native apps for both iOS and macOS with platform-specific features
 - **User Data Management**: Track owned sets, favorites, and instruction availability
 - **Database Import/Export**: Backup and restore user data (macOS)
