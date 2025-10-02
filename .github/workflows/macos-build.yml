@@ -1,0 +1,53 @@
+name: macOS Build & Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Xcode
+        run: sudo xcode-select -s /Applications/Xcode_15.4.app
+
+      - name: Build archive
+        run: |
+          xcodebuild -scheme "BRIQ-macos" \
+            -configuration Release \
+            -archivePath $PWD/build/BRIQ.xcarchive \
+            archive
+
+      - name: Export .app
+        run: |
+          xcodebuild -exportArchive \
+            -archivePath $PWD/build/BRIQ.xcarchive \
+            -exportPath $PWD/build \
+            -exportOptionsPlist ExportOptions.plist
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: BRIQ-macos.app
+          path: build/BRIQ.app
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: BRIQ-macos.app
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: BRIQ-macos.app
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,7 +1,10 @@
 # BRIQ
 
-A cross-platform SwiftUI application for iOS and macOS that manages LEGO set data, including sets, parts, and minifigures.
+A cross-platform SwiftUI application for iOS and macOS that manages personal LEGO set collections.
 
+It uses the publicly available data from [Rebrickable](https://rebrickable.com/downloads/) that is adapted for this application by [briq-utils](https://github.com/sperano/briq-utils).
+
+<img src="docs/assets/screenshot01.png" alt="Screenshpt #1" width="200"/>
 ![Screenshot #1](./docs/assets/screenshot01.png)
 ![Screenshot #2](./docs/assets/screenshot02.png)
 ![Screenshot #3](./docs/assets/screenshot03.png)
