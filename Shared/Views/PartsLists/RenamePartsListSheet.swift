@@ -1,0 +1,79 @@
+//
+//  RenamePartsListSheet.swift
+//  BRIQ
+//
+
+import SwiftUI
+import CoreData
+
+struct RenamePartsListSheet: View {
+    @Environment(\.managedObjectContext) private var context
+    @Environment(\.dismiss) private var dismiss
+
+    @ObservedObject var partsList: PartsList
+
+    @State private var name: String = ""
+    @State private var showError: Bool = false
+    @State private var errorMessage: String = ""
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                TextField("Name", text: $name)
+            }
+            .navigationTitle("Rename Parts List")
+            #if os(iOS)
+            .navigationBarTitleDisplayMode(.inline)
+            #endif
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") {
+                        dismiss()
+                    }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Save") {
+                        save()
+                    }
+                    .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
+                }
+            }
+            .alert("Error", isPresented: $showError) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text(errorMessage)
+            }
+            .onAppear {
+                name = partsList.name
+            }
+        }
+    }
+
+    private func save() {
+        let trimmedName = name.trimmingCharacters(in: .whitespaces)
+
+        guard !trimmedName.isEmpty else {
+            errorMessage = "Name cannot be empty."
+            showError = true
+            return
+        }
+
+        if trimmedName != partsList.name {
+            if PartsList.fetch(byName: trimmedName, in: context) != nil {
+                errorMessage = "A parts list with this name already exists."
+                showError = true
+                return
+            }
+        }
+
+        partsList.name = trimmedName
+
+        do {
+            try context.save()
+            dismiss()
+        } catch {
+            errorMessage = "Failed to save: \(error.localizedDescription)"
+            showError = true
+        }
+    }
+}
