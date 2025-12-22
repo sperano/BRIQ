@@ -56,7 +56,7 @@ struct SetList: View {
             SetListStatusBar(sets: $sets)
             .padding()
         }
-        .searchable(text: $searchText)
+        .searchable(text: $searchText, placement: .toolbar)
         .environment(\.refreshSetList, loadSets)
         .onAppear(perform: loadSets)
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("UserDataImported"))) { _ in

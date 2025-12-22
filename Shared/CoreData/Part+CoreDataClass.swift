@@ -15,6 +15,7 @@ public class Part: NSManagedObject, Identifiable {
     @NSManaged public var material: String
     @NSManaged public var name: String
     @NSManaged public var number: String
+    @NSManaged public var partsListParts: NSSet?
     @NSManaged public var setParts: NSSet?
 
     public var id: String { number }

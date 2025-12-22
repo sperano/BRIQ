@@ -65,6 +65,7 @@ struct MacBRIQApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .frame(minWidth: 700, minHeight: 400)
                 .environment(\.managedObjectContext, coreDataStack.viewContext)
                 .environmentObject(coreDataStack)
                 .environmentObject(initializationState)
@@ -83,6 +84,8 @@ struct MacBRIQApp: App {
                     )
                 }
         }
+        .windowResizability(.contentMinSize)
+        .defaultSize(width: 900, height: 600)
         .commands {
             CommandGroup(after: .toolbar) {
                 ViewModeCommands()

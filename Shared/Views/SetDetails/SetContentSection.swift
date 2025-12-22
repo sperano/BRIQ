@@ -39,7 +39,7 @@ struct SetContentSection: View {
                 Text("\(totalParts) parts:")
                     .font(.title2)
                     .fontWeight(.bold)
-                PartsList(parts: (set.parts?.allObjects as? [SetPart]) ?? [], viewMode: viewMode)
+                SetPartsDisplay(parts: (set.parts?.allObjects as? [SetPart]) ?? [], viewMode: viewMode)
             }
         }
     }

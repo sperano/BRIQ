@@ -7,8 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		07254BF0B1C6303A015401AD /* CreatePartsListSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA8436CAA0AABF17AAC407E /* CreatePartsListSheet.swift */; };
 		073301E82E73C3040057EDBB /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 073301E72E73C3040057EDBB /* ZIPFoundation */; };
 		073301EB2E73C3140057EDBB /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 073301EA2E73C3140057EDBB /* ZIPFoundation */; };
+		0E544A4797C7D374B2193EB1 /* PartsListsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80B442980FC58475D5BD6C7 /* PartsListsView.swift */; };
+		14AA4D74A068CB8C999EB774 /* PartsListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A314F54A936030C16257B51 /* PartsListRow.swift */; };
+		26554742B12F8AA00A2AEEA4 /* RenamePartsListSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B974990B395C8EEB7028F7B /* RenamePartsListSheet.swift */; };
+		34AF467D9E5EE6B7A884BAFE /* PartsListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB14CD881422C6FB7853AAE /* PartsListRow.swift */; };
+		35C14F32AB859CC7E66130C7 /* PartsListsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9134BEDA42F71FF38D93293 /* PartsListsView.swift */; };
+		56B7412CAF7C27340D809496 /* PartsList+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46040EFA59D6F71FB46E141 /* PartsList+CoreDataClass.swift */; };
+		615B4A19B7B32AEF7C2F3D6C /* PartsListPart+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DC4181B99C855CC442A5BE /* PartsListPart+CoreDataClass.swift */; };
+		64024AF8B2CD2BE189E548E7 /* PartsListPart+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E65458293049E4EC8892DF6 /* PartsListPart+CoreDataClass.swift */; };
+		850742CD8A5B7FF2B5DF7228 /* PartsList+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1146229C2829B277DB5AC8 /* PartsList+CoreDataClass.swift */; };
+		8ED54826903D5AF7E06AFB36 /* CreatePartsListSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4914BFBBDAB1B6D990FFA6C /* CreatePartsListSheet.swift */; };
+		FA12401C977E210A11A13285 /* RenamePartsListSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40084448815506F3C4316231 /* RenamePartsListSheet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -25,6 +37,18 @@
 		073347F22E73BDC7006CBBAA /* BRIQ.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BRIQ.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		074180EA2E77C94B00B9FF22 /* BRIQTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BRIQTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		075C34DC2E73BE4300CE4BC0 /* BRIQ-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BRIQ-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		0EA8436CAA0AABF17AAC407E /* CreatePartsListSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CreatePartsListSheet.swift; path = Shared/Views/PartsLists/CreatePartsListSheet.swift; sourceTree = SOURCE_ROOT; };
+		3A1146229C2829B277DB5AC8 /* PartsList+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "PartsList+CoreDataClass.swift"; path = "Shared/CoreData/PartsList+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
+		3A314F54A936030C16257B51 /* PartsListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PartsListRow.swift; path = Shared/Views/PartsLists/PartsListRow.swift; sourceTree = SOURCE_ROOT; };
+		3AB14CD881422C6FB7853AAE /* PartsListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PartsListRow.swift; path = Shared/Views/PartsLists/PartsListRow.swift; sourceTree = SOURCE_ROOT; };
+		40084448815506F3C4316231 /* RenamePartsListSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RenamePartsListSheet.swift; path = Shared/Views/PartsLists/RenamePartsListSheet.swift; sourceTree = SOURCE_ROOT; };
+		58DC4181B99C855CC442A5BE /* PartsListPart+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "PartsListPart+CoreDataClass.swift"; path = "Shared/CoreData/PartsListPart+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
+		5B974990B395C8EEB7028F7B /* RenamePartsListSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RenamePartsListSheet.swift; path = Shared/Views/PartsLists/RenamePartsListSheet.swift; sourceTree = SOURCE_ROOT; };
+		6E65458293049E4EC8892DF6 /* PartsListPart+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "PartsListPart+CoreDataClass.swift"; path = "Shared/CoreData/PartsListPart+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
+		B80B442980FC58475D5BD6C7 /* PartsListsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PartsListsView.swift; path = Shared/Views/PartsLists/PartsListsView.swift; sourceTree = SOURCE_ROOT; };
+		D46040EFA59D6F71FB46E141 /* PartsList+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "PartsList+CoreDataClass.swift"; path = "Shared/CoreData/PartsList+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
+		E9134BEDA42F71FF38D93293 /* PartsListsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PartsListsView.swift; path = Shared/Views/PartsLists/PartsListsView.swift; sourceTree = SOURCE_ROOT; };
+		F4914BFBBDAB1B6D990FFA6C /* CreatePartsListSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CreatePartsListSheet.swift; path = Shared/Views/PartsLists/CreatePartsListSheet.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -216,6 +240,18 @@
 				075C34DD2E73BE4300CE4BC0 /* BRIQ-ios */,
 				073301E92E73C3140057EDBB /* Frameworks */,
 				070756002E739D24007C1FA4 /* Products */,
+				3AB14CD881422C6FB7853AAE /* PartsListRow.swift */,
+				3A314F54A936030C16257B51 /* PartsListRow.swift */,
+				B80B442980FC58475D5BD6C7 /* PartsListsView.swift */,
+				E9134BEDA42F71FF38D93293 /* PartsListsView.swift */,
+				0EA8436CAA0AABF17AAC407E /* CreatePartsListSheet.swift */,
+				F4914BFBBDAB1B6D990FFA6C /* CreatePartsListSheet.swift */,
+				40084448815506F3C4316231 /* RenamePartsListSheet.swift */,
+				5B974990B395C8EEB7028F7B /* RenamePartsListSheet.swift */,
+				3A1146229C2829B277DB5AC8 /* PartsList+CoreDataClass.swift */,
+				D46040EFA59D6F71FB46E141 /* PartsList+CoreDataClass.swift */,
+				58DC4181B99C855CC442A5BE /* PartsListPart+CoreDataClass.swift */,
+				6E65458293049E4EC8892DF6 /* PartsListPart+CoreDataClass.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -381,6 +417,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				34AF467D9E5EE6B7A884BAFE /* PartsListRow.swift in Sources */,
+				0E544A4797C7D374B2193EB1 /* PartsListsView.swift in Sources */,
+				07254BF0B1C6303A015401AD /* CreatePartsListSheet.swift in Sources */,
+				FA12401C977E210A11A13285 /* RenamePartsListSheet.swift in Sources */,
+				850742CD8A5B7FF2B5DF7228 /* PartsList+CoreDataClass.swift in Sources */,
+				615B4A19B7B32AEF7C2F3D6C /* PartsListPart+CoreDataClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -395,6 +437,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				14AA4D74A068CB8C999EB774 /* PartsListRow.swift in Sources */,
+				35C14F32AB859CC7E66130C7 /* PartsListsView.swift in Sources */,
+				8ED54826903D5AF7E06AFB36 /* CreatePartsListSheet.swift in Sources */,
+				26554742B12F8AA00A2AEEA4 /* RenamePartsListSheet.swift in Sources */,
+				56B7412CAF7C27340D809496 /* PartsList+CoreDataClass.swift in Sources */,
+				64024AF8B2CD2BE189E548E7 /* PartsListPart+CoreDataClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

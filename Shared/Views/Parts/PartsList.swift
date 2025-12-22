@@ -10,7 +10,7 @@ import SwiftUI
 import CoreData
 #endif
 
-struct PartsList: View {
+struct SetPartsDisplay: View {
     let parts: [SetPart]
     let viewMode: ViewMode
     
@@ -31,13 +31,13 @@ struct PartsList: View {
 
 #if DEBUG
 #Preview("List") {
-    PartsList(parts: SetPart.sampleData, viewMode: .list)
+    SetPartsDisplay(parts: SetPart.sampleData, viewMode: .list)
         .environment(\.managedObjectContext, NSManagedObjectContext.preview)
         .frame(width: 400, height: 600)
 }
 
 #Preview("Icon") {
-    PartsList(parts: SetPart.sampleData, viewMode: .icon)
+    SetPartsDisplay(parts: SetPart.sampleData, viewMode: .icon)
         .environment(\.managedObjectContext, NSManagedObjectContext.preview)
         .frame(width: 400, height: 600)
 }
