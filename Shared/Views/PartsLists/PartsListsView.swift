@@ -18,11 +18,13 @@ struct PartsListsView: View {
     @State private var showCreateSheet = false
     @State private var partsListToRename: PartsList?
     @State private var partsListToDelete: PartsList?
+    @State private var selectedPartsList: PartsList?
 
     var body: some View {
-        List {
-            ForEach(partsLists) { partsList in
+        NavigationSplitView {
+            List(partsLists, selection: $selectedPartsList) { partsList in
                 PartsListRow(partsList: partsList)
+                    .tag(partsList)
                     .contextMenu {
                         Button {
                             partsListToRename = partsList
@@ -36,47 +38,54 @@ struct PartsListsView: View {
                         }
                     }
             }
-        }
-        .overlay {
-            if partsLists.isEmpty {
-                ContentUnavailableView {
-                    Label("No Parts Lists", systemImage: "list.bullet.rectangle")
-                } description: {
-                    Text("Create a parts list to get started.")
+            .overlay {
+                if partsLists.isEmpty {
+                    ContentUnavailableView {
+                        Label("No Parts Lists", systemImage: "list.bullet.rectangle")
+                    } description: {
+                        Text("Create a parts list to get started.")
+                    }
                 }
             }
-        }
-        .navigationTitle("Parts Lists")
-        .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                Button {
-                    showCreateSheet = true
-                } label: {
-                    Label("Add", systemImage: "plus")
+            .navigationTitle("Parts Lists")
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button {
+                        showCreateSheet = true
+                    } label: {
+                        Label("Add", systemImage: "plus")
+                    }
                 }
             }
-        }
-        .sheet(isPresented: $showCreateSheet) {
-            CreatePartsListSheet()
-        }
-        .sheet(item: $partsListToRename) { partsList in
-            RenamePartsListSheet(partsList: partsList)
-        }
-        .alert("Delete Parts List?", isPresented: Binding(
-            get: { partsListToDelete != nil },
-            set: { if !$0 { partsListToDelete = nil } }
-        )) {
-            Button("Cancel", role: .cancel) {
-                partsListToDelete = nil
+            .sheet(isPresented: $showCreateSheet) {
+                CreatePartsListSheet()
             }
-            Button("Delete", role: .destructive) {
-                if let partsList = partsListToDelete {
-                    delete(partsList)
+            .sheet(item: $partsListToRename) { partsList in
+                RenamePartsListSheet(partsList: partsList)
+            }
+            .alert("Delete Parts List?", isPresented: Binding(
+                get: { partsListToDelete != nil },
+                set: { if !$0 { partsListToDelete = nil } }
+            )) {
+                Button("Cancel", role: .cancel) {
+                    partsListToDelete = nil
                 }
-                partsListToDelete = nil
+                Button("Delete", role: .destructive) {
+                    if let partsList = partsListToDelete {
+                        delete(partsList)
+                    }
+                    partsListToDelete = nil
+                }
+            } message: {
+                Text("This will permanently delete \"\(partsListToDelete?.name ?? "")\" and all its parts.")
             }
-        } message: {
-            Text("This will permanently delete \"\(partsListToDelete?.name ?? "")\" and all its parts.")
+        } detail: {
+            if let selectedPartsList = selectedPartsList {
+                PartsListDetailView(partsList: selectedPartsList)
+            } else {
+                Text("Select a parts list")
+                    .foregroundStyle(.secondary)
+            }
         }
     }
 

@@ -6,7 +6,7 @@
 import SwiftUI
 
 struct PartsListRow: View {
-    let partsList: PartsList
+    @ObservedObject var partsList: PartsList
 
     private var partsCount: Int {
         partsList.parts?.count ?? 0
