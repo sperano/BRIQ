@@ -54,13 +54,13 @@
 		4D5E6F7A8B9C0D1E2F3A4B5C /* PartsListPartRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PartsListPartRow.swift; path = Shared/Views/PartsLists/PartsListPartRow.swift; sourceTree = SOURCE_ROOT; };
 		58DC4181B99C855CC442A5BE /* PartsListPart+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "PartsListPart+CoreDataClass.swift"; path = "Shared/CoreData/PartsListPart+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
 		5B974990B395C8EEB7028F7B /* RenamePartsListSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RenamePartsListSheet.swift; path = Shared/Views/PartsLists/RenamePartsListSheet.swift; sourceTree = SOURCE_ROOT; };
+		5E6F7A8B9C0D1E2F3A4B5C6D /* EditPartsListPartSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EditPartsListPartSheet.swift; path = Shared/Views/PartsLists/EditPartsListPartSheet.swift; sourceTree = SOURCE_ROOT; };
 		6E65458293049E4EC8892DF6 /* PartsListPart+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "PartsListPart+CoreDataClass.swift"; path = "Shared/CoreData/PartsListPart+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
+		6F7A8B9C0D1E2F3A4B5C6D7E /* EditPartsListPartSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EditPartsListPartSheet.swift; path = Shared/Views/PartsLists/EditPartsListPartSheet.swift; sourceTree = SOURCE_ROOT; };
 		B80B442980FC58475D5BD6C7 /* PartsListsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PartsListsView.swift; path = Shared/Views/PartsLists/PartsListsView.swift; sourceTree = SOURCE_ROOT; };
 		D46040EFA59D6F71FB46E141 /* PartsList+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "PartsList+CoreDataClass.swift"; path = "Shared/CoreData/PartsList+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
 		E9134BEDA42F71FF38D93293 /* PartsListsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PartsListsView.swift; path = Shared/Views/PartsLists/PartsListsView.swift; sourceTree = SOURCE_ROOT; };
 		F4914BFBBDAB1B6D990FFA6C /* CreatePartsListSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CreatePartsListSheet.swift; path = Shared/Views/PartsLists/CreatePartsListSheet.swift; sourceTree = SOURCE_ROOT; };
-		5E6F7A8B9C0D1E2F3A4B5C6D /* EditPartsListPartSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EditPartsListPartSheet.swift; path = Shared/Views/PartsLists/EditPartsListPartSheet.swift; sourceTree = SOURCE_ROOT; };
-		6F7A8B9C0D1E2F3A4B5C6D7E /* EditPartsListPartSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EditPartsListPartSheet.swift; path = Shared/Views/PartsLists/EditPartsListPartSheet.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -99,6 +99,11 @@
 				Views/Parts/PartsIconView.swift,
 				Views/Parts/PartsList.swift,
 				Views/Parts/PartsListView.swift,
+				Views/PartsLists/LegoColorPicker.swift,
+				Views/PartsLists/PartsListDetailIconView.swift,
+				Views/PartsLists/PartsListDetailTableView.swift,
+				Views/PartsLists/PartsListViewMode.swift,
+				Views/PartsLists/PartsListViewModeMenuToolbarItem.swift,
 				Views/SetDetails/SetContentSection.swift,
 				Views/SetDetails/SetDetail.swift,
 				Views/SetDetails/SetDetailFields.swift,
@@ -157,6 +162,10 @@
 				Views/Parts/PartsIconView.swift,
 				Views/Parts/PartsList.swift,
 				Views/Parts/PartsListView.swift,
+				Views/PartsLists/LegoColorPicker.swift,
+				Views/PartsLists/PartsListDetailIconView.swift,
+				Views/PartsLists/PartsListViewMode.swift,
+				Views/PartsLists/PartsListViewModeMenuToolbarItem.swift,
 				Views/SetDetails/SetContentSection.swift,
 				Views/SetDetails/SetDetail.swift,
 				Views/SetDetails/SetDetailFields.swift,

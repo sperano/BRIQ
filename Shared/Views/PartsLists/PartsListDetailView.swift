@@ -4,11 +4,14 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct PartsListDetailView: View {
     @Environment(\.managedObjectContext) private var context
 
     @ObservedObject var partsList: PartsList
+
+    @AppStorage("partsListViewMode") private var viewMode: PartsListViewMode = .icon
 
     @State private var partToEdit: PartsListPart?
     @State private var partToDelete: PartsListPart?
@@ -26,30 +29,34 @@ struct PartsListDetailView: View {
                     Text("This parts list is empty.")
                 }
             } else {
-                ScrollView {
-                    VStack(alignment: .leading) {
-                        ForEach(sortedParts) { part in
-                            PartsListPartRow(part: part)
-                                .contextMenu {
-                                    Button {
-                                        partToEdit = part
-                                    } label: {
-                                        Label("Edit", systemImage: "pencil")
-                                    }
-                                    Button(role: .destructive) {
-                                        partToDelete = part
-                                    } label: {
-                                        Label("Delete", systemImage: "trash")
-                                    }
-                                }
-                        }
-                    }
-                    .padding()
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                switch viewMode {
+                case .icon:
+                    PartsListDetailIconView(
+                        parts: sortedParts,
+                        onEdit: { partToEdit = $0 },
+                        onDelete: { partToDelete = $0 }
+                    )
+                case .table:
+                    #if os(macOS)
+                    PartsListDetailTableView(
+                        parts: sortedParts,
+                        onEdit: { partToEdit = $0 },
+                        onDelete: { partToDelete = $0 }
+                    )
+                    #else
+                    PartsListDetailIconView(
+                        parts: sortedParts,
+                        onEdit: { partToEdit = $0 },
+                        onDelete: { partToDelete = $0 }
+                    )
+                    #endif
                 }
             }
         }
         .navigationTitle(partsList.name)
+        .toolbar {
+            PartsListViewModeMenuToolbarItem(viewMode: $viewMode)
+        }
         .sheet(item: $partToEdit) { part in
             EditPartsListPartSheet(partsListPart: part)
         }
