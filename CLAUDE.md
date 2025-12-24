@@ -11,10 +11,11 @@ BRIQ is a cross-platform SwiftUI application for iOS and macOS that manages LEGO
 - **BRIQ-ios/**: iOS-specific app files and views
 - **BRIQ-macos/**: macOS-specific app files, views, and platform features (menu commands, user data import/export)
 - **Shared/**: Cross-platform code including models, views, and business logic
+  - **Auto-Generated/**: Auto-generated theme, category, and color data (Themes.swift, PartCategories.swift, PartColors.swift)
   - **CoreData/**: Core Data models and stack (Set, Part, Minifig, SetPart, SetMinifig, SetUserData)
-  - **Models/**: Data model enums and utilities (Theme, PartCategory, PartColor)
-  - **Models/Auto-Generated/**: Auto-generated theme and category data
-  - **Views/**: Shared SwiftUI views organized by feature (Minifigs/, Parts/, SetLists/)
+  - **SampleData/**: Sample data providers for SwiftUI previews
+  - **Views/**: Shared SwiftUI views organized by feature (Minifigs/, Parts/, SetDetails/, SetLists/, Themes/)
+  - Root-level utilities: Theme.swift, PartColor.swift, EnvironmentKeys.swift, SetListSortOrder.swift, Database.swift, BundledData.swift, InitializationState.swift
 
 ## Build Commands
 
@@ -53,9 +54,9 @@ All models are defined in `Shared/CoreData/` with the data model at `Shared/Core
 - `Database.swift`: Database utilities including reset, import/export of user data
 - `ContentView`: Main entry point handling initialization flow vs main app UI
 
-### Theme System  
+### Theme System
 - Themes are loaded via `initThemesTree()` function in app initialization
-- Auto-generated theme data in `Models/Auto-Generated/Themes.swift`
+- Auto-generated theme data in `Auto-Generated/Themes.swift`
 - Theme hierarchy accessible via `AllThemes` global dictionary
 
 ## Development Notes

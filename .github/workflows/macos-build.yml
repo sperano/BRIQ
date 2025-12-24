@@ -7,47 +7,49 @@ on:
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: macos-26
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      #- name: Set up Xcode
-      #  run: sudo xcode-select -s /Applications/Xcode_15.4.app
 
       - name: Build archive
         run: |
           xcodebuild -scheme "BRIQ-macos" \
             -configuration Release \
             -archivePath $PWD/build/BRIQ.xcarchive \
+            CODE_SIGN_IDENTITY="-" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
             archive
 
-      - name: Export .app
+      - name: Extract .app from archive
         run: |
-          xcodebuild -exportArchive \
-            -archivePath $PWD/build/BRIQ.xcarchive \
-            -exportPath $PWD/build \
-            -exportOptionsPlist ExportOptions.plist
+          mkdir -p build/export
+          cp -R build/BRIQ.xcarchive/Products/Applications/BRIQ.app build/export/
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: BRIQ-macos.app
-          path: build/BRIQ.app
+          name: BRIQ-macos
+          path: build/export/BRIQ.app
 
   release:
     needs: build
     runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: BRIQ-macos.app
+          name: BRIQ-macos
+
+      - name: Zip app for release
+        run: zip -r BRIQ-macos.zip BRIQ.app
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: BRIQ-macos.app
+          files: BRIQ-macos.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

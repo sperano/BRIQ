@@ -5,6 +5,8 @@
 //  Created by Éric Spérano on 7/12/25.
 //
 
+import SwiftUI
+
 class PartColor: Identifiable, Sendable {
     let name: String
     let rgb: String
@@ -22,6 +24,18 @@ class PartColor: Identifiable, Sendable {
         self.setsCount = setsCount
         self.year1 = year1
         self.year2 = year2
+    }
+
+    var swiftUIColor: Color {
+        let scanner = Scanner(string: rgb)
+        var rgbValue: UInt64 = 0
+        scanner.scanHexInt64(&rgbValue)
+
+        let red = Double((rgbValue & 0xFF0000) >> 16) / 255.0
+        let green = Double((rgbValue & 0x00FF00) >> 8) / 255.0
+        let blue = Double(rgbValue & 0x0000FF) / 255.0
+
+        return Color(red: red, green: green, blue: blue)
     }
 
     #if DEBUG

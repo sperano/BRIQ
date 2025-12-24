@@ -12,7 +12,19 @@
         <attribute name="material" attributeType="String"/>
         <attribute name="name" attributeType="String"/>
         <attribute name="number" attributeType="String"/>
+        <relationship name="partsListParts" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="PartsListPart" inverseName="part" inverseEntity="PartsListPart"/>
         <relationship name="setParts" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="SetPart" inverseName="part" inverseEntity="SetPart"/>
+    </entity>
+    <entity name="PartsList" representedClassName="PartsList" syncable="YES">
+        <attribute name="name" attributeType="String"/>
+        <relationship name="parts" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="PartsListPart" inverseName="partsList" inverseEntity="PartsListPart"/>
+    </entity>
+    <entity name="PartsListPart" representedClassName="PartsListPart" syncable="YES">
+        <attribute name="colorID" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="imageURL" optional="YES" attributeType="String"/>
+        <attribute name="quantity" attributeType="Integer 32" defaultValueString="1" usesScalarValueType="YES"/>
+        <relationship name="part" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Part" inverseName="partsListParts" inverseEntity="Part"/>
+        <relationship name="partsList" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PartsList" inverseName="parts" inverseEntity="PartsList"/>
     </entity>
     <entity name="Set" representedClassName="Set" syncable="YES">
         <attribute name="imageURL" optional="YES" attributeType="String"/>

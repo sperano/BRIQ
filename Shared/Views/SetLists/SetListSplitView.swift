@@ -47,7 +47,7 @@ struct SetListSplitView: View {
                     .foregroundColor(.secondary)
             }
         }
-        .onChange(of: selectedSet) { newSet in
+        .onChange(of: selectedSet) {
             // When selection changes, refresh if there were pending changes
             if pendingRefresh {
                 refreshSetList()

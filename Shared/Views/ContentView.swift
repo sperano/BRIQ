@@ -19,8 +19,20 @@ struct ContentView: View {
 
     var body: some View {
         if hasInitialized {
-            NavigationStack {
-                SetList()
+            TabView {
+                NavigationStack {
+                    SetList()
+                }
+                .tabItem {
+                    Label("Sets", systemImage: "square.grid.2x2")
+                }
+
+                NavigationStack {
+                    PartsListsView()
+                }
+                .tabItem {
+                    Label("Parts Lists", systemImage: "list.bullet.rectangle")
+                }
             }
         } else {
             VStack(spacing: 20) {
