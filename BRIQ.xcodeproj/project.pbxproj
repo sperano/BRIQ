@@ -81,8 +81,10 @@
 				"CoreData/SetUserData+CoreDataClass.swift",
 				Database.swift,
 				EnvironmentKeys.swift,
+				FocusedValues.swift,
 				InitializationState.swift,
 				PartColor.swift,
+				PDFGenerator.swift,
 				"SampleData/SampleData+Extensions.swift",
 				SampleData/SampleDataProvider.swift,
 				SetListSortOrder.swift,
@@ -104,6 +106,7 @@
 				Views/PartsLists/PartsListDetailTableView.swift,
 				Views/PartsLists/PartsListViewMode.swift,
 				Views/PartsLists/PartsListViewModeMenuToolbarItem.swift,
+				Views/PartsLists/PDFOptionsSheet.swift,
 				Views/SetDetails/SetContentSection.swift,
 				Views/SetDetails/SetDetail.swift,
 				Views/SetDetails/SetDetailFields.swift,
@@ -144,8 +147,10 @@
 				"CoreData/SetUserData+CoreDataClass.swift",
 				Database.swift,
 				EnvironmentKeys.swift,
+				FocusedValues.swift,
 				InitializationState.swift,
 				PartColor.swift,
+				PDFGenerator.swift,
 				"SampleData/SampleData+Extensions.swift",
 				SampleData/SampleDataProvider.swift,
 				SetListSortOrder.swift,
@@ -166,6 +171,7 @@
 				Views/PartsLists/PartsListDetailIconView.swift,
 				Views/PartsLists/PartsListViewMode.swift,
 				Views/PartsLists/PartsListViewModeMenuToolbarItem.swift,
+				Views/PartsLists/PDFOptionsSheet.swift,
 				Views/SetDetails/SetContentSection.swift,
 				Views/SetDetails/SetDetail.swift,
 				Views/SetDetails/SetDetailFields.swift,
@@ -621,7 +627,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = SGHB6DGT2T;
 				ENABLE_APP_SANDBOX = YES;
@@ -667,7 +673,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = SGHB6DGT2T;
 				ENABLE_APP_SANDBOX = YES;

@@ -15,6 +15,7 @@ struct PartsListDetailView: View {
 
     @State private var partToEdit: PartsListPart?
     @State private var partToDelete: PartsListPart?
+    @State private var showPDFOptions: Bool = false
 
     private var sortedParts: [PartsListPart] {
         partsList.partsArray.sorted { ($0.part?.number ?? "") < ($1.part?.number ?? "") }
@@ -55,7 +56,21 @@ struct PartsListDetailView: View {
         }
         .navigationTitle(partsList.name)
         .toolbar {
+            ToolbarItem {
+                Button {
+                    showPDFOptions = true
+                } label: {
+                    Label("Export PDF", systemImage: "doc.richtext")
+                }
+                .help("Export parts list as PDF")
+            }
             PartsListViewModeMenuToolbarItem(viewMode: $viewMode)
+        }
+        .focusedSceneValue(\.exportPDFAction) {
+            showPDFOptions = true
+        }
+        .sheet(isPresented: $showPDFOptions) {
+            PDFOptionsSheet(partsList: partsList)
         }
         .sheet(item: $partToEdit) { part in
             EditPartsListPartSheet(partsListPart: part)
