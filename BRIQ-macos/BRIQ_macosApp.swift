@@ -15,6 +15,7 @@ struct MacBRIQApp: App {
     @State private var isReinitializing = false
     @State private var preserveUserData = true
     @StateObject private var initializationState = InitializationState()
+    @FocusedValue(\.exportPDFAction) private var exportPDFAction
 
     init() {
         initThemesTree()
@@ -87,6 +88,13 @@ struct MacBRIQApp: App {
         .windowResizability(.contentMinSize)
         .defaultSize(width: 900, height: 600)
         .commands {
+            CommandGroup(replacing: .importExport) {
+                Button("Export Parts List as PDF...") {
+                    exportPDFAction?()
+                }
+                .keyboardShortcut("e", modifiers: [.command, .shift])
+                .disabled(exportPDFAction == nil)
+            }
             CommandGroup(after: .toolbar) {
                 ViewModeCommands()
                 Divider()
