@@ -7,6 +7,7 @@
 
 import SwiftUI
 import CoreData
+import OSLog
 
 struct SetDetailFields: View {
     @ObservedObject var set: Set
@@ -89,7 +90,7 @@ struct SetDetailFields: View {
             try context.save()
             hasChangesBinding?.wrappedValue = true
         } catch {
-            print("Save error: \(error)")
+            Logger.database.error("Save error: \(error)")
         }
     }
 

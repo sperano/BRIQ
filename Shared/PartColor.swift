@@ -1,5 +1,5 @@
 //
-//  Color.swift
+//  PartColor.swift
 //  BRIQ
 //
 //  Created by Éric Spérano on 7/12/25.
@@ -37,9 +37,4 @@ class PartColor: Identifiable, Sendable {
 
         return Color(red: red, green: green, blue: blue)
     }
-
-    #if DEBUG
-    //static let blue = PartColor(name: "Blue", rgb:"0055BF", isTransparent: false, partsCount: 194982, setsCount: 47095, year1:1949, year2: 2025)
-    //static let sampleData: [PartColor] = [blue]
-    #endif
 }

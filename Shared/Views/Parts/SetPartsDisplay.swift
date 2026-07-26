@@ -1,5 +1,5 @@
 //
-//  PartsList.swift
+//  SetPartsDisplay.swift
 //  BRIQ
 //
 //  Created by Éric Spérano on 8/9/25.

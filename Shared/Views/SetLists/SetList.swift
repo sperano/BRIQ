@@ -7,13 +7,14 @@
 
 import SwiftUI
 import CoreData
+import OSLog
 
 struct SetList: View {
     @Environment(\.managedObjectContext) private var context
 
     @State private var sets: [Set] = []
     @State private var searchText = ""
-    @State public var selectedTheme: Theme?
+    @State private var selectedTheme: Theme?
     #if os(iOS)
     @State private var showSettings = false
     #endif
@@ -27,7 +28,7 @@ struct SetList: View {
     @AppStorage("displayUSNumbers") private var displayUSNumbers = false
     @AppStorage("favoriteThemes") private var favoriteThemesString: String = ""
     @AppStorage("sortOrder") private var sortOrder: SetListSortOrder = .year
-    public var favoriteThemes: Swift.Set<Int> {
+    private var favoriteThemes: Swift.Set<Int> {
         Swift.Set(favoriteThemesString.split(separator: ",").compactMap { Int($0) })
     }
 
@@ -59,7 +60,7 @@ struct SetList: View {
         .searchable(text: $searchText, placement: .toolbar)
         .environment(\.refreshSetList, loadSets)
         .onAppear(perform: loadSets)
-        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("UserDataImported"))) { _ in
+        .onReceive(NotificationCenter.default.publisher(for: .userDataImported)) { _ in
             loadSets()
         }
         .onChange(of: searchText) { _, _ in loadSets() }
@@ -126,7 +127,7 @@ struct SetList: View {
 
             self.sets = fetchedSets
         } catch {
-            print("Failed to fetch sets:", error)
+            Logger.database.error("Failed to fetch sets: \(error)")
         }
     }
 

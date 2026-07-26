@@ -1,5 +1,5 @@
 //
-//  ThemeTreeView.swift
+//  FavoriteThemes.swift
 //  BRIQ
 //
 //  Created by Éric Spérano on 8/19/25.
@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension Array {
-    public var optional: [Element]? { isEmpty ? nil : self }
+    var optional: [Element]? { isEmpty ? nil : self }
 }
 
 struct ThemeRow:  View {

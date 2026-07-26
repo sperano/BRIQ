@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreData
+import OSLog
 
 @objc(Minifig)
 public class Minifig: NSManagedObject, Identifiable {
@@ -51,7 +52,7 @@ extension Minifig {
         do {
             return try context.fetch(request).first
         } catch {
-            print("Error fetching minifig by number: \(error)")
+            Logger.database.error("Error fetching minifig by number: \(error)")
             return nil
         }
     }

@@ -16,7 +16,7 @@ struct SetIconView: View {
     
     var body: some View {
         VStack(spacing: 4) {
-            AsyncImage(url: URL(string: set.imageURL ?? "")) { phase in // TODO
+            AsyncImage(url: URL(string: set.imageURL ?? "")) { phase in
                 if let image = phase.image {
                     image
                         .resizable()

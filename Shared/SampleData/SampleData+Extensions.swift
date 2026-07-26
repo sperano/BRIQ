@@ -239,12 +239,14 @@ extension NSManagedObjectContext {
 
 // MARK: - Theme Sample Data
 extension Theme {
+    // Real entries from the auto-generated AllThemes array, so previews
+    // resolve the same theme names as production (indexed by position).
     static var sampleTheme: Theme {
-        return PreviewAllThemes.first ?? Theme(id: 158, name: "Star Wars")
+        return AllThemes[5] // Star Wars
     }
 
     static var sampleThemes: [Theme] {
-        return PreviewAllThemes.isEmpty ? [Theme(id: 158, name: "Star Wars"), Theme(id: 52, name: "City")] : PreviewAllThemes
+        return [AllThemes[5], AllThemes[14]] // Star Wars, City
     }
 }
 #endif

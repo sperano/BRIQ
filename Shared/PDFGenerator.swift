@@ -6,6 +6,7 @@
 import Foundation
 import CoreGraphics
 import ImageIO
+import OSLog
 
 #if os(macOS)
 import AppKit
@@ -158,7 +159,7 @@ actor PDFGenerator {
             let (data, _) = try await URLSession.shared.data(from: url)
             return createCGImage(from: data)
         } catch {
-            print("Failed to download image from \(url): \(error)")
+            Logger.pdf.error("Failed to download image from \(url): \(error)")
             return nil
         }
     }

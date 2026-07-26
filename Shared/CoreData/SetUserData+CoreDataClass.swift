@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreData
+import OSLog
 
 @objc(SetUserData)
 public class SetUserData: NSManagedObject, Identifiable, Comparable {
@@ -58,7 +59,7 @@ extension SetUserData {
         do {
             return try context.fetch(request).first
         } catch {
-            print("Error fetching user data by number: \(error)")
+            Logger.database.error("Error fetching user data by number: \(error)")
             return nil
         }
     }
