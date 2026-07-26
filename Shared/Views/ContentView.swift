@@ -45,7 +45,6 @@ struct ContentView: View {
                     ProgressView(value: progress, total: 1.0)
                         .progressViewStyle(.linear)
                         .padding()
-                    //Text("Initializing... \(Int(progress * 100))%")
                     Text("\(count) sets imported.")
                 }
             }
@@ -67,11 +66,4 @@ struct ContentView: View {
         }
     }
 }
-
-#if DEBUG
-//#Preview {
-//    ContentView()
-//        .modelContainer(SampleData.shared.modelContainer)
-//}
-#endif
 

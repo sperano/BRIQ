@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreData
+import OSLog
 
 @objc(Set)
 public class Set: NSManagedObject, Identifiable, Comparable {
@@ -107,7 +108,7 @@ extension Set {
         do {
             return try context.fetch(request).first
         } catch {
-            print("Error fetching set by number: \(error)")
+            Logger.database.error("Error fetching set by number: \(error)")
             return nil
         }
     }

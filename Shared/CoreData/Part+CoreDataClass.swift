@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreData
+import OSLog
 
 @objc(Part)
 public class Part: NSManagedObject, Identifiable {
@@ -57,7 +58,7 @@ extension Part {
         do {
             return try context.fetch(request).first
         } catch {
-            print("Error fetching part by number: \(error)")
+            Logger.database.error("Error fetching part by number: \(error)")
             return nil
         }
     }

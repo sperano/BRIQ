@@ -1,11 +1,12 @@
 //
-//  MacBRIQApp.swift
-//  MacBRIQ
+//  BRIQ_macosApp.swift
+//  BRIQ
 //
 //  Created by Éric Spérano on 8/21/25.
 //
 
 import CoreData
+import OSLog
 import SwiftUI
 
 @main
@@ -54,9 +55,9 @@ struct MacBRIQApp: App {
                 }
             }
 
-            print("Database reinitialization completed successfully")
+            Logger.database.info("Database reinitialization completed successfully")
         } catch {
-            print("Failed to reinitialize database: \(error)")
+            Logger.database.error("Failed to reinitialize database: \(error)")
         }
 
         await MainActor.run {

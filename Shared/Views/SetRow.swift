@@ -35,11 +35,9 @@ struct SetRow: View {
     
     var body: some View {
         HStack {
-            RowImage(url: set.imageURL ?? "") // TODO
+            RowImage(url: set.imageURL ?? "")
             Text("\(set.baseNumber)  \(set.name)")
-                //.font(.headline) // Or any font/style you prefer
         }
-        //.padding(.horizontal)
     }
 }
 

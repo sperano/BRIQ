@@ -18,7 +18,6 @@ struct ImageViewer: View {
                     image
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        //.frame(width: geometry.size.width)
                         .onTapGesture {
                             showFullImage = true
                         }
@@ -43,14 +42,11 @@ struct FullSizeImageViewer: View {
     var body: some View {
         NavigationView {
             ScrollView([.horizontal, .vertical], showsIndicators: true) {
-                AsyncImage(url: URL(string: set.imageURL ?? "")) { phase in // TODO
+                AsyncImage(url: URL(string: set.imageURL ?? "")) { phase in
                     if let image = phase.image {
                         image
                             .resizable()
-                            //.aspectRatio(contentMode: .none)
                             .scaledToFill()
-                            //.scaledToFit()
-                            //.frame(maxWidth: .infinity, maxHeight: .infinity)
                     }
                 }
                 Button(action: {

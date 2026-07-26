@@ -7,6 +7,7 @@
 
 import SwiftUI
 import CoreData
+import OSLog
 
 struct PartsListView: View {
     @Environment(\.managedObjectContext) private var context
@@ -79,7 +80,7 @@ struct PartsListView: View {
         do {
             try context.save()
         } catch {
-            print("Failed to add part to list: \(error)")
+            Logger.database.error("Failed to add part to list: \(error)")
         }
     }
 }
