@@ -8,6 +8,7 @@
 import Foundation
 import CoreData
 import Combine
+import OSLog
 
 @MainActor
 class CoreDataStack: ObservableObject {
@@ -25,7 +26,7 @@ class CoreDataStack: ObservableObject {
 
         container.loadPersistentStores { _, error in
             if let error = error as NSError? {
-                print("Core Data error: \(error), \(error.userInfo)")
+                Logger.database.error("Core Data error: \(error), \(error.userInfo)")
                 // In production, handle this error appropriately
                 fatalError("Unresolved Core Data error \(error), \(error.userInfo)")
             }
@@ -56,7 +57,7 @@ class CoreDataStack: ObservableObject {
                 try context.save()
             } catch {
                 let nsError = error as NSError
-                print("Core Data save error: \(nsError), \(nsError.userInfo)")
+                Logger.database.error("Core Data save error: \(nsError), \(nsError.userInfo)")
                 // In production, handle this error appropriately
                 fatalError("Unresolved Core Data save error \(nsError), \(nsError.userInfo)")
             }
@@ -100,13 +101,13 @@ class CoreDataStack: ObservableObject {
     }
 }
 
-// MARK - Errors
-enum CoreDataError: Error {
+// MARK: - Errors
+enum CoreDataError: LocalizedError {
     case storeNotFound
     case saveFailed(Error)
     case fetchFailed(Error)
 
-    var localizedDescription: String {
+    var errorDescription: String? {
         switch self {
         case .storeNotFound:
             return "Core Data store not found"
@@ -114,45 +115,6 @@ enum CoreDataError: Error {
             return "Core Data save failed: \(error.localizedDescription)"
         case .fetchFailed(let error):
             return "Core Data fetch failed: \(error.localizedDescription)"
-        }
-    }
-}
-
-// MARK: - Batch Operations
-extension CoreDataStack {
-
-    func performBatchInsert(
-        entityName: String,
-        objects: [[String: Any]],
-        batchSize: Int = 1000
-    ) async throws {
-        let context = newBackgroundContext()
-
-        try await context.perform {
-            let batches = objects.chunked(into: batchSize)
-
-            for batch in batches {
-                let batchInsert = NSBatchInsertRequest(entityName: entityName, objects: batch)
-                batchInsert.resultType = .statusOnly
-
-                let result = try context.execute(batchInsert) as? NSBatchInsertResult
-
-                if let success = result?.result as? Bool, !success {
-                    throw CoreDataError.saveFailed(NSError(domain: "BatchInsert", code: 1, userInfo: [NSLocalizedDescriptionKey: "Batch insert failed"]))
-                }
-            }
-
-            try context.save()
-        }
-    }
-
-}
-
-// MARK: - Helper Extensions
-extension Array {
-    func chunked(into size: Int) -> [[Element]] {
-        return stride(from: 0, to: count, by: size).map {
-            Array(self[$0..<Swift.min($0 + size, count)])
         }
     }
 }

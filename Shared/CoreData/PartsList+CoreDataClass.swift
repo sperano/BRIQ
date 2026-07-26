@@ -5,6 +5,7 @@
 
 import Foundation
 import CoreData
+import OSLog
 
 @objc(PartsList)
 public class PartsList: NSManagedObject, Identifiable {
@@ -45,7 +46,7 @@ extension PartsList {
         do {
             return try context.fetch(request).first
         } catch {
-            print("Error fetching parts list by name: \(error)")
+            Logger.database.error("Error fetching parts list by name: \(error)")
             return nil
         }
     }

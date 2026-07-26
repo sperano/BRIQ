@@ -5,6 +5,7 @@
 
 import SwiftUI
 import CoreData
+import OSLog
 
 struct PartsListsView: View {
     @Environment(\.managedObjectContext) private var context
@@ -94,7 +95,7 @@ struct PartsListsView: View {
         do {
             try context.save()
         } catch {
-            print("Failed to delete parts list: \(error)")
+            Logger.database.error("Failed to delete parts list: \(error)")
         }
     }
 }

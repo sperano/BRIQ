@@ -16,8 +16,7 @@ struct SetDetail: View {
     @AppStorage("partsMinifigsViewMode") private var viewModeRaw: String = "icon"
 
     private var viewMode: ViewMode {
-        get { ViewMode(rawValue: viewModeRaw) ?? .list }
-        set { viewModeRaw = newValue.rawValue }
+        ViewMode(rawValue: viewModeRaw) ?? .list
     }
     
     var body: some View {
