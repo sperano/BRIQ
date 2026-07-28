@@ -9,61 +9,73 @@ import SwiftUI
 import CoreData
 
 struct ContentView: View {
-    @Environment(\.managedObjectContext) private var context
-    @EnvironmentObject var coreDataStack: CoreDataStack
-    @AppStorage("hasInitialized") private var hasInitialized: Bool = false
-    @EnvironmentObject var initializationState: InitializationState
-
-    @State private var count: Int = 0
-    @State private var progress: Double = 0
+    @EnvironmentObject var databaseInitializer: DatabaseInitializer
 
     var body: some View {
-        if hasInitialized {
-            TabView {
-                NavigationStack {
-                    SetList()
-                }
-                .tabItem {
-                    Label("Sets", systemImage: "square.grid.2x2")
-                }
+        Group {
+            switch databaseInitializer.state {
+            case .ready:
+                mainTabs
+            case .idle, .loading:
+                loadingView
+            case .failed(let message):
+                failureView(message: message)
+            }
+        }
+        .task {
+            await databaseInitializer.initializeIfNeeded()
+        }
+    }
 
-                NavigationStack {
-                    PartsListsView()
-                }
-                .tabItem {
-                    Label("Parts Lists", systemImage: "list.bullet.rectangle")
-                }
+    private var mainTabs: some View {
+        TabView {
+            NavigationStack {
+                SetList()
             }
-        } else {
-            VStack(spacing: 20) {
-                if count == 0 {
-                    ProgressView()
-                        .progressViewStyle(.circular)
-                        .padding()
-                    Text("Initializing...")
-                } else {
-                    ProgressView(value: progress, total: 1.0)
-                        .progressViewStyle(.linear)
-                        .padding()
-                    Text("\(count) sets imported.")
-                }
+            .tabItem {
+                Label("Sets", systemImage: "square.grid.2x2")
             }
-            .task {
-                await initDB()
-                hasInitialized = true
-                initializationState.isInitializing = false
-                initializationState.hasCompleted = true
+
+            NavigationStack {
+                PartsListsView()
+            }
+            .tabItem {
+                Label("Parts Lists", systemImage: "list.bullet.rectangle")
             }
         }
     }
-    
-    func initDB() async {
-        await BundledData.loadAll(coreDataStack: coreDataStack) { newCount, newProgress in
-            await MainActor.run {
-                self.count = newCount
-                self.progress = newProgress
+
+    private var loadingView: some View {
+        VStack(spacing: 20) {
+            if case .loading(let setsImported, let fraction) = databaseInitializer.state, setsImported > 0 {
+                ProgressView(value: fraction, total: 1.0)
+                    .progressViewStyle(.linear)
+                    .padding()
+                Text("\(setsImported) sets imported.")
+            } else {
+                ProgressView()
+                    .progressViewStyle(.circular)
+                    .padding()
+                Text("Initializing...")
             }
         }
+    }
+
+    private func failureView(message: String) -> some View {
+        VStack(spacing: 20) {
+            Image(systemName: "exclamationmark.triangle")
+                .font(.largeTitle)
+                .foregroundStyle(.yellow)
+            Text("Database initialization failed.")
+            Text(message)
+                .font(.callout)
+                .foregroundStyle(.secondary)
+            Button("Try Again") {
+                Task {
+                    await databaseInitializer.initializeIfNeeded()
+                }
+            }
+        }
+        .padding()
     }
 }
-
