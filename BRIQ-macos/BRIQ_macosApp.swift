@@ -12,72 +12,29 @@ import SwiftUI
 @main
 struct MacBRIQApp: App {
     @StateObject private var coreDataStack = CoreDataStack.shared
+    @StateObject private var databaseInitializer = DatabaseInitializer(coreDataStack: .shared)
     @State private var showingReinitializeConfirmation = false
-    @State private var isReinitializing = false
     @State private var preserveUserData = true
-    @StateObject private var initializationState = InitializationState()
     @FocusedValue(\.exportPDFAction) private var exportPDFAction
 
     init() {
         initThemesTree()
     }
 
-    private func recreateContainer() async throws {
-        try coreDataStack.resetStore()
-    }
-
-    private func reinitializeDatabase() async {
-        await MainActor.run {
-            isReinitializing = true
-        }
-
-        var temporaryUserData: String?
-
-        do {
-            // Export user data if preserveUserData is enabled
-            if preserveUserData {
-                temporaryUserData = await MainActor.run {
-                    exportUserData(context: coreDataStack.viewContext)
-                }
-            }
-
-            try await recreateContainer()
-
-            // Use InitializationState to wait for completion
-            await initializationState.reinitialize()
-
-            // Re-import user data if it was exported
-            if let userData = temporaryUserData {
-                // Wait a bit for the new container to be fully ready
-                try await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
-                await MainActor.run {
-                    importUserData(context: coreDataStack.viewContext, jsonString: userData)
-                }
-            }
-
-            Logger.database.info("Database reinitialization completed successfully")
-        } catch {
-            Logger.database.error("Failed to reinitialize database: \(error)")
-        }
-
-        await MainActor.run {
-            isReinitializing = false
-        }
-    }
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .frame(minWidth: 700, minHeight: 400)
                 .environment(\.managedObjectContext, coreDataStack.viewContext)
                 .environmentObject(coreDataStack)
-                .environmentObject(initializationState)
+                .environmentObject(databaseInitializer)
                 .sheet(isPresented: $showingReinitializeConfirmation) {
                     ReinitializeConfirmationView(
                         preserveUserData: $preserveUserData,
                         onConfirm: {
                             showingReinitializeConfirmation = false
                             Task {
-                                await reinitializeDatabase()
+                                await databaseInitializer.reinitialize(preserveUserData: preserveUserData)
                             }
                         },
                         onCancel: {
@@ -107,7 +64,7 @@ struct MacBRIQApp: App {
                 Button("Re-Initialize") {
                     showingReinitializeConfirmation = true
                 }
-                .disabled(isReinitializing)
+                .disabled(databaseInitializer.state != .ready)
                 Divider()
                 Button("Import User Data") {
                     if let data = readUserDataFromFile() {

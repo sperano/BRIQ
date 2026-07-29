@@ -11,7 +11,7 @@ import CoreData
 @main
 struct BRIQ_iosApp: App {
     @StateObject private var coreDataStack = CoreDataStack.shared
-    @StateObject private var initializationState = InitializationState()
+    @StateObject private var databaseInitializer = DatabaseInitializer(coreDataStack: .shared)
 
     init() {
         initThemesTree()
@@ -22,7 +22,7 @@ struct BRIQ_iosApp: App {
             ContentView()
                 .environment(\.managedObjectContext, coreDataStack.viewContext)
                 .environmentObject(coreDataStack)
-                .environmentObject(initializationState)
+                .environmentObject(databaseInitializer)
         }
     }
 }
