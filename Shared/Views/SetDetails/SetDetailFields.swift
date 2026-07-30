@@ -7,13 +7,13 @@
 
 import SwiftUI
 import CoreData
-import OSLog
 
 struct SetDetailFields: View {
     @ObservedObject var set: Set
     var selectedSet: Binding<Set?>? = nil
     @Environment(\.managedObjectContext) private var context
     @Environment(\.setDetailHasChanges) private var hasChangesBinding
+    @EnvironmentObject private var coreDataStack: CoreDataStack
     @State private var refreshTrigger: Bool = false
 
     // Direct Core Data bindings with UI refresh
@@ -86,11 +86,8 @@ struct SetDetailFields: View {
     }
 
     private func saveContext() {
-        do {
-            try context.save()
+        if coreDataStack.saveViewContext() {
             hasChangesBinding?.wrappedValue = true
-        } catch {
-            Logger.database.error("Save error: \(error)")
         }
     }
 
@@ -156,5 +153,6 @@ struct SetDetailFields: View {
     SetDetailFields(set: Set.sampleData[0])
         .padding()
         .environment(\.managedObjectContext, NSManagedObjectContext.preview)
+        .environmentObject(CoreDataStack.shared)
 }
 #endif

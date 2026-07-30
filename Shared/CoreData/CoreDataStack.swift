@@ -14,30 +14,29 @@ import OSLog
 class CoreDataStack: ObservableObject {
     static let shared = CoreDataStack()
 
-    lazy var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "BRIQ")
+    let persistentContainer: NSPersistentContainer
 
-        // Configure for better performance
-        let description = container.persistentStoreDescriptions.first
-        description?.shouldInferMappingModelAutomatically = true
-        description?.shouldMigrateStoreAutomatically = true
-        description?.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
-        description?.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
+    /// Non-nil when the store failed to load and automatic recovery
+    /// (destroying and recreating it) also failed.
+    let loadError: Error?
 
-        container.loadPersistentStores { _, error in
-            if let error = error as NSError? {
-                Logger.database.error("Core Data error: \(error), \(error.userInfo)")
-                // In production, handle this error appropriately
-                fatalError("Unresolved Core Data error \(error), \(error.userInfo)")
-            }
+    /// Most recent user-visible save failure; ContentView presents it as an alert.
+    @Published var lastSaveError: String?
+
+    init() {
+        let container = Self.makeContainer()
+        var failure: Error?
+        do {
+            try Self.loadStoreRecoveringFromCorruption(into: container)
+        } catch {
+            failure = error
         }
+        persistentContainer = container
+        loadError = failure
 
-        // Configure view context
         container.viewContext.automaticallyMergesChangesFromParent = true
         container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-
-        return container
-    }()
+    }
 
     var viewContext: NSManagedObjectContext {
         return persistentContainer.viewContext
@@ -49,55 +48,89 @@ class CoreDataStack: ObservableObject {
         return context
     }
 
-    func saveContext() {
+    func saveContext() throws {
         let context = persistentContainer.viewContext
-
-        if context.hasChanges {
-            do {
-                try context.save()
-            } catch {
-                let nsError = error as NSError
-                Logger.database.error("Core Data save error: \(nsError), \(nsError.userInfo)")
-                // In production, handle this error appropriately
-                fatalError("Unresolved Core Data save error \(nsError), \(nsError.userInfo)")
-            }
-        }
-    }
-
-    func saveBackgroundContext(_ context: NSManagedObjectContext) async throws {
         guard context.hasChanges else { return }
 
-        try await context.perform {
+        do {
             try context.save()
+        } catch {
+            Logger.database.error("Core Data save error: \(error)")
+            throw CoreDataError.saveFailed(error)
         }
     }
 
+    /// Saves the view context; on failure rolls back the pending changes and
+    /// publishes the error so the UI can present it.
+    @discardableResult
+    func saveViewContext() -> Bool {
+        do {
+            try saveContext()
+            return true
+        } catch {
+            viewContext.rollback()
+            lastSaveError = error.localizedDescription
+            return false
+        }
+    }
+
+    /// Destroys the persistent store (including WAL/SHM sidecars) and re-adds
+    /// it using the original store descriptions, preserving migration and
+    /// history-tracking options.
     func resetStore() throws {
-        guard let storeURL = persistentContainer.persistentStoreDescriptions.first?.url else {
+        try Self.destroyStore(of: persistentContainer)
+        if let error = Self.attemptLoad(persistentContainer) {
+            throw error
+        }
+        viewContext.reset()
+    }
+
+    private static func makeContainer() -> NSPersistentContainer {
+        let container = NSPersistentContainer(name: "BRIQ")
+
+        let description = container.persistentStoreDescriptions.first
+        description?.shouldInferMappingModelAutomatically = true
+        description?.shouldMigrateStoreAutomatically = true
+        description?.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
+        description?.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
+
+        return container
+    }
+
+    private static func loadStoreRecoveringFromCorruption(into container: NSPersistentContainer) throws {
+        guard let error = attemptLoad(container) else { return }
+
+        Logger.database.error("Core Data store failed to load: \(error); destroying and recreating it")
+        try destroyStore(of: container)
+        // The recreated store is empty; force the bundled data to re-import.
+        UserDefaults.standard.removeObject(forKey: DatabaseInitializer.hasInitializedKey)
+
+        if let retryError = attemptLoad(container) {
+            throw retryError
+        }
+    }
+
+    /// `loadPersistentStores` calls its handler synchronously for local stores,
+    /// so the captured error is complete when this returns.
+    private static func attemptLoad(_ container: NSPersistentContainer) -> Error? {
+        var loadError: Error?
+        container.loadPersistentStores { _, error in
+            loadError = error
+        }
+        return loadError
+    }
+
+    private static func destroyStore(of container: NSPersistentContainer) throws {
+        guard let description = container.persistentStoreDescriptions.first,
+              let storeURL = description.url else {
             throw CoreDataError.storeNotFound
         }
 
-        let coordinator = persistentContainer.persistentStoreCoordinator
-
-        // Remove the persistent store
-        if let store = coordinator.persistentStores.first {
+        let coordinator = container.persistentStoreCoordinator
+        if let store = coordinator.persistentStore(for: storeURL) {
             try coordinator.remove(store)
         }
-
-        // Delete the store file
-        try FileManager.default.removeItem(at: storeURL)
-
-        // Recreate the store
-        let description = NSPersistentStoreDescription(url: storeURL)
-        description.shouldInferMappingModelAutomatically = true
-        description.shouldMigrateStoreAutomatically = true
-
-        try coordinator.addPersistentStore(
-            ofType: NSSQLiteStoreType,
-            configurationName: nil,
-            at: storeURL,
-            options: nil
-        )
+        try coordinator.destroyPersistentStore(at: storeURL, type: .sqlite, options: description.options)
     }
 }
 
