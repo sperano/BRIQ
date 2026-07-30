@@ -7,10 +7,10 @@
 
 import SwiftUI
 import CoreData
-import OSLog
 
 struct PartsListView: View {
     @Environment(\.managedObjectContext) private var context
+    @EnvironmentObject private var coreDataStack: CoreDataStack
 
     let parts: [SetPart]
 
@@ -77,11 +77,7 @@ struct PartsListView: View {
             imageURL: setPart.imageURL
         )
 
-        do {
-            try context.save()
-        } catch {
-            Logger.database.error("Failed to add part to list: \(error)")
-        }
+        coreDataStack.saveViewContext()
     }
 }
 

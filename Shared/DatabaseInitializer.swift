@@ -35,6 +35,11 @@ final class DatabaseInitializer: ObservableObject {
     /// Runs the first-launch import unless the database is already loaded.
     /// Safe to call repeatedly; also used to retry after a failure.
     func initializeIfNeeded() async {
+        if let loadError = coreDataStack.loadError {
+            state = .failed(message: loadError.localizedDescription)
+            return
+        }
+
         switch state {
         case .ready, .loading:
             return

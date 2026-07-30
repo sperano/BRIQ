@@ -5,10 +5,10 @@
 
 import SwiftUI
 import CoreData
-import OSLog
 
 struct PartsListDetailView: View {
     @Environment(\.managedObjectContext) private var context
+    @EnvironmentObject private var coreDataStack: CoreDataStack
 
     @ObservedObject var partsList: PartsList
 
@@ -96,10 +96,6 @@ struct PartsListDetailView: View {
 
     private func delete(_ part: PartsListPart) {
         context.delete(part)
-        do {
-            try context.save()
-        } catch {
-            Logger.database.error("Failed to delete part: \(error)")
-        }
+        coreDataStack.saveViewContext()
     }
 }

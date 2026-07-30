@@ -5,10 +5,10 @@
 
 import SwiftUI
 import CoreData
-import OSLog
 
 struct PartsListsView: View {
     @Environment(\.managedObjectContext) private var context
+    @EnvironmentObject private var coreDataStack: CoreDataStack
 
     @FetchRequest(
         sortDescriptors: [SortDescriptor(\.name, order: .forward)],
@@ -92,10 +92,6 @@ struct PartsListsView: View {
 
     private func delete(_ partsList: PartsList) {
         context.delete(partsList)
-        do {
-            try context.save()
-        } catch {
-            Logger.database.error("Failed to delete parts list: \(error)")
-        }
+        coreDataStack.saveViewContext()
     }
 }

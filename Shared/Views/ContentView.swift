@@ -10,6 +10,7 @@ import CoreData
 
 struct ContentView: View {
     @EnvironmentObject var databaseInitializer: DatabaseInitializer
+    @EnvironmentObject var coreDataStack: CoreDataStack
 
     var body: some View {
         Group {
@@ -24,6 +25,17 @@ struct ContentView: View {
         }
         .task {
             await databaseInitializer.initializeIfNeeded()
+        }
+        .alert(
+            "Save Failed",
+            isPresented: Binding(
+                get: { coreDataStack.lastSaveError != nil },
+                set: { if !$0 { coreDataStack.lastSaveError = nil } }
+            )
+        ) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(coreDataStack.lastSaveError ?? "")
         }
     }
 
