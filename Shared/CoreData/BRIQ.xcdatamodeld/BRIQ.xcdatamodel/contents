@@ -36,6 +36,7 @@
         <attribute name="number" attributeType="String"/>
         <attribute name="partsCount" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="sameAsNumber" optional="YES" attributeType="String"/>
+        <attribute name="sortKey" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="themeID" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="year" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="minifigs" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="SetMinifig" inverseName="set" inverseEntity="SetMinifig"/>

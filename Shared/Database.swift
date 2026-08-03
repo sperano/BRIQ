@@ -9,10 +9,6 @@ import Foundation
 import CoreData
 import OSLog
 
-extension Notification.Name {
-    static let userDataImported = Notification.Name("UserDataImported")
-}
-
 func exportUserData(context: NSManagedObjectContext) -> String? {
     do {
         let request = SetUserData.fetchRequest()
@@ -87,9 +83,6 @@ func importUserData(context: NSManagedObjectContext, jsonString: String) {
 
         try context.save()
         Logger.dataTransfer.info("Successfully imported \(userData.count) user data entries")
-
-        // Post notification to refresh UI
-        NotificationCenter.default.post(name: .userDataImported, object: nil)
     } catch {
         Logger.dataTransfer.error("Failed to import user data: \(error)")
     }

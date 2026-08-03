@@ -27,25 +27,30 @@ enum SetListSortOrder: String, CaseIterable {
     }
 
     var sortDescriptors: [NSSortDescriptor] {
+        // sortKey is the precomputed numeric form of the set number; "number"
+        // remains as a final tiebreaker for non-numeric prefixes that all map
+        // to sortKey 0.
         switch self {
         case .year:
             return [
                 NSSortDescriptor(key: "year", ascending: true),
+                NSSortDescriptor(key: "sortKey", ascending: true),
                 NSSortDescriptor(key: "number", ascending: true)
             ]
         case .number:
             return [
+                NSSortDescriptor(key: "sortKey", ascending: true),
                 NSSortDescriptor(key: "number", ascending: true)
             ]
         case .name:
             return [
                 NSSortDescriptor(key: "name", ascending: true),
-                NSSortDescriptor(key: "number", ascending: true)
+                NSSortDescriptor(key: "sortKey", ascending: true)
             ]
         case .partsCount:
             return [
                 NSSortDescriptor(key: "partsCount", ascending: false), // Descending for parts count (most parts first)
-                NSSortDescriptor(key: "number", ascending: true)
+                NSSortDescriptor(key: "sortKey", ascending: true)
             ]
         }
     }

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SetListStatusBar: View {
-    @Binding var sets: [Set]
+    let sets: [Set]
     
     private var totalMinifigs: Int {
         sets.reduce(0) { total, set in

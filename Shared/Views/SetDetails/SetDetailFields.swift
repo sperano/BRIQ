@@ -12,82 +12,80 @@ struct SetDetailFields: View {
     @ObservedObject var set: Set
     var selectedSet: Binding<Set?>? = nil
     @Environment(\.managedObjectContext) private var context
-    @Environment(\.setDetailHasChanges) private var hasChangesBinding
     @EnvironmentObject private var coreDataStack: CoreDataStack
-    @State private var refreshTrigger: Bool = false
 
-    // Direct Core Data bindings with UI refresh
+    /// Observes the set's SetUserData directly — it may not exist yet, and
+    /// @ObservedObject can't watch an optional — so the toggles update without
+    /// manual refresh triggers.
+    @FetchRequest private var userDataResults: FetchedResults<SetUserData>
+
+    init(set: Set, selectedSet: Binding<Set?>? = nil) {
+        self.set = set
+        self.selectedSet = selectedSet
+        _userDataResults = FetchRequest(
+            sortDescriptors: [],
+            predicate: NSPredicate(format: "number == %@", set.number)
+        )
+    }
+
+    private var userData: SetUserData? { userDataResults.first }
+
     private var ownedBinding: Binding<Bool> {
         Binding(
-            get: {
-                _ = refreshTrigger // Force dependency on refresh trigger
-                return set.userData?.owned ?? false
-            },
+            get: { userData?.owned ?? false },
             set: { newValue in
-                ensureUserData()
-                set.userData?.owned = newValue
-                saveContext()
-                refreshTrigger.toggle() // Force UI refresh
+                ensureUserData().owned = newValue
+                save()
             }
         )
     }
 
     private var favoriteBinding: Binding<Bool> {
         Binding(
-            get: {
-                _ = refreshTrigger // Force dependency on refresh trigger
-                return set.userData?.favorite ?? false
-            },
+            get: { userData?.favorite ?? false },
             set: { newValue in
-                ensureUserData()
-                set.userData?.favorite = newValue
-                saveContext()
-                refreshTrigger.toggle() // Force UI refresh
+                ensureUserData().favorite = newValue
+                save()
             }
         )
     }
 
     private var ownsInstructionsBinding: Binding<Bool> {
         Binding(
-            get: {
-                _ = refreshTrigger // Force dependency on refresh trigger
-                return set.userData?.ownsInstructions ?? false
-            },
+            get: { userData?.ownsInstructions ?? false },
             set: { newValue in
-                ensureUserData()
-                set.userData?.ownsInstructions = newValue
-                saveContext()
-                refreshTrigger.toggle() // Force UI refresh
+                ensureUserData().ownsInstructions = newValue
+                save()
             }
         )
     }
 
     private var instructionsQualityBinding: Binding<Int> {
         Binding(
-            get: {
-                _ = refreshTrigger // Force dependency on refresh trigger
-                return Int(set.userData?.instructionsQuality ?? 0)
-            },
+            get: { Int(userData?.instructionsQuality ?? 0) },
             set: { newValue in
-                ensureUserData()
-                set.userData?.instructionsQuality = Int32(newValue)
-                saveContext()
-                refreshTrigger.toggle() // Force UI refresh
+                ensureUserData().instructionsQuality = Int32(newValue)
+                save()
             }
         )
     }
 
-    private func ensureUserData() {
-        if set.userData == nil {
-            let userData = SetUserData.create(in: context, number: set.number)
-            set.userData = userData
-            userData.set = set
+    private func ensureUserData() -> SetUserData {
+        if let userData = set.userData {
+            return userData
         }
+        let userData = SetUserData.create(in: context, number: set.number)
+        set.userData = userData
+        userData.set = set
+        return userData
     }
 
-    private func saveContext() {
+    private func save() {
         if coreDataStack.saveViewContext() {
-            hasChangesBinding?.wrappedValue = true
+            // The set list's fetch request filters on userData key paths, but
+            // Core Data only re-evaluates fetched Set objects themselves;
+            // refreshing the set makes the list re-filter it.
+            context.refresh(set, mergeChanges: true)
         }
     }
 
@@ -138,9 +136,9 @@ struct SetDetailFields: View {
                 ("Instr. Quality", AnyView(
                     StarRatingView(
                         rating: instructionsQualityBinding,
-                        isInteractive: set.userData?.ownsInstructions ?? false
+                        isInteractive: userData?.ownsInstructions ?? false
                     )
-                    .opacity((set.userData?.ownsInstructions ?? false) ? 1.0 : 0.5)
+                    .opacity((userData?.ownsInstructions ?? false) ? 1.0 : 0.5)
                 )),
             ])
             SetExternalLinks(set: set)
