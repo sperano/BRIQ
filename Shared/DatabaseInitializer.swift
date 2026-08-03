@@ -41,18 +41,53 @@ final class DatabaseInitializer: ObservableObject {
         }
 
         switch state {
-        case .ready, .loading:
+        case .loading:
+            return
+        case .ready:
+            // Already initialized on a previous launch; the store may still
+            // predate newer derived attributes.
+            await backfillSortKeysIfNeeded()
             return
         case .idle, .failed:
             break
         }
 
         if defaults.bool(forKey: Self.hasInitializedKey) {
+            await backfillSortKeysIfNeeded()
             state = .ready
             return
         }
 
         await load()
+    }
+
+    private var didCheckSortKeyBackfill = false
+
+    /// Stores imported before `Set.sortKey` existed hold 0 for every set after
+    /// the lightweight migration; compute the keys once. Failure is logged and
+    /// tolerated — sorting degrades but the app works.
+    private func backfillSortKeysIfNeeded() async {
+        guard !didCheckSortKeyBackfill else { return }
+        didCheckSortKeyBackfill = true
+        let context = coreDataStack.newBackgroundContext()
+        do {
+            try await context.perform {
+                let total = try context.count(for: Set.fetchRequest())
+                let zeroRequest = Set.fetchRequest()
+                zeroRequest.predicate = NSPredicate(format: "sortKey == 0")
+                let zeroed = try context.count(for: zeroRequest)
+                guard total > 0, zeroed == total else { return }
+
+                Logger.database.info("Backfilling sortKey for \(total) sets")
+                for set in try context.fetch(Set.fetchRequest()) {
+                    set.sortKey = Set.sortKey(forNumber: set.number)
+                }
+                try context.save()
+                context.reset()
+            }
+        } catch {
+            Logger.database.error("sortKey backfill failed: \(error)")
+        }
     }
 
     /// Wipes the store and re-imports the bundled database, optionally

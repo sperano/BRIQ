@@ -10,8 +10,6 @@ import SwiftUI
 struct SetDetailNavigationLink<Label: View>: View {
     let set: Set
     let selectedSet: Binding<Set?>?
-    @Environment(\.refreshSetList) private var refreshSetList
-    @Environment(\.setDetailNavigationDepth) private var currentDepth
     @ViewBuilder let label: () -> Label
 
     init(
@@ -26,12 +24,7 @@ struct SetDetailNavigationLink<Label: View>: View {
 
     var body: some View {
         NavigationLink {
-            SetDetail(
-                set: set,
-                selectedSet: selectedSet,
-                onDisappear: currentDepth == 0 ? refreshSetList : nil
-            )
-            .environment(\.setDetailNavigationDepth, currentDepth + 1)
+            SetDetail(set: set, selectedSet: selectedSet)
         } label: {
             label()
         }

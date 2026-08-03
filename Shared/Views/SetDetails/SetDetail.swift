@@ -11,8 +11,6 @@ import CoreData
 struct SetDetail: View {
     @ObservedObject var set: Set
     var selectedSet: Binding<Set?>? = nil
-    var onDisappear: (() -> Void)? = nil
-    @State private var hasChanges = false
     @AppStorage("partsMinifigsViewMode") private var viewModeRaw: String = "icon"
 
     private var viewMode: ViewMode {
@@ -47,12 +45,6 @@ struct SetDetail: View {
                 }
             }
         }
-        .onDisappear {
-            if hasChanges {
-                onDisappear?()
-            }
-        }
-        .environment(\.setDetailHasChanges, $hasChanges)
     }
 }
 
