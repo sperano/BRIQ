@@ -10,11 +10,14 @@ import CoreData
 
 @main
 struct BRIQ_iosApp: App {
-    @StateObject private var coreDataStack = CoreDataStack.shared
-    @StateObject private var databaseInitializer = DatabaseInitializer(coreDataStack: .shared)
+    @StateObject private var coreDataStack: CoreDataStack
+    @StateObject private var databaseInitializer: DatabaseInitializer
 
     init() {
         initThemesTree()
+        let stack = CoreDataStack()
+        _coreDataStack = StateObject(wrappedValue: stack)
+        _databaseInitializer = StateObject(wrappedValue: DatabaseInitializer(coreDataStack: stack))
     }
 
     var body: some Scene {
