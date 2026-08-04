@@ -17,34 +17,24 @@ struct MacBRIQApp: App {
     @State private var preserveUserData = true
     @FocusedValue(\.exportPDFAction) private var exportPDFAction
 
+    /// True when the app is running as a unit-test host; the tests create
+    /// their own in-memory stacks, so the app must not touch the real store.
+    private static let isTestHost = NSClassFromString("XCTestCase") != nil
+
     init() {
         initThemesTree()
-        let stack = CoreDataStack()
+        let stack = CoreDataStack(inMemory: Self.isTestHost)
         _coreDataStack = StateObject(wrappedValue: stack)
         _databaseInitializer = StateObject(wrappedValue: DatabaseInitializer(coreDataStack: stack))
     }
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .frame(minWidth: 700, minHeight: 400)
-                .environment(\.managedObjectContext, coreDataStack.viewContext)
-                .environmentObject(coreDataStack)
-                .environmentObject(databaseInitializer)
-                .sheet(isPresented: $showingReinitializeConfirmation) {
-                    ReinitializeConfirmationView(
-                        preserveUserData: $preserveUserData,
-                        onConfirm: {
-                            showingReinitializeConfirmation = false
-                            Task {
-                                await databaseInitializer.reinitialize(preserveUserData: preserveUserData)
-                            }
-                        },
-                        onCancel: {
-                            showingReinitializeConfirmation = false
-                        }
-                    )
-                }
+            if Self.isTestHost {
+                Text("Running tests")
+            } else {
+                appContent
+            }
         }
         .windowResizability(.contentMinSize)
         .defaultSize(width: 900, height: 600)
@@ -88,6 +78,28 @@ struct MacBRIQApp: App {
         Settings {
             PreferencesView()
         }
+    }
+
+    private var appContent: some View {
+        ContentView()
+            .frame(minWidth: 700, minHeight: 400)
+            .environment(\.managedObjectContext, coreDataStack.viewContext)
+            .environmentObject(coreDataStack)
+            .environmentObject(databaseInitializer)
+            .sheet(isPresented: $showingReinitializeConfirmation) {
+                ReinitializeConfirmationView(
+                    preserveUserData: $preserveUserData,
+                    onConfirm: {
+                        showingReinitializeConfirmation = false
+                        Task {
+                            await databaseInitializer.reinitialize(preserveUserData: preserveUserData)
+                        }
+                    },
+                    onCancel: {
+                        showingReinitializeConfirmation = false
+                    }
+                )
+            }
     }
 }
 

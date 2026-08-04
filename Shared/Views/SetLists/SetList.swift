@@ -67,65 +67,18 @@ struct SetList: View {
     }
 
     private var predicate: NSPredicate? {
-        var predicates: [NSPredicate] = []
-
-        // Search text filter
-        if !searchText.isEmpty {
-            predicates.append(NSPredicate(
-                format: "number CONTAINS[cd] %@ OR name CONTAINS[cd] %@", searchText, searchText
-            ))
-        }
-
-        // Owned state filter
-        switch filterOwnedState {
-        case 1: // owned only
-            predicates.append(NSPredicate(format: "userData.owned == YES"))
-        case 2: // not owned only
-            predicates.append(NSPredicate(format: "userData.owned == NO OR userData == nil"))
-        default: break // all
-        }
-
-        // Favorite state filter
-        switch filterFavoriteState {
-        case 1: // favorites only
-            predicates.append(NSPredicate(format: "userData.favorite == YES"))
-        case 2: // not favorites only
-            predicates.append(NSPredicate(format: "userData.favorite == NO OR userData == nil"))
-        default: break // all
-        }
-
-        // Theme filter
-        if let selectedTheme = selectedTheme {
-            var themeIDs = selectedTheme.getAllThemeIDs()
-            // If filtering by favorites, only include favorite themes from the hierarchy
-            if filterFavoriteThemes {
-                themeIDs = themeIDs.intersection(favoriteThemes)
-            }
-            let themeArray = Array(themeIDs).map { NSNumber(value: $0) }
-            predicates.append(NSPredicate(format: "themeID IN %@", themeArray))
-        } else if filterFavoriteThemes {
-            let themeArray = Array(favoriteThemes).map { NSNumber(value: $0) }
-            predicates.append(NSPredicate(format: "themeID IN %@", themeArray))
-        }
-
-        // Exclusion filters
-        if excludePackages {
-            predicates.append(NSPredicate(format: "isPack == NO"))
-        }
-        if excludeUnreleased {
-            predicates.append(NSPredicate(format: "isUnreleased == NO"))
-        }
-        if excludeAccessories {
-            predicates.append(NSPredicate(format: "isAccessory == NO"))
-        }
-
-        // US numbers filter
-        if !displayUSNumbers {
-            predicates.append(NSPredicate(format: "isUSNumber == NO"))
-        }
-
-        guard !predicates.isEmpty else { return nil }
-        return NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+        SetListFilter(
+            searchText: searchText,
+            ownedState: filterOwnedState,
+            favoriteState: filterFavoriteState,
+            filterFavoriteThemes: filterFavoriteThemes,
+            favoriteThemes: favoriteThemes,
+            selectedTheme: selectedTheme,
+            excludePackages: excludePackages,
+            excludeUnreleased: excludeUnreleased,
+            excludeAccessories: excludeAccessories,
+            displayUSNumbers: displayUSNumbers
+        ).predicate()
     }
 }
 

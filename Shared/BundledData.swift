@@ -72,17 +72,21 @@ enum BundledDataError: LocalizedError {
 struct BundledData {
     static let setImportBatchSize = 500
 
-    /// Imports the bundled database into `context`. Throws on any failure and
-    /// cooperates with task cancellation between batches, so callers decide
-    /// whether the import counts as complete.
-    static func loadAll(
-        into context: NSManagedObjectContext,
-        progress: @escaping @MainActor (Int, Double) -> Void
-    ) async throws {
+    static func bundledArchiveURL() throws -> URL {
         guard let zipURL = Bundle.main.url(forResource: "init", withExtension: "zip") else {
             throw BundledDataError.archiveMissing
         }
+        return zipURL
+    }
 
+    /// Imports the archive at `zipURL` into `context`. Throws on any failure
+    /// and cooperates with task cancellation between batches, so callers
+    /// decide whether the import counts as complete.
+    static func loadAll(
+        from zipURL: URL,
+        into context: NSManagedObjectContext,
+        progress: @escaping @MainActor (Int, Double) -> Void
+    ) async throws {
         let fileManager = FileManager.default
         let tempDir = fileManager.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         try fileManager.createDirectory(at: tempDir, withIntermediateDirectories: true)

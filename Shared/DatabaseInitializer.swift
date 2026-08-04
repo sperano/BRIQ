@@ -122,7 +122,7 @@ final class DatabaseInitializer: ObservableObject {
         do {
             try await resetLeftoverPartialImport()
             let context = coreDataStack.newBackgroundContext()
-            try await BundledData.loadAll(into: context) { [weak self] setsImported, fraction in
+            try await BundledData.loadAll(from: BundledData.bundledArchiveURL(), into: context) { [weak self] setsImported, fraction in
                 self?.state = .loading(setsImported: setsImported, fraction: fraction)
             }
             defaults.set(true, forKey: Self.hasInitializedKey)

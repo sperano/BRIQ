@@ -99,8 +99,19 @@ final class CoreDataStack: ObservableObject {
         viewContext.reset()
     }
 
+    /// Loaded once: instantiating the model repeatedly (e.g. one stack per
+    /// test) makes multiple NSEntityDescriptions claim the same
+    /// NSManagedObject subclasses.
+    private static let managedObjectModel: NSManagedObjectModel = {
+        guard let url = Bundle(for: CoreDataStack.self).url(forResource: "BRIQ", withExtension: "momd"),
+              let model = NSManagedObjectModel(contentsOf: url) else {
+            fatalError("BRIQ.momd is missing from the bundle")
+        }
+        return model
+    }()
+
     private static func makeContainer() -> NSPersistentContainer {
-        let container = NSPersistentContainer(name: "BRIQ")
+        let container = NSPersistentContainer(name: "BRIQ", managedObjectModel: managedObjectModel)
 
         let description = container.persistentStoreDescriptions.first
         description?.shouldInferMappingModelAutomatically = true
