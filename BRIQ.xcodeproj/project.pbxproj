@@ -83,6 +83,7 @@
 				PDFGenerator.swift,
 				"SampleData/SampleData+Extensions.swift",
 				SampleData/SampleDataProvider.swift,
+				SetListFilter.swift,
 				SetListSortOrder.swift,
 				Theme.swift,
 				Views/ContentView.swift,
@@ -149,6 +150,7 @@
 				PDFGenerator.swift,
 				"SampleData/SampleData+Extensions.swift",
 				SampleData/SampleDataProvider.swift,
+				SetListFilter.swift,
 				SetListSortOrder.swift,
 				Theme.swift,
 				Views/ContentView.swift,
@@ -225,6 +227,11 @@
 			path = "BRIQ-ios";
 			sourceTree = "<group>";
 		};
+		07AB20C12E9F00010000AB01 /* BRIQTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = BRIQTests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -261,6 +268,7 @@
 				073347ED2E73BDA3006CBBAA /* Shared */,
 				073347F32E73BDC7006CBBAA /* BRIQ-macos */,
 				075C34DD2E73BE4300CE4BC0 /* BRIQ-ios */,
+				07AB20C12E9F00010000AB01 /* BRIQTests */,
 				073301E92E73C3140057EDBB /* Frameworks */,
 				070756002E739D24007C1FA4 /* Products */,
 				3AB14CD881422C6FB7853AAE /* PartsListRow.swift */,
@@ -337,6 +345,9 @@
 			);
 			dependencies = (
 				074180EF2E77C94B00B9FF22 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				07AB20C12E9F00010000AB01 /* BRIQTests */,
 			);
 			name = BRIQTests;
 			packageProductDependencies = (
