@@ -26,10 +26,10 @@ final class DatabaseInitializer: ObservableObject {
     private let coreDataStack: CoreDataStack
     private let defaults: UserDefaults
 
-    init(coreDataStack: CoreDataStack, defaults: UserDefaults = .standard) {
+    nonisolated init(coreDataStack: CoreDataStack, defaults: UserDefaults = .standard) {
         self.coreDataStack = coreDataStack
         self.defaults = defaults
-        state = defaults.bool(forKey: Self.hasInitializedKey) ? .ready : .idle
+        _state = Published(initialValue: defaults.bool(forKey: Self.hasInitializedKey) ? .ready : .idle)
     }
 
     /// Runs the first-launch import unless the database is already loaded.

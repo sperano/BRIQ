@@ -11,14 +11,17 @@ import SwiftUI
 
 @main
 struct MacBRIQApp: App {
-    @StateObject private var coreDataStack = CoreDataStack.shared
-    @StateObject private var databaseInitializer = DatabaseInitializer(coreDataStack: .shared)
+    @StateObject private var coreDataStack: CoreDataStack
+    @StateObject private var databaseInitializer: DatabaseInitializer
     @State private var showingReinitializeConfirmation = false
     @State private var preserveUserData = true
     @FocusedValue(\.exportPDFAction) private var exportPDFAction
 
     init() {
         initThemesTree()
+        let stack = CoreDataStack()
+        _coreDataStack = StateObject(wrappedValue: stack)
+        _databaseInitializer = StateObject(wrappedValue: DatabaseInitializer(coreDataStack: stack))
     }
 
     var body: some Scene {

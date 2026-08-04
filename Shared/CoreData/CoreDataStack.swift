@@ -10,8 +10,11 @@ import CoreData
 import Combine
 import OSLog
 
-@MainActor
-class CoreDataStack: ObservableObject {
+/// Not actor-isolated: the contexts it vends enforce their own queues
+/// (view context on main, background contexts on private queues). The app
+/// creates one instance and injects it via the environment; `shared` exists
+/// for previews only.
+final class CoreDataStack: ObservableObject {
     static let shared = CoreDataStack()
 
     let persistentContainer: NSPersistentContainer
@@ -21,13 +24,21 @@ class CoreDataStack: ObservableObject {
     let loadError: Error?
 
     /// Most recent user-visible save failure; ContentView presents it as an alert.
-    @Published var lastSaveError: String?
+    @MainActor @Published var lastSaveError: String?
 
-    init() {
+    /// `inMemory` writes the store to /dev/null for tests and previews.
+    init(inMemory: Bool = false) {
         let container = Self.makeContainer()
         var failure: Error?
         do {
-            try Self.loadStoreRecoveringFromCorruption(into: container)
+            if inMemory {
+                container.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")
+                if let error = Self.attemptLoad(container) {
+                    throw error
+                }
+            } else {
+                try Self.loadStoreRecoveringFromCorruption(into: container)
+            }
         } catch {
             failure = error
         }
@@ -48,6 +59,7 @@ class CoreDataStack: ObservableObject {
         return context
     }
 
+    @MainActor
     func saveContext() throws {
         let context = persistentContainer.viewContext
         guard context.hasChanges else { return }
@@ -62,6 +74,7 @@ class CoreDataStack: ObservableObject {
 
     /// Saves the view context; on failure rolls back the pending changes and
     /// publishes the error so the UI can present it.
+    @MainActor
     @discardableResult
     func saveViewContext() -> Bool {
         do {
@@ -77,6 +90,7 @@ class CoreDataStack: ObservableObject {
     /// Destroys the persistent store (including WAL/SHM sidecars) and re-adds
     /// it using the original store descriptions, preserving migration and
     /// history-tracking options.
+    @MainActor
     func resetStore() throws {
         try Self.destroyStore(of: persistentContainer)
         if let error = Self.attemptLoad(persistentContainer) {
