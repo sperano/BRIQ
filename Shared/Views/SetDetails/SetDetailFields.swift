@@ -74,7 +74,10 @@ struct SetDetailFields: View {
         if let userData = set.userData {
             return userData
         }
-        let userData = SetUserData.create(in: context, number: set.number)
+        // `number` is unique: adopt an unlinked row (e.g. imported before
+        // the set existed) instead of inserting a conflicting one.
+        let userData = SetUserData.fetch(byNumber: set.number, in: context)
+            ?? SetUserData.create(in: context, number: set.number)
         set.userData = userData
         userData.set = set
         return userData
