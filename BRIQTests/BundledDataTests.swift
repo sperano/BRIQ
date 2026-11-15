@@ -47,7 +47,8 @@ private final class FixtureLocator {}
         #expect(second.minifigs == 0)
     }
 
-    @Test func reportsProgressAndFinishesAtOne() async throws {
+    /// The fixture's two sets fit in one batch, so progress is reported once.
+    @Test func reportsProgressOnceForASingleBatch() async throws {
         let stack = CoreDataStack(inMemory: true)
         let context = stack.newBackgroundContext()
 
@@ -60,7 +61,7 @@ private final class FixtureLocator {}
             log.fractions.append(fraction)
         }
 
-        #expect(log.fractions.last == 1.0)
+        #expect(log.fractions == [1.0])
     }
 
     @Test func missingArchiveThrows() async {
@@ -68,7 +69,7 @@ private final class FixtureLocator {}
         let context = stack.newBackgroundContext()
         let missing = URL(fileURLWithPath: "/nonexistent/init.zip")
 
-        await #expect(throws: (any Error).self) {
+        await #expect(throws: BundledDataError.archiveMissing) {
             try await BundledData.loadAll(from: missing, into: context) { _, _ in }
         }
     }

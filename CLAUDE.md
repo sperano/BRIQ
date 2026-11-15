@@ -41,9 +41,9 @@ The identity attributes behind each `Identifiable.id` carry uniqueness constrain
 
 ### Database Initialization
 - First launch loads data from bundled `init.zip` file containing comprehensive LEGO database
-- Initialization happens in `ContentView.swift` using `BundledData.loadAll()`
+- Initialization happens in `DatabaseInitializer.swift` (started from `ContentView`) using `BundledData.loadAll(from:into:progress:)`
 - Progress tracking shows loading status to user
-- Database reset functionality available via `Database.swift` functions
+- Database reset: `DatabaseInitializer.reinitialize(preserveUserData:)` wipes the store with `CoreDataStack.resetStore()` and reloads it
 
 ### Platform Differences
 - **iOS**: Basic app structure with navigation
@@ -53,7 +53,7 @@ The identity attributes behind each `Identifiable.id` carry uniqueness constrain
 - `CoreDataStack`: Manages Core Data persistent container, contexts, and batch operations
 - `InitializationState`: Manages app initialization state across both platforms
 - `BundledData`: Handles loading and parsing of LEGO data from ZIP archive
-- `Database.swift`: Typed (`Codable`) user-data export and import; import validates the whole file before changing anything and throws `UserDataImportError`
+- `Database.swift`: Typed (`Codable`) user-data export and import; import validates the whole file before changing anything, throws `UserDataImportError` for invalid input and rethrows the Core Data error when the save fails
 - `ContentView`: Main entry point handling initialization flow vs main app UI
 
 ### Theme System
@@ -63,8 +63,8 @@ The identity attributes behind each `Identifiable.id` carry uniqueness constrain
 
 ## Development Notes
 
-- The app handles database corruption gracefully with automatic recreation via `CoreDataStack.resetStore()`
-- User data can be preserved during database reinitialization (macOS only)
+- The app handles database corruption gracefully with automatic recreation in `CoreDataStack.loadStoreRecoveringFromCorruption`
+- User data can be preserved during database reinitialization (macOS only): it is checked to import again before the wipe, and kept in `UserDefaults` until the reloaded store has it back
 - Large dataset loading is optimized with batch operations via `CoreDataStack.performBatchInsert()`
 - Core Data migrations are lightweight (`shouldMigrateStoreAutomatically`). A model change needs a new model version, never an in-place edit: migration needs the old version to read the store. Before migrating, `StoreDeduplicator` resolves rows that would violate the uniqueness constraints, since a failed migration recreates the store
 - Views are organized by feature area (Sets, Parts, Minifigs)

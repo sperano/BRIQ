@@ -64,7 +64,7 @@ enum BundledDataError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .archiveMissing:
-            return "The bundled LEGO database (init.zip) is missing from the app bundle."
+            return "The bundled LEGO database archive is missing."
         }
     }
 }
@@ -88,6 +88,9 @@ struct BundledData {
         progress: @escaping @MainActor (Int, Double) -> Void
     ) async throws {
         let fileManager = FileManager.default
+        guard fileManager.fileExists(atPath: zipURL.path) else {
+            throw BundledDataError.archiveMissing
+        }
         let tempDir = fileManager.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         try fileManager.createDirectory(at: tempDir, withIntermediateDirectories: true)
         defer { try? fileManager.removeItem(at: tempDir) }

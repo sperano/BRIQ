@@ -27,12 +27,18 @@ final class CoreDataStack: ObservableObject {
     @MainActor @Published var lastSaveError: String?
 
     /// `inMemory` writes the store to /dev/null for tests and previews.
-    init(inMemory: Bool = false) {
+    convenience init(inMemory: Bool = false) {
+        self.init(storeURL: inMemory ? URL(fileURLWithPath: "/dev/null") : nil)
+    }
+
+    /// `storeURL` replaces the default location (tests, previews); such a
+    /// store is loaded as is, without the duplicate check or the recovery.
+    init(storeURL: URL?) {
         let container = Self.makeContainer()
         var failure: Error?
         do {
-            if inMemory {
-                container.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")
+            if let storeURL {
+                container.persistentStoreDescriptions.first?.url = storeURL
                 if let error = Self.attemptLoad(container) {
                     throw error
                 }

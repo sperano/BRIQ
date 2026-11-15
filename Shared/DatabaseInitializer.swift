@@ -20,15 +20,21 @@ final class DatabaseInitializer: ObservableObject {
     }
 
     static let hasInitializedKey = "hasInitialized"
+    /// User data exported by `reinitialize`, kept until the reloaded store
+    /// has it back, so a failed or cancelled reload does not lose it.
+    static let pendingUserDataKey = "pendingUserDataRestore"
 
     @Published private(set) var state: State
 
     private let coreDataStack: CoreDataStack
     private let defaults: UserDefaults
+    /// The archive to import; nil means the one bundled with the app.
+    private let archiveURL: URL?
 
-    nonisolated init(coreDataStack: CoreDataStack, defaults: UserDefaults = .standard) {
+    nonisolated init(coreDataStack: CoreDataStack, defaults: UserDefaults = .standard, archiveURL: URL? = nil) {
         self.coreDataStack = coreDataStack
         self.defaults = defaults
+        self.archiveURL = archiveURL
         _state = Published(initialValue: defaults.bool(forKey: Self.hasInitializedKey) ? .ready : .idle)
     }
 
@@ -91,11 +97,18 @@ final class DatabaseInitializer: ObservableObject {
     }
 
     /// Wipes the store and re-imports the bundled database, optionally
-    /// preserving user data across the reset via export/import.
+    /// preserving user data across the reset via export/import. When the
+    /// user data cannot be exported in a form the import accepts, nothing is
+    /// wiped and the reason is published through `lastSaveError`.
     func reinitialize(preserveUserData: Bool) async {
         guard state == .ready else { return }
 
-        let exportedUserData = preserveUserData ? exportUserData(context: coreDataStack.viewContext) : nil
+        if preserveUserData {
+            guard let exported = exportRestorableUserData() else { return }
+            defaults.set(exported, forKey: Self.pendingUserDataKey)
+        } else {
+            defaults.removeObject(forKey: Self.pendingUserDataKey)
+        }
 
         defaults.removeObject(forKey: Self.hasInitializedKey)
         state = .loading(setsImported: 0, fraction: 0)
@@ -109,16 +122,37 @@ final class DatabaseInitializer: ObservableObject {
         }
 
         await load()
+    }
 
-        if state == .ready, let exportedUserData {
-            do {
-                try importUserData(context: coreDataStack.viewContext, jsonString: exportedUserData)
-                Logger.database.info("Database reinitialization completed with user data restored")
-            } catch {
-                // The reloaded database itself is fine, so stay `.ready`.
-                Logger.database.error("Database reinitialized but restoring user data failed: \(error)")
-                coreDataStack.lastSaveError = "Your user data could not be restored: \(error.localizedDescription)"
-            }
+    private func exportRestorableUserData() -> String? {
+        guard let exported = exportUserData(context: coreDataStack.viewContext) else {
+            coreDataStack.lastSaveError = "The database was not re-initialized: your user data could not be exported."
+            return nil
+        }
+        do {
+            _ = try decodeUserDataExport(exported)
+            return exported
+        } catch {
+            Logger.database.error("Exported user data would not import again: \(error)")
+            coreDataStack.lastSaveError = "The database was not re-initialized: your user data could not be "
+                + "restored afterwards. \(error.localizedDescription)"
+            return nil
+        }
+    }
+
+    /// Runs after a successful load. A failed restore keeps the payload: only
+    /// a later reset (followed by a load) uses it, and `reinitialize`
+    /// replaces it first.
+    private func restorePendingUserData() {
+        guard let pending = defaults.string(forKey: Self.pendingUserDataKey) else { return }
+        do {
+            try importUserData(context: coreDataStack.viewContext, jsonString: pending)
+            defaults.removeObject(forKey: Self.pendingUserDataKey)
+            Logger.database.info("User data restored after reinitialization")
+        } catch {
+            // The reloaded database itself is fine, so stay `.ready`.
+            Logger.database.error("Database reinitialized but restoring user data failed: \(error)")
+            coreDataStack.lastSaveError = "Your user data could not be restored: \(error.localizedDescription)"
         }
     }
 
@@ -128,10 +162,12 @@ final class DatabaseInitializer: ObservableObject {
         do {
             try await resetLeftoverPartialImport()
             let context = coreDataStack.newBackgroundContext()
-            try await BundledData.loadAll(from: BundledData.bundledArchiveURL(), into: context) { [weak self] setsImported, fraction in
+            let url = try archiveURL ?? BundledData.bundledArchiveURL()
+            try await BundledData.loadAll(from: url, into: context) { [weak self] setsImported, fraction in
                 self?.state = .loading(setsImported: setsImported, fraction: fraction)
             }
             defaults.set(true, forKey: Self.hasInitializedKey)
+            restorePendingUserData()
             state = .ready
         } catch is CancellationError {
             Logger.database.notice("Database initialization cancelled; will retry on next launch")

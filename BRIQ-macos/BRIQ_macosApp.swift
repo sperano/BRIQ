@@ -59,15 +59,14 @@ struct MacBRIQApp: App {
                 }
                 .disabled(databaseInitializer.state != .ready)
                 Divider()
+                // A reinitialization in progress would overwrite an import
+                // and has no user data to export.
                 Button("Import User Data") {
-                    if let data = readUserDataFromFile() {
-                        Task { @MainActor in
-                            showUserDataImportResult(Result {
-                                try importUserData(context: coreDataStack.viewContext, jsonString: data)
-                            })
-                        }
+                    Task { @MainActor in
+                        importUserDataFromFile(into: coreDataStack.viewContext)
                     }
                 }
+                .disabled(databaseInitializer.state != .ready)
                 Button("Export User Data") {
                     Task { @MainActor in
                         if let data = exportUserData(context: coreDataStack.viewContext) {
@@ -75,6 +74,7 @@ struct MacBRIQApp: App {
                         }
                     }
                 }
+                .disabled(databaseInitializer.state != .ready)
             }
         }
         Settings {

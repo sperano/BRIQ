@@ -83,7 +83,10 @@ import Foundation
         let unique = set("2-1", in: context)
         let firstData = insert("SetUserData", ["number": "1-1", "owned": true], in: context)
         firstData.setValue(first, forKey: "set")
-        let secondData = insert("SetUserData", ["number": "1-1", "favorite": true, "instructionsQuality": 3], in: context)
+        let secondData = insert(
+            "SetUserData", ["number": "1-1", "favorite": true, "ownsInstructions": true, "instructionsQuality": 3],
+            in: context
+        )
         secondData.setValue(second, forKey: "set")
 
         let part = insert("Part", ["number": "p1", "name": "Brick", "material": "Plastic"], in: context)
@@ -115,7 +118,7 @@ import Foundation
         #expect(try context.count(for: SetUserData.fetchRequest()) == 1)
         #expect(userData.owned)
         #expect(userData.favorite)
-        #expect(!userData.ownsInstructions)
+        #expect(userData.ownsInstructions)
         #expect(userData.instructionsQuality == 3)
 
         let parts = try context.fetch(Part.fetchRequest())
@@ -150,6 +153,46 @@ import Foundation
         let sets = try context.fetch(Set.fetchRequest())
         #expect(sets.map(\.name) == ["Owned copy"])
         #expect(sets.first?.userData?.owned == true)
+    }
+
+    /// An unlinked copy (as SetDetailFields can leave behind) is inserted
+    /// first, so keeping the group's first row would orphan the set.
+    @Test func linkedUserDataSurvivesAndKeepsTheHigherRating() throws {
+        try writeStore(model: versionOneModel()) { context in
+            insert("SetUserData", ["number": "1-1", "owned": true, "instructionsQuality": 2], in: context)
+            let linked = insert("SetUserData", ["number": "1-1", "favorite": true, "instructionsQuality": 4], in: context)
+            linked.setValue(set("1-1", in: context), forKey: "set")
+        }
+
+        #expect(try prepare() == 1)
+
+        let context = try migratedContainer().viewContext
+        let survivingSet = try #require(try context.fetch(Set.fetchRequest()).first)
+        let userData = try #require(survivingSet.userData)
+        #expect(try context.count(for: SetUserData.fetchRequest()) == 1)
+        #expect(userData.owned)
+        #expect(userData.favorite)
+        #expect(userData.instructionsQuality == 4)
+    }
+
+    @Test func threeCopiesFoldIntoOneRow() throws {
+        try writeStore(model: versionOneModel()) { context in
+            let owner = set("1-1", in: context)
+            for quantity in 1...3 {
+                let part = insert("Part", ["number": "p2", "name": "Plate", "material": "Plastic"], in: context)
+                insert("SetPart", ["quantity": quantity], in: context).setValuesForKeys(["set": owner, "part": part])
+            }
+        }
+
+        #expect(try prepare() == 2)
+
+        let context = try migratedContainer().viewContext
+        let parts = try context.fetch(Part.fetchRequest())
+        #expect(parts.count == 1)
+        let owner = try #require(try context.fetch(Set.fetchRequest()).first)
+        let setParts = owner.parts as? Swift.Set<SetPart> ?? []
+        #expect(setParts.map(\.quantity).sorted() == [1, 2, 3])
+        #expect(setParts.allSatisfy { $0.part == parts.first })
     }
 
     @Test func storeWithoutDuplicatesIsLeftAsIs() throws {

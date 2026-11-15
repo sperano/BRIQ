@@ -93,19 +93,47 @@ import Foundation
     @Test func importUpdatesListedRowsInPlaceAndDeletesUnlisted() throws {
         let kept = try makeOwnedSet("200-1")
         let dropped = try makeOwnedSet("201-1")
-        let keptID = try #require(kept.userData?.objectID)
+        let keptData = try #require(kept.userData)
+        keptData.ownsInstructions = true
+        keptData.instructionsQuality = 3
+        try stack.viewContext.save()
 
         let json = """
-        {"version": "1.0", "userData": [{"number": "200-1", "owned": false, "favorite": true}]}
+        {"version": "1.0", "userData": [
+            {"number": "200-1", "owned": false, "favorite": true, "ownsInstructions": false, "instructionsQuality": 1}
+        ]}
         """
         let imported = try importUserData(context: stack.viewContext, jsonString: json)
 
         #expect(imported == 1)
         #expect(try allUserData().map(\.number) == ["200-1"])
-        #expect(kept.userData?.objectID == keptID)
+        #expect(kept.userData?.objectID == keptData.objectID)
         #expect(kept.userData?.owned == false)
         #expect(kept.userData?.favorite == true)
+        #expect(kept.userData?.ownsInstructions == false)
+        #expect(kept.userData?.instructionsQuality == 1)
         #expect(dropped.userData == nil)
+    }
+
+    @Test func importingAnEmptyListDeletesAllUserData() throws {
+        let set = try makeOwnedSet("keep-1")
+
+        let imported = try importUserData(context: stack.viewContext, jsonString: #"{"version": "1.0", "userData": []}"#)
+
+        #expect(imported == 0)
+        #expect(try allUserData().isEmpty)
+        #expect(set.userData == nil)
+    }
+
+    @Test func surroundingWhitespaceIsDroppedFromNumbers() throws {
+        let set = makeSet("200-1")
+        try stack.viewContext.save()
+
+        let json = #"{"version": "1.0", "userData": [{"number": " 200-1\n", "owned": true}]}"#
+        try importUserData(context: stack.viewContext, jsonString: json)
+
+        #expect(try allUserData().map(\.number) == ["200-1"])
+        #expect(set.userData?.owned == true)
     }
 
     @Test func importCreatesRowsForUnknownSetsWithoutLinkingThem() throws {
@@ -143,23 +171,24 @@ import Foundation
     }
 
     @Test(arguments: [
-        "not json at all {",
-        #"{"userData": [{"number": "1-1"}]}"#,
-        #"{"version": "1.0"}"#,
-        #"{"version": "1.0", "userData": [{"owned": true}]}"#,
-        #"{"version": "1.0", "userData": [{"number": "1-1", "owned": "yes"}]}"#,
+        ("not json at all {", "it is not JSON."),
+        (#"{"userData": [{"number": "1-1"}]}"#, #""version" is missing at the top level."#),
+        (#"{"version": "1.0"}"#, #""userData" is missing at the top level."#),
+        (#"{"version": "1.0", "userData": [{"owned": true}]}"#, #""number" is missing at userData[0]."#),
+        (
+            #"{"version": "1.0", "userData": [{"number": "1-1", "owned": "yes"}]}"#,
+            "the value at userData[0].owned has the wrong type."
+        ),
     ])
-    func malformedInputIsRejected(json: String) throws {
+    func malformedInputIsRejected(json: String, detail: String) throws {
         let set = try makeOwnedSet("keep-1")
 
         let error = try #require(throws: UserDataImportError.self) {
             try importUserData(context: stack.viewContext, jsonString: json)
         }
 
-        guard case .malformed = error else {
-            Issue.record("expected .malformed, got \(error)")
-            return
-        }
+        #expect(error == .malformed(detail))
+        #expect(error.errorDescription == "The user data file is not valid: \(detail)")
         try expectUntouched(set)
     }
 
@@ -180,6 +209,7 @@ import Foundation
             #"{"version": "1.0", "userData": [{"number": "1-1"}, {"number": "1-1", "owned": true}]}"#,
             .duplicateNumber("1-1")
         ),
+        (#"{"version": "1.0", "userData": [{"number": "1-1"}, {"number": "1-1 "}]}"#, .duplicateNumber("1-1")),
         (
             #"{"version": "1.0", "userData": [{"number": "1-1", "instructionsQuality": 6}]}"#,
             .invalidInstructionsQuality(number: "1-1", value: 6)
@@ -196,6 +226,25 @@ import Foundation
             try importUserData(context: stack.viewContext, jsonString: json)
         }
         try expectUntouched(set)
+    }
+
+    @Test(arguments: [
+        (UserDataImportError.notUTF8, "The user data file is not UTF-8 text."),
+        (.unsupportedVersion("2.0"), "User data version 2.0 is not supported."),
+        (.emptyNumber, "The user data file contains an entry without a set number."),
+        (.duplicateNumber("1-1"), "The user data file lists set 1-1 more than once."),
+        (.invalidInstructionsQuality(number: "1-1", value: 6), "Set 1-1 has an instructions rating of 6; expected 0–5."),
+    ])
+    func errorDescriptions(error: UserDataImportError, expected: String) {
+        #expect(error.errorDescription == expected)
+    }
+
+    @Test func fileTextMustBeUTF8() throws {
+        #expect(try userDataString(from: Data(#"{"version": "1.0"}"#.utf8)) == #"{"version": "1.0"}"#)
+        // 0xC3 starts a two-byte sequence that 0x28 does not continue.
+        #expect(throws: UserDataImportError.notUTF8) {
+            try userDataString(from: Data([0xC3, 0x28]))
+        }
     }
 
     @Test func failedSaveRollsBackTheImport() throws {

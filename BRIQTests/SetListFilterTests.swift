@@ -33,6 +33,21 @@ import CoreData
             in: context, number: "400-1", isUSNumber: false, name: "Pack",
             year: 1990, imageURL: nil, partsCount: 0, themeID: 3, isPack: true
         )
+        _ = Set.create(
+            in: context, number: "500-1", isUSNumber: false, name: "Unreleased",
+            year: 1990, imageURL: nil, partsCount: 0, themeID: 3, isUnreleased: true
+        )
+        _ = Set.create(
+            in: context, number: "600-1", isUSNumber: false, name: "Accessory",
+            year: 1990, imageURL: nil, partsCount: 0, themeID: 3, isAccessory: true
+        )
+        let notFavorite = Set.create(
+            in: context, number: "700-1", isUSNumber: false, name: "Owned, not favorite",
+            year: 1990, imageURL: nil, partsCount: 0, themeID: 3
+        )
+        let notFavoriteData = SetUserData.create(in: context, number: "700-1", owned: true)
+        notFavoriteData.set = notFavorite
+        notFavorite.userData = notFavoriteData
 
         try context.save()
     }
@@ -46,7 +61,7 @@ import CoreData
 
     @Test func emptyFilterOnlyHidesUSNumbers() throws {
         // The default filter still hides US-number variants...
-        #expect(try numbers(matching: SetListFilter()) == ["100-1", "200-1", "400-1"])
+        #expect(try numbers(matching: SetListFilter()) == ["100-1", "200-1", "400-1", "500-1", "600-1", "700-1"])
 
         // ...and with US numbers displayed, no predicate remains at all.
         var filter = SetListFilter()
@@ -57,20 +72,27 @@ import CoreData
     @Test func ownedOnly() throws {
         var filter = SetListFilter()
         filter.ownedState = 1
-        #expect(try numbers(matching: filter) == ["100-1"])
+        #expect(try numbers(matching: filter) == ["100-1", "700-1"])
     }
 
     @Test func notOwnedIncludesSetsWithoutUserData() throws {
         var filter = SetListFilter()
         filter.ownedState = 2
         filter.displayUSNumbers = true
-        #expect(try numbers(matching: filter) == ["200-1", "300-1", "400-1"])
+        #expect(try numbers(matching: filter) == ["200-1", "300-1", "400-1", "500-1", "600-1"])
     }
 
     @Test func favoritesOnly() throws {
         var filter = SetListFilter()
         filter.favoriteState = 1
         #expect(try numbers(matching: filter) == ["100-1"])
+    }
+
+    @Test func notFavoriteIncludesSetsWithoutUserData() throws {
+        var filter = SetListFilter()
+        filter.favoriteState = 2
+        filter.displayUSNumbers = true
+        #expect(try numbers(matching: filter) == ["200-1", "300-1", "400-1", "500-1", "600-1", "700-1"])
     }
 
     @Test func searchMatchesNumberOrNameCaseInsensitively() throws {
@@ -87,10 +109,22 @@ import CoreData
         var filter = SetListFilter()
         filter.excludePackages = true
         // displayUSNumbers defaults to false, which hides US variants
-        #expect(try numbers(matching: filter) == ["100-1", "200-1"])
+        #expect(try numbers(matching: filter) == ["100-1", "200-1", "500-1", "600-1", "700-1"])
 
         filter.displayUSNumbers = true
-        #expect(try numbers(matching: filter) == ["100-1", "200-1", "300-1"])
+        #expect(try numbers(matching: filter) == ["100-1", "200-1", "300-1", "500-1", "600-1", "700-1"])
+    }
+
+    @Test func excludeUnreleased() throws {
+        var filter = SetListFilter()
+        filter.excludeUnreleased = true
+        #expect(try numbers(matching: filter) == ["100-1", "200-1", "400-1", "600-1", "700-1"])
+    }
+
+    @Test func excludeAccessories() throws {
+        var filter = SetListFilter()
+        filter.excludeAccessories = true
+        #expect(try numbers(matching: filter) == ["100-1", "200-1", "400-1", "500-1", "700-1"])
     }
 
     @Test func favoriteThemesFilter() throws {

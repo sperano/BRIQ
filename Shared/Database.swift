@@ -32,10 +32,12 @@ nonisolated struct UserDataExport: Codable, Equatable {
         }
 
         /// Only `number` is required; absent flags mean "not set", as in
-        /// hand-written files.
+        /// hand-written files. Surrounding whitespace is dropped from the
+        /// number so it still matches its set.
         init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             number = try container.decode(String.self, forKey: .number)
+                .trimmingCharacters(in: .whitespacesAndNewlines)
             owned = try container.decodeIfPresent(Bool.self, forKey: .owned) ?? false
             favorite = try container.decodeIfPresent(Bool.self, forKey: .favorite) ?? false
             ownsInstructions = try container.decodeIfPresent(Bool.self, forKey: .ownsInstructions) ?? false
@@ -55,7 +57,7 @@ nonisolated struct UserDataExport: Codable, Equatable {
         }
         var seen = Swift.Set<String>()
         for entry in userData {
-            guard !entry.number.trimmingCharacters(in: .whitespaces).isEmpty else {
+            guard !entry.number.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
                 throw UserDataImportError.emptyNumber
             }
             guard seen.insert(entry.number).inserted else {
@@ -124,15 +126,20 @@ func exportUserData(context: NSManagedObjectContext) -> String? {
     }
 }
 
-func decodeUserDataExport(_ jsonString: String) throws -> UserDataExport {
-    guard let jsonData = jsonString.data(using: .utf8) else {
+/// The text of a user data file, which must be UTF-8.
+func userDataString(from data: Data) throws -> String {
+    guard let string = String(data: data, encoding: .utf8) else {
         throw UserDataImportError.notUTF8
     }
+    return string
+}
+
+func decodeUserDataExport(_ jsonString: String) throws -> UserDataExport {
     let decoder = JSONDecoder()
     decoder.dateDecodingStrategy = .iso8601
     let export: UserDataExport
     do {
-        export = try decoder.decode(UserDataExport.self, from: jsonData)
+        export = try decoder.decode(UserDataExport.self, from: Data(jsonString.utf8))
     } catch let error as DecodingError {
         throw UserDataImportError.malformed(describe(error))
     }
@@ -160,9 +167,10 @@ private func describe(_ error: DecodingError) -> String {
 }
 
 /// Replaces all user data with the contents of `jsonString`. The input is
-/// decoded and validated before the context is touched; if saving fails the
-/// context is rolled back, so existing user data survives any failure.
-/// Returns the number of imported entries.
+/// decoded and validated before the context is touched (invalid input throws
+/// `UserDataImportError`); if saving fails the context is rolled back and the
+/// Core Data error rethrown, so existing user data survives any failure.
+/// Returns the number of imported entries, including those matching no set.
 @discardableResult
 func importUserData(context: NSManagedObjectContext, jsonString: String) throws -> Int {
     let export = try decodeUserDataExport(jsonString)

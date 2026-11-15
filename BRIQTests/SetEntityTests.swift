@@ -78,5 +78,14 @@ import CoreData
             year: 1990, imageURL: nil, partsCount: 0, themeID: 0
         )
         #expect(older < newer)
+        #expect(!(newer < older))
+
+        // Same year: the number decides.
+        let sameYear = Set.create(
+            in: context, number: "900-1", isUSNumber: false, name: "Same year",
+            year: 1990, imageURL: nil, partsCount: 0, themeID: 0
+        )
+        #expect(newer < sameYear)
+        #expect(!(sameYear < newer))
     }
 }
