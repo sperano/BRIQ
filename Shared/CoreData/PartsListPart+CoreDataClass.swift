@@ -20,11 +20,7 @@ public class PartsListPart: NSManagedObject, Identifiable {
     }
 
     func color() -> PartColor {
-        let index = Int(colorID)
-        guard index >= 0 && index < AllPartColors.count else {
-            return PartColor(name: "Unknown", rgb: "000000", isTransparent: false, partsCount: 0, setsCount: 0, year1: nil, year2: nil)
-        }
-        return AllPartColors[index]
+        PartColor.lookup(id: colorID)
     }
 }
 
@@ -47,6 +43,25 @@ extension PartsListPart {
         partsListPart.quantity = quantity
         partsListPart.imageURL = imageURL
         return partsListPart
+    }
+
+    /// Adds `setPart`'s part, color, quantity and image to `partsList`; nil
+    /// when `setPart` has no part.
+    @discardableResult
+    static func create(
+        in context: NSManagedObjectContext,
+        partsList: PartsList,
+        copying setPart: SetPart
+    ) -> PartsListPart? {
+        guard let part = setPart.part else { return nil }
+        return create(
+            in: context,
+            partsList: partsList,
+            part: part,
+            colorID: setPart.colorID,
+            quantity: setPart.quantity,
+            imageURL: setPart.imageURL
+        )
     }
 
     static func fetchRequest() -> NSFetchRequest<PartsListPart> {
