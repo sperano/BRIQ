@@ -11,22 +11,26 @@ import CoreData
 #endif
 
 struct RowImage: View {
-    let url: String
-    
+    let url: String?
+
+    private static let size: CGFloat = 40
+    private static let cornerRadius: CGFloat = 8
+
     var body: some View {
-        AsyncImage(url: URL(string: url)) { phase in
-            if let image = phase.image {
+        ThumbnailImage(url: url.flatMap(URL.init(string:)), size: Self.size) { phase in
+            switch phase {
+            case .success(let image):
                 image
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-            } else if phase.error != nil {
+            case .failure:
                 Color(.red) // or a placeholder image
-            } else {
+            case .empty:
                 ProgressView()
             }
         }
-        .frame(width: 40, height: 40)
-        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .frame(width: Self.size, height: Self.size)
+        .clipShape(RoundedRectangle(cornerRadius: Self.cornerRadius))
     }
 }
 
@@ -35,7 +39,7 @@ struct SetRow: View {
     
     var body: some View {
         HStack {
-            RowImage(url: set.imageURL ?? "")
+            RowImage(url: set.imageURL)
             Text("\(set.baseNumber)  \(set.name)")
         }
     }

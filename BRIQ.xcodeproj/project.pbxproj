@@ -67,6 +67,7 @@
 				"Auto-Generated/PartColors.swift",
 				"Auto-Generated/Themes.swift",
 				BundledData.swift,
+				ConcurrentMap.swift,
 				CoreData/BRIQ.xcdatamodeld,
 				CoreData/CoreDataStack.swift,
 				"CoreData/Minifig+CoreDataClass.swift",
@@ -74,6 +75,7 @@
 				"CoreData/NSManagedObjectContext+SaveOrRollback.swift",
 				"CoreData/Part+CoreDataClass.swift",
 				"CoreData/Set+CoreDataClass.swift",
+				CoreData/SetContentTotals.swift,
 				"CoreData/SetMinifig+CoreDataClass.swift",
 				"CoreData/SetPart+CoreDataClass.swift",
 				"CoreData/SetUserData+CoreDataClass.swift",
@@ -81,6 +83,8 @@
 				Database.swift,
 				DatabaseInitializer.swift,
 				FocusedValues.swift,
+				IconSize.swift,
+				ImageLoader.swift,
 				Logging.swift,
 				PartColor.swift,
 				PDFGenerator.swift,
@@ -131,6 +135,7 @@
 				Views/StarRatingView.swift,
 				Views/Themes/FavoriteThemes.swift,
 				Views/Themes/ThemeDropdown.swift,
+				Views/ThumbnailImage.swift,
 			);
 			target = 073347F12E73BDC7006CBBAA /* BRIQ-macos */;
 		};
@@ -141,6 +146,7 @@
 				"Auto-Generated/PartColors.swift",
 				"Auto-Generated/Themes.swift",
 				BundledData.swift,
+				ConcurrentMap.swift,
 				CoreData/BRIQ.xcdatamodeld,
 				CoreData/CoreDataStack.swift,
 				"CoreData/Minifig+CoreDataClass.swift",
@@ -148,6 +154,7 @@
 				"CoreData/NSManagedObjectContext+SaveOrRollback.swift",
 				"CoreData/Part+CoreDataClass.swift",
 				"CoreData/Set+CoreDataClass.swift",
+				CoreData/SetContentTotals.swift,
 				"CoreData/SetMinifig+CoreDataClass.swift",
 				"CoreData/SetPart+CoreDataClass.swift",
 				"CoreData/SetUserData+CoreDataClass.swift",
@@ -155,6 +162,8 @@
 				Database.swift,
 				DatabaseInitializer.swift,
 				FocusedValues.swift,
+				IconSize.swift,
+				ImageLoader.swift,
 				Logging.swift,
 				PartColor.swift,
 				PDFGenerator.swift,
@@ -201,6 +210,7 @@
 				Views/StarRatingView.swift,
 				Views/Themes/FavoriteThemes.swift,
 				Views/Themes/ThemeDropdown.swift,
+				Views/ThumbnailImage.swift,
 			);
 			target = 075C34DB2E73BE4300CE4BC0 /* BRIQ-ios */;
 		};

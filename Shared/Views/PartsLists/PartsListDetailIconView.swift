@@ -14,7 +14,7 @@ struct PartsListDetailIconView: View {
         ScrollView {
             IconGridView(
                 items: parts,
-                imageURL: { $0.imageURL ?? "placeholder.png" },
+                imageURL: { $0.imageURL },
                 quantity: { Int($0.quantity) },
                 number: { $0.part?.number ?? "" },
                 name: { $0.part?.name ?? "" }

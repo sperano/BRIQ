@@ -12,22 +12,23 @@ import CoreData
 
 struct SetIconView: View {
     @ObservedObject var set: Set
-    var size: CGFloat = 120
+    var size: CGFloat = IconSize.defaultSize
     
     var body: some View {
         VStack(spacing: 4) {
-            AsyncImage(url: URL(string: set.imageURL ?? "")) { phase in
-                if let image = phase.image {
+            ThumbnailImage(url: set.imageURL.flatMap(URL.init(string:)), size: size) { phase in
+                switch phase {
+                case .success(let image):
                     image
                         .resizable()
                         .aspectRatio(contentMode: .fill)
-                } else if phase.error != nil {
+                case .failure:
                     Color.gray.opacity(0.4)
                         .overlay(
                             Image(systemName: "photo")
                                 .foregroundColor(.gray)
                         )
-                } else {
+                case .empty:
                     Color.gray.opacity(0.5)
                         .overlay(
                             ProgressView()

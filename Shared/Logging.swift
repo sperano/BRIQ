@@ -15,4 +15,6 @@ nonisolated extension Logger {
     static let dataTransfer = Logger(subsystem: subsystem, category: "dataTransfer")
     /// PDF generation.
     static let pdf = Logger(subsystem: subsystem, category: "pdf")
+    /// Image downloads and decoding.
+    static let images = Logger(subsystem: subsystem, category: "images")
 }

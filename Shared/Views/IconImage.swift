@@ -8,57 +8,39 @@
 import SwiftUI
 
 struct IconImage: View {
-    let url: String
-    @State private var retryCount = 0
-    @State private var imageKey = 0
-    
-    private let maxRetries = 3
-    
+    let url: String?
+    var size: CGFloat = IconSize.defaultSize
+
+    private static let cornerRadius: CGFloat = 8
+
     var body: some View {
-        AsyncImage(url: URL(string: url)) { phase in
+        ThumbnailImage(url: url.flatMap(URL.init(string:)), size: size) { phase in
             switch phase {
             case .success(let image):
                 image
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-            case .failure(_):
+            case .failure(let retry):
                 VStack(spacing: 4) {
                     Image(systemName: "photo")
                         .foregroundColor(.gray)
                         .font(.title2)
-                    if retryCount < maxRetries {
-                        Button("Retry") {
-                            retryLoad()
-                        }
-                        .font(.caption)
-                        .padding(2)
+                    if let retry {
+                        Button("Retry", action: retry)
+                            .font(.caption)
+                            .padding(2)
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color.gray.opacity(0.2))
-                .onAppear {
-                    if retryCount < maxRetries {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                            retryLoad()
-                        }
-                    }
-                }
             case .empty:
                 ProgressView()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background(Color.gray.opacity(0.1))
-            @unknown default:
-                Color.gray.opacity(0.2)
             }
         }
-        .id(imageKey)
-        .frame(width: 100, height: 100)
-        .clipShape(RoundedRectangle(cornerRadius: 8))
-    }
-    
-    private func retryLoad() {
-        retryCount += 1
-        imageKey += 1
+        .frame(width: size, height: size)
+        .clipShape(RoundedRectangle(cornerRadius: Self.cornerRadius))
     }
 }
 
@@ -86,6 +68,7 @@ struct IconImage: View {
             IconImage(url: "https://invalid-url-example.com/nonexistent.jpg")
             IconImage(url: "https://cdn.rebrickable.com/media/sets/invalid-set.jpg")
             IconImage(url: "not-a-valid-url")
+            IconImage(url: nil)
         }
     }
     .padding()

@@ -16,7 +16,7 @@ BRIQ is a cross-platform SwiftUI application for iOS and macOS that manages LEGO
   - **CoreData/**: Core Data models and stack (Set, Part, Minifig, SetPart, SetMinifig, SetUserData, PartsList, PartsListPart)
   - **SampleData/**: Sample data providers for SwiftUI previews
   - **Views/**: Shared SwiftUI views organized by feature (Minifigs/, Parts/, PartsLists/, SetDetails/, SetLists/, Settings/, Themes/)
-  - Root-level utilities: Theme.swift, PartColor.swift, SetListSortOrder.swift, SetListFilters.swift (filter `@AppStorage` keys and defaults), Database.swift, BundledData.swift, DatabaseInitializer.swift, Logging.swift, PDFGenerator.swift, FocusedValues.swift
+  - Root-level utilities: Theme.swift, PartColor.swift, SetListSortOrder.swift, SetListFilters.swift (filter `@AppStorage` keys and defaults), Database.swift, BundledData.swift, DatabaseInitializer.swift, Logging.swift, PDFGenerator.swift, ImageLoader.swift, ConcurrentMap.swift, IconSize.swift, FocusedValues.swift
 
 ## Build Commands
 
@@ -58,6 +58,8 @@ The identity attributes behind each `Identifiable.id` carry uniqueness constrain
 - `BundledData`: Handles loading and parsing of LEGO data from ZIP archive
 - `Database.swift`: Typed (`Codable`) user-data export and import; import validates the whole file before changing anything, throws `UserDataImportError` for invalid input and rethrows the Core Data error when the save fails
 - `ContentView`: Main entry point handling initialization flow vs main app UI
+- `ImageLoader` / `ThumbnailImage`: remote images, decoded at the size they are drawn and cached in memory; URLs that can never load (an HTTP 4xx other than 408 and 429, a bad or unsupported URL, data that is not an image) are not requested again until Retry (only `IconImage` shows one; rows and set icons try again after a relaunch); network errors, 5xx, 408 and 429 are retried on the next appearance. Use `ThumbnailImage` rather than `AsyncImage` for grids and rows
+- `SetContentTotals`: status-bar minifig and part totals, summed by the store (`SUM(quantity)`) instead of faulting each set's relationships
 
 ### Theme System
 - Themes are loaded via `initThemesTree()` function in app initialization
@@ -75,5 +77,5 @@ The identity attributes behind each `Identifiable.id` carry uniqueness constrain
 - Core Data migrations are lightweight (`shouldMigrateStoreAutomatically`). A model change needs a new model version, never an in-place edit: migration needs the old version to read the store. Before migrating, `StoreDeduplicator` resolves rows that would violate the uniqueness constraints, since a failed migration recreates the store
 - Views are organized by feature area (Sets, Parts, Minifigs)
 - Platform-specific code mostly lives in `BRIQ-ios/`/`BRIQ-macos/`, but some shared views and utilities also branch on platform internally (`#if os(...)`)
-- Unit tests live in `BRIQTests/` (the `BRIQTests` target); they need Xcode to build and run
+- Unit tests (Swift Testing) live in `BRIQTests/` (the `BRIQTests` target, hosted in the macOS app); they need Xcode to build and run
 - `Shared/` is not a target member as a whole: a new file there must be added to both targets' membership exceptions in `project.pbxproj` (Xcode's target membership checkboxes)
