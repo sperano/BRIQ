@@ -72,5 +72,5 @@ All models are defined in `Shared/CoreData/` with the data model at `Shared/Core
 - Large dataset loading is batched in `BundledData` (`setImportBatchSize`), cooperating with task cancellation between batches
 - Core Data migrations are handled automatically with `shouldMigrateStoreAutomatically`
 - Views are organized by feature area (Sets, Parts, Minifigs)
-- Platform-specific code mostly lives in `BRIQ-ios/`/`BRIQ-macos/`, but some shared views and utilities also branch on platform internally (`#if os(...)`/`#if canImport(...)`)
+- Platform-specific code mostly lives in `BRIQ-ios/`/`BRIQ-macos/`, but some shared views and utilities also branch on platform internally (`#if os(...)`)
 - There are no tests: the `BRIQTests` target exists in the Xcode project but has no source files
