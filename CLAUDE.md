@@ -58,7 +58,7 @@ The identity attributes behind each `Identifiable.id` carry uniqueness constrain
 - `BundledData`: Handles loading and parsing of LEGO data from ZIP archive
 - `Database.swift`: Typed (`Codable`) user-data export and import; import validates the whole file before changing anything, throws `UserDataImportError` for invalid input and rethrows the Core Data error when the save fails
 - `ContentView`: Main entry point handling initialization flow vs main app UI
-- `ImageLoader` / `ThumbnailImage`: remote images, decoded at the size they are drawn and cached in memory; URLs that can never load (an HTTP 4xx other than 408 and 429, data that is not an image) are not requested again until Retry; network errors, 5xx, 408 and 429 are retried on the next appearance. Use `ThumbnailImage` rather than `AsyncImage` for grids and rows
+- `ImageLoader` / `ThumbnailImage`: remote images, decoded at the size they are drawn and cached in memory; URLs that can never load (an HTTP 4xx other than 408 and 429, a bad or unsupported URL, data that is not an image) are not requested again until Retry; network errors, 5xx, 408 and 429 are retried on the next appearance. Use `ThumbnailImage` rather than `AsyncImage` for grids and rows
 - `SetContentTotals`: status-bar minifig and part totals, summed by the store (`SUM(quantity)`) instead of faulting each set's relationships
 
 ### Theme System
