@@ -20,14 +20,6 @@ public class SetPart: NSManagedObject, Identifiable {
     public var id: String {
         return "\(set?.number ?? "unknown")-\(part?.number ?? "unknown")-\(colorID)"
     }
-
-    func color() -> PartColor {
-        let index = Int(colorID)
-        guard index >= 0 && index < AllPartColors.count else {
-            return PartColor(name: "Unknown", rgb: "000000", isTransparent: false, partsCount: 0, setsCount: 0, year1: nil, year2: nil)
-        }
-        return AllPartColors[index]
-    }
 }
 
 // MARK: - Core Data Convenience
