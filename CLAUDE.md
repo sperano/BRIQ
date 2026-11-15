@@ -12,10 +12,10 @@ BRIQ is a cross-platform SwiftUI application for iOS and macOS that manages LEGO
 - **BRIQ-macos/**: macOS-specific app files, views, and platform features (menu commands, user data import/export)
 - **Shared/**: Cross-platform code including models, views, and business logic
   - **Auto-Generated/**: Auto-generated theme, category, and color data (Themes.swift, PartCategories.swift, PartColors.swift)
-  - **CoreData/**: Core Data models and stack (Set, Part, Minifig, SetPart, SetMinifig, SetUserData)
+  - **CoreData/**: Core Data models and stack (Set, Part, Minifig, SetPart, SetMinifig, SetUserData, PartsList, PartsListPart)
   - **SampleData/**: Sample data providers for SwiftUI previews
-  - **Views/**: Shared SwiftUI views organized by feature (Minifigs/, Parts/, SetDetails/, SetLists/, Themes/)
-  - Root-level utilities: Theme.swift, PartColor.swift, EnvironmentKeys.swift, SetListSortOrder.swift, Database.swift, BundledData.swift, InitializationState.swift
+  - **Views/**: Shared SwiftUI views organized by feature (Minifigs/, Parts/, PartsLists/, SetDetails/, SetLists/, Themes/)
+  - Root-level utilities: Theme.swift, PartColor.swift, SetListSortOrder.swift, Database.swift, BundledData.swift, DatabaseInitializer.swift, Logging.swift, PDFGenerator.swift, FocusedValues.swift
 
 ## Build Commands
 
@@ -34,6 +34,7 @@ The app uses Core Data with these core entities:
 - `Minifig`: LEGO minifigures
 - `SetPart`/`SetMinifig`: Junction models linking sets to parts/minifigs with quantities
 - `SetUserData`: User preferences per set (owned, favorite, instructions)
+- `PartsList`/`PartsListPart`: User-created parts lists and their line items
 
 All models are defined in `Shared/CoreData/` with the versioned data model at `Shared/CoreData/BRIQ.xcdatamodeld` (current version: `BRIQ 2.xcdatamodel`, named in `.xccurrentversion`). The Core Data stack is managed by `CoreDataStack.swift`.
 
@@ -41,17 +42,17 @@ The identity attributes behind each `Identifiable.id` carry uniqueness constrain
 
 ### Database Initialization
 - First launch loads data from bundled `init.zip` file containing comprehensive LEGO database
-- Initialization happens in `DatabaseInitializer.swift` (started from `ContentView`) using `BundledData.loadAll(from:into:progress:)`
+- `ContentView.swift` triggers `DatabaseInitializer.initializeIfNeeded()`, which calls `BundledData.loadAll(from:into:progress:)`
 - Progress tracking shows loading status to user
-- Database reset: `DatabaseInitializer.reinitialize(preserveUserData:)` wipes the store with `CoreDataStack.resetStore()` and reloads it
+- Database reset: `DatabaseInitializer.reinitialize(preserveUserData:)` wipes the store with `CoreDataStack.resetStore()` and reloads it; `DatabaseInitializer` also uses `resetStore()` to clear a partial import. `Database.swift` only handles user-data import/export
 
 ### Platform Differences
 - **iOS**: Basic app structure with navigation
 - **macOS**: Extended with menu commands for database management, user data import/export, view modes, and settings window
 
 ### Key Components
-- `CoreDataStack`: Manages Core Data persistent container, contexts, and batch operations
-- `InitializationState`: Manages app initialization state across both platforms
+- `CoreDataStack`: Manages the Core Data persistent container, contexts, and store reset/recovery
+- `DatabaseInitializer`: Owns first-launch import, failure recovery, and reinitialization
 - `BundledData`: Handles loading and parsing of LEGO data from ZIP archive
 - `Database.swift`: Typed (`Codable`) user-data export and import; import validates the whole file before changing anything, throws `UserDataImportError` for invalid input and rethrows the Core Data error when the save fails
 - `ContentView`: Main entry point handling initialization flow vs main app UI
@@ -59,13 +60,17 @@ The identity attributes behind each `Identifiable.id` carry uniqueness constrain
 ### Theme System
 - Themes are loaded via `initThemesTree()` function in app initialization
 - Auto-generated theme data in `Auto-Generated/Themes.swift`
-- Theme hierarchy accessible via `AllThemes` global dictionary
+- Theme hierarchy accessible via the `AllThemes` global array (parent/children links set by `initThemesTree()`)
 
 ## Development Notes
 
-- The app handles database corruption gracefully with automatic recreation in `CoreDataStack.loadStoreRecoveringFromCorruption`
+- If the store fails to load at launch, `CoreDataStack` destroys and recreates it automatically
+  (`loadStoreRecoveringFromCorruption`); `resetStore()` itself is invoked later, by
+  `DatabaseInitializer`, for user-triggered reinitialization (macOS "Database > Re-Initialize")
+  and to clear a partial import left behind by a crash
 - User data can be preserved during database reinitialization (macOS only): it is checked to import again before the wipe, and kept in `UserDefaults` until the reloaded store has it back
-- Large dataset loading is optimized with batch operations via `CoreDataStack.performBatchInsert()`
+- Large dataset loading is batched in `BundledData` (`setImportBatchSize`), cooperating with task cancellation between batches
 - Core Data migrations are lightweight (`shouldMigrateStoreAutomatically`). A model change needs a new model version, never an in-place edit: migration needs the old version to read the store. Before migrating, `StoreDeduplicator` resolves rows that would violate the uniqueness constraints, since a failed migration recreates the store
 - Views are organized by feature area (Sets, Parts, Minifigs)
-- Platform-specific code is isolated to respective app target directories
+- Platform-specific code mostly lives in `BRIQ-ios/`/`BRIQ-macos/`, but some shared views and utilities also branch on platform internally (`#if os(...)`)
+- Unit tests live in `BRIQTests/` (the `BRIQTests` target); they need Xcode to build and run
