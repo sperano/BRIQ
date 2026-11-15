@@ -22,7 +22,12 @@ final class StubURLProtocol: URLProtocol {
     private static let lock = NSLock()
     nonisolated(unsafe) private static var replies: [URL: Reply] = [:]
     nonisolated(unsafe) private static var requestCounts: [URL: Int] = [:]
-    nonisolated(unsafe) private static var arrivalWaiters: [URL: [CheckedContinuation<Void, Never>]] = [:]
+    nonisolated(unsafe) private static var arrivalWaiters: [URL: [ArrivalWaiter]] = [:]
+
+    private struct ArrivalWaiter {
+        let count: Int
+        let continuation: CheckedContinuation<Void, Never>
+    }
 
     static func makeSession() -> URLSession {
         let configuration = URLSessionConfiguration.ephemeral
@@ -44,14 +49,14 @@ final class StubURLProtocol: URLProtocol {
         lock.withLock { requestCounts[url, default: 0] }
     }
 
-    /// Returns once a request for `url` has reached the stub.
-    static func waitForRequest(to url: URL) async {
+    /// Returns once `count` requests for `url` have reached the stub.
+    static func waitForRequest(to url: URL, count: Int = 1) async {
         await withCheckedContinuation { continuation in
             let arrived = lock.withLock {
-                if requestCounts[url, default: 0] > 0 {
+                if requestCounts[url, default: 0] >= count {
                     return true
                 }
-                arrivalWaiters[url, default: []].append(continuation)
+                arrivalWaiters[url, default: []].append(ArrivalWaiter(count: count, continuation: continuation))
                 return false
             }
             if arrived {
@@ -70,11 +75,14 @@ final class StubURLProtocol: URLProtocol {
 
     override func startLoading() {
         guard let url = request.url else { return }
-        let (reply, waiters) = Self.lock.withLock {
+        let (reply, arrived) = Self.lock.withLock {
             Self.requestCounts[url, default: 0] += 1
-            return (Self.replies[url], Self.arrivalWaiters.removeValue(forKey: url) ?? [])
+            let count = Self.requestCounts[url, default: 0]
+            let waiters = Self.arrivalWaiters[url] ?? []
+            Self.arrivalWaiters[url] = waiters.filter { $0.count > count }
+            return (Self.replies[url], waiters.filter { $0.count <= count })
         }
-        waiters.forEach { $0.resume() }
+        arrived.forEach { $0.continuation.resume() }
 
         switch reply {
         case .data(let status, let body):

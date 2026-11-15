@@ -15,7 +15,9 @@ enum ThumbnailPhase {
 
 /// `AsyncImage` replacement that loads through `ImageLoader.shared`: the image
 /// is decoded at `size` points times the display scale and cached, and a URL
-/// that cannot load is not requested again each time the view appears.
+/// that can never load is not requested again each time the view appears.
+/// Other failures (network errors, server errors) are retried on the next
+/// appearance.
 struct ThumbnailImage<Content: View>: View {
     let url: URL?
     let size: CGFloat

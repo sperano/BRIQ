@@ -131,6 +131,19 @@ import CoreGraphics
         #expect(StubURLProtocol.requestCount(for: url) == 2)
     }
 
+    @Test func aCancelledLargerRequestReturnsTheCachedSmallerImage() async throws {
+        let url = servePNG(width: 400, height: 200)
+        let small = try #require(await loader.image(at: url, maxPixelSize: 100))
+        StubURLProtocol.setReply(.hang, for: url)
+        let loader = self.loader
+        let pending = Task { await loader.image(at: url, maxPixelSize: 200) }
+        await StubURLProtocol.waitForRequest(to: url, count: 2)
+
+        pending.cancel()
+
+        #expect(await pending.value === small)
+    }
+
     @Test func downsampledImageThrowsTheHTTPStatus() async {
         let url = StubURLProtocol.uniqueURL("missing.png")
         StubURLProtocol.setReply(.data(status: TestImage.httpNotFound, body: Data()), for: url)
