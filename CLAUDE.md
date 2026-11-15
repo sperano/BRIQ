@@ -14,8 +14,8 @@ BRIQ is a cross-platform SwiftUI application for iOS and macOS that manages LEGO
   - **Auto-Generated/**: Auto-generated theme, category, and color data (Themes.swift, PartCategories.swift, PartColors.swift)
   - **CoreData/**: Core Data models and stack (Set, Part, Minifig, SetPart, SetMinifig, SetUserData)
   - **SampleData/**: Sample data providers for SwiftUI previews
-  - **Views/**: Shared SwiftUI views organized by feature (Minifigs/, Parts/, SetDetails/, SetLists/, Themes/)
-  - Root-level utilities: Theme.swift, PartColor.swift, EnvironmentKeys.swift, SetListSortOrder.swift, Database.swift, BundledData.swift, InitializationState.swift
+  - **Views/**: Shared SwiftUI views organized by feature (Minifigs/, Parts/, PartsLists/, SetDetails/, SetLists/, Themes/)
+  - Root-level utilities: Theme.swift, PartColor.swift, SetListSortOrder.swift, Database.swift, BundledData.swift, DatabaseInitializer.swift, Logging.swift, PDFGenerator.swift, FocusedValues.swift
 
 ## Build Commands
 
@@ -39,31 +39,37 @@ All models are defined in `Shared/CoreData/` with the data model at `Shared/Core
 
 ### Database Initialization
 - First launch loads data from bundled `init.zip` file containing comprehensive LEGO database
-- Initialization happens in `ContentView.swift` using `BundledData.loadAll()`
+- `ContentView.swift` triggers `DatabaseInitializer.initializeIfNeeded()`, which calls `BundledData.loadAll()`
 - Progress tracking shows loading status to user
-- Database reset functionality available via `Database.swift` functions
+- Database reset functionality (manual reinitialization, partial-import cleanup) lives in
+  `DatabaseInitializer` and `CoreDataStack.resetStore()`; `Database.swift` only handles
+  user-data import/export
 
 ### Platform Differences
 - **iOS**: Basic app structure with navigation
 - **macOS**: Extended with menu commands for database management, user data import/export, view modes, and settings window
 
 ### Key Components
-- `CoreDataStack`: Manages Core Data persistent container, contexts, and batch operations
-- `InitializationState`: Manages app initialization state across both platforms
+- `CoreDataStack`: Manages the Core Data persistent container, contexts, and store reset/recovery
+- `DatabaseInitializer`: Owns first-launch import, failure recovery, and reinitialization
 - `BundledData`: Handles loading and parsing of LEGO data from ZIP archive
-- `Database.swift`: Database utilities including reset, import/export of user data
+- `Database.swift`: User-data import/export utilities
 - `ContentView`: Main entry point handling initialization flow vs main app UI
 
 ### Theme System
 - Themes are loaded via `initThemesTree()` function in app initialization
 - Auto-generated theme data in `Auto-Generated/Themes.swift`
-- Theme hierarchy accessible via `AllThemes` global dictionary
+- Theme hierarchy accessible via the `AllThemes` global array (parent/children links set by `initThemesTree()`)
 
 ## Development Notes
 
-- The app handles database corruption gracefully with automatic recreation via `CoreDataStack.resetStore()`
+- If the store fails to load at launch, `CoreDataStack` destroys and recreates it automatically
+  (`loadStoreRecoveringFromCorruption`); `resetStore()` itself is invoked later, by
+  `DatabaseInitializer`, for user-triggered reinitialization (macOS "Database > Re-Initialize")
+  and to clear a partial import left behind by a crash
 - User data can be preserved during database reinitialization (macOS only)
-- Large dataset loading is optimized with batch operations via `CoreDataStack.performBatchInsert()`
+- Large dataset loading is batched in `BundledData` (`setImportBatchSize`), cooperating with task cancellation between batches
 - Core Data migrations are handled automatically with `shouldMigrateStoreAutomatically`
 - Views are organized by feature area (Sets, Parts, Minifigs)
 - Platform-specific code is isolated to respective app target directories
+- There are no tests: the `BRIQTests` target exists in the Xcode project but has no source files
