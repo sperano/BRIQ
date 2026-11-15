@@ -46,3 +46,18 @@ func readUserDataFromFile() -> String? {
     }
     return nil
 }
+
+@MainActor
+func showUserDataImportResult(_ result: Result<Int, Error>) {
+    let alert = NSAlert()
+    switch result {
+    case .success(let count):
+        alert.messageText = "User Data Imported"
+        alert.informativeText = "Imported user data for \(count) sets."
+    case .failure(let error):
+        alert.alertStyle = .warning
+        alert.messageText = "Could Not Import User Data"
+        alert.informativeText = "\(error.localizedDescription) Your existing user data was not changed."
+    }
+    alert.runModal()
+}

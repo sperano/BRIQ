@@ -99,11 +99,13 @@ final class CoreDataStack: ObservableObject {
         viewContext.reset()
     }
 
+    static let modelName = "BRIQ"
+
     /// Loaded once: instantiating the model repeatedly (e.g. one stack per
     /// test) makes multiple NSEntityDescriptions claim the same
     /// NSManagedObject subclasses.
-    private static let managedObjectModel: NSManagedObjectModel = {
-        guard let url = Bundle(for: CoreDataStack.self).url(forResource: "BRIQ", withExtension: "momd"),
+    static let managedObjectModel: NSManagedObjectModel = {
+        guard let url = Bundle(for: CoreDataStack.self).url(forResource: CoreDataStack.modelName, withExtension: "momd"),
               let model = NSManagedObjectModel(contentsOf: url) else {
             fatalError("BRIQ.momd is missing from the bundle")
         }
@@ -111,7 +113,7 @@ final class CoreDataStack: ObservableObject {
     }()
 
     private static func makeContainer() -> NSPersistentContainer {
-        let container = NSPersistentContainer(name: "BRIQ", managedObjectModel: managedObjectModel)
+        let container = NSPersistentContainer(name: modelName, managedObjectModel: managedObjectModel)
 
         let description = container.persistentStoreDescriptions.first
         description?.shouldInferMappingModelAutomatically = true
@@ -123,6 +125,7 @@ final class CoreDataStack: ObservableObject {
     }
 
     private static func loadStoreRecoveringFromCorruption(into container: NSPersistentContainer) throws {
+        resolveDuplicatesBeforeMigration(in: container)
         guard let error = attemptLoad(container) else { return }
 
         Logger.database.error("Core Data store failed to load: \(error); destroying and recreating it")
@@ -132,6 +135,26 @@ final class CoreDataStack: ObservableObject {
 
         if let retryError = attemptLoad(container) {
             throw retryError
+        }
+    }
+
+    /// Migrating a store that holds duplicates to the uniqueness-constrained
+    /// model fails, and a failed load recreates the store, losing user data.
+    /// A failure here is only logged: the load and its recovery run as before.
+    private static func resolveDuplicatesBeforeMigration(in container: NSPersistentContainer) {
+        guard let description = container.persistentStoreDescriptions.first,
+              let storeURL = description.url else { return }
+        do {
+            try StoreDeduplicator.prepareForMigration(
+                storeAt: storeURL,
+                options: description.options,
+                to: managedObjectModel,
+                sourceModels: StoreDeduplicator.bundledModelVersions(
+                    named: modelName, in: Bundle(for: CoreDataStack.self)
+                )
+            )
+        } catch {
+            Logger.database.error("Duplicate check before migration failed: \(error)")
         }
     }
 

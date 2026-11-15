@@ -62,7 +62,9 @@ struct MacBRIQApp: App {
                 Button("Import User Data") {
                     if let data = readUserDataFromFile() {
                         Task { @MainActor in
-                            importUserData(context: coreDataStack.viewContext, jsonString: data)
+                            showUserDataImportResult(Result {
+                                try importUserData(context: coreDataStack.viewContext, jsonString: data)
+                            })
                         }
                     }
                 }

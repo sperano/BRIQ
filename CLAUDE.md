@@ -35,7 +35,9 @@ The app uses Core Data with these core entities:
 - `SetPart`/`SetMinifig`: Junction models linking sets to parts/minifigs with quantities
 - `SetUserData`: User preferences per set (owned, favorite, instructions)
 
-All models are defined in `Shared/CoreData/` with the data model at `Shared/CoreData/BRIQ.xcdatamodeld/BRIQ.xcdatamodel`. The Core Data stack is managed by `CoreDataStack.swift`.
+All models are defined in `Shared/CoreData/` with the versioned data model at `Shared/CoreData/BRIQ.xcdatamodeld` (current version: `BRIQ 2.xcdatamodel`, named in `.xccurrentversion`). The Core Data stack is managed by `CoreDataStack.swift`.
+
+The identity attributes behind each `Identifiable.id` carry uniqueness constraints: `number` on `Set`, `SetUserData`, `Part` and `Minifig`, `name` on `PartsList`.
 
 ### Database Initialization
 - First launch loads data from bundled `init.zip` file containing comprehensive LEGO database
@@ -51,7 +53,7 @@ All models are defined in `Shared/CoreData/` with the data model at `Shared/Core
 - `CoreDataStack`: Manages Core Data persistent container, contexts, and batch operations
 - `InitializationState`: Manages app initialization state across both platforms
 - `BundledData`: Handles loading and parsing of LEGO data from ZIP archive
-- `Database.swift`: Database utilities including reset, import/export of user data
+- `Database.swift`: Typed (`Codable`) user-data export and import; import validates the whole file before changing anything and throws `UserDataImportError`
 - `ContentView`: Main entry point handling initialization flow vs main app UI
 
 ### Theme System
@@ -64,6 +66,6 @@ All models are defined in `Shared/CoreData/` with the data model at `Shared/Core
 - The app handles database corruption gracefully with automatic recreation via `CoreDataStack.resetStore()`
 - User data can be preserved during database reinitialization (macOS only)
 - Large dataset loading is optimized with batch operations via `CoreDataStack.performBatchInsert()`
-- Core Data migrations are handled automatically with `shouldMigrateStoreAutomatically`
+- Core Data migrations are lightweight (`shouldMigrateStoreAutomatically`). A model change needs a new model version, never an in-place edit: migration needs the old version to read the store. Before migrating, `StoreDeduplicator` resolves rows that would violate the uniqueness constraints, since a failed migration recreates the store
 - Views are organized by feature area (Sets, Parts, Minifigs)
 - Platform-specific code is isolated to respective app target directories

@@ -111,8 +111,14 @@ final class DatabaseInitializer: ObservableObject {
         await load()
 
         if state == .ready, let exportedUserData {
-            importUserData(context: coreDataStack.viewContext, jsonString: exportedUserData)
-            Logger.database.info("Database reinitialization completed with user data restored")
+            do {
+                try importUserData(context: coreDataStack.viewContext, jsonString: exportedUserData)
+                Logger.database.info("Database reinitialization completed with user data restored")
+            } catch {
+                // The reloaded database itself is fine, so stay `.ready`.
+                Logger.database.error("Database reinitialized but restoring user data failed: \(error)")
+                coreDataStack.lastSaveError = "Your user data could not be restored: \(error.localizedDescription)"
+            }
         }
     }
 
