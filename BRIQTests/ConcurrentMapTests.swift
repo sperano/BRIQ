@@ -62,6 +62,44 @@ import Testing
             }
         }
     }
+
+    /// The other transforms only end when cancelled, so a map that waits for
+    /// every transform before rethrowing never finishes (the time limit
+    /// fails it), and one that starts more after the error is counted.
+    @Test(.timeLimit(.minutes(1)))
+    func theFirstErrorStopsTheRemainingTransforms() async {
+        let limit = 2
+        let started = Counter()
+
+        await #expect(throws: TransformError.failed) {
+            try await Array(0..<(limit * 10)).concurrentMap(maxConcurrent: limit) { item -> Int in
+                await started.increment()
+                if item == 0 {
+                    throw TransformError.failed
+                }
+                await Self.waitUntilCancelled()
+                return item
+            }
+        }
+
+        #expect(await started.value == limit)
+    }
+
+    private static func waitUntilCancelled() async {
+        // The stream never yields: its iteration ends only when the task is
+        // cancelled. Finishing it afterwards keeps the continuation alive.
+        let (stream, continuation) = AsyncStream<Never>.makeStream()
+        for await _ in stream {}
+        continuation.finish()
+    }
+}
+
+private actor Counter {
+    private(set) var value = 0
+
+    func increment() {
+        value += 1
+    }
 }
 
 /// Holds arrivals until `size` of them are waiting, then releases them all,

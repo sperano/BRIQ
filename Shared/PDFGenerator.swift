@@ -149,7 +149,8 @@ actor PDFGenerator {
             guard let url else { return nil }
             do {
                 return try await loader.downsampledImage(at: url, maxPixelSize: maxPixelSize)
-            } catch is CancellationError {
+            } catch where ImageLoader.isCancellation(error) {
+                // URLSession reports a cancelled task as URLError(.cancelled).
                 throw CancellationError()
             } catch {
                 Logger.pdf.error("Failed to download image from \(url): \(error)")

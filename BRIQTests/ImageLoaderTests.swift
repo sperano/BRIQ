@@ -99,6 +99,21 @@ import CoreGraphics
 
         #expect(larger === small)
         #expect(StubURLProtocol.requestCount(for: url) == 2)
+
+        let largerAgain = await loader.image(at: url, maxPixelSize: 200)
+
+        #expect(largerAgain === small)
+        #expect(StubURLProtocol.requestCount(for: url) == 2)
+    }
+
+    @Test func requestsAgainAfterAServerError() async {
+        let url = StubURLProtocol.uniqueURL("busy.png")
+        StubURLProtocol.setReply(.data(status: TestImage.httpServiceUnavailable, body: Data()), for: url)
+
+        #expect(await loader.image(at: url, maxPixelSize: 100) == nil)
+        #expect(await loader.image(at: url, maxPixelSize: 100) == nil)
+
+        #expect(StubURLProtocol.requestCount(for: url) == 2)
     }
 
     @Test func aCancelledRequestIsNotRememberedAsFailed() async {
@@ -143,8 +158,15 @@ import CoreGraphics
         #expect(StubURLProtocol.requestCount(for: url) == 2)
     }
 
+    @Test(arguments: [
+        (400, true), (403, true), (404, true), (410, true), (499, true),
+        (408, false), (429, false), (500, false), (502, false), (503, false), (304, false),
+    ])
+    func onlyClientErrorsThatRepeatArePermanent(status: Int, permanent: Bool) {
+        #expect(ImageLoader.isPermanent(ImageLoaderError.badStatus(status)) == permanent)
+    }
+
     @Test func onlyErrorsThatRepeatArePermanent() {
-        #expect(ImageLoader.isPermanent(ImageLoaderError.badStatus(TestImage.httpNotFound)))
         #expect(ImageLoader.isPermanent(ImageLoaderError.undecodable))
         #expect(ImageLoader.isPermanent(URLError(.badURL)))
         #expect(ImageLoader.isPermanent(URLError(.unsupportedURL)))

@@ -16,6 +16,8 @@ struct PDFOptionsSheet: View {
     @State private var progress: Double = 0
     @State private var progressMessage: String = ""
     @State private var errorMessage: String?
+    /// Cancelled when the sheet goes away, so a dismissed export stops downloading.
+    @State private var exportTask: Task<Void, Never>?
 
     private let columnRange = 6...20
 
@@ -59,7 +61,6 @@ struct PDFOptionsSheet: View {
                     Button("Cancel") {
                         dismiss()
                     }
-                    .disabled(isGenerating)
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Export") {
@@ -72,6 +73,9 @@ struct PDFOptionsSheet: View {
         #if os(macOS)
         .frame(minWidth: 350, minHeight: 250)
         #endif
+        .onDisappear {
+            exportTask?.cancel()
+        }
     }
 
     private func exportPDF() {
@@ -80,7 +84,7 @@ struct PDFOptionsSheet: View {
         progress = 0
         progressMessage = "Preparing..."
 
-        Task {
+        exportTask = Task {
             do {
                 // Read on the main actor: the parts belong to the view context.
                 let generator = PDFGenerator(
@@ -95,9 +99,12 @@ struct PDFOptionsSheet: View {
                     }
                 }
 
+                try Task.checkCancellation()
                 await MainActor.run {
                     savePDF(data: pdfData)
                 }
+            } catch is CancellationError {
+                // The sheet was dismissed: nothing is left to show the result in.
             } catch {
                 await MainActor.run {
                     errorMessage = error.localizedDescription

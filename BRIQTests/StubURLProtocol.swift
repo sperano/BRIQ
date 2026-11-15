@@ -15,6 +15,8 @@ final class StubURLProtocol: URLProtocol {
         case data(status: Int, body: Data)
         /// Never answers: the request ends only when it is cancelled.
         case hang
+        /// Fails with `URLError(code)`.
+        case failure(URLError.Code)
     }
 
     private static let lock = NSLock()
@@ -82,6 +84,8 @@ final class StubURLProtocol: URLProtocol {
             client?.urlProtocolDidFinishLoading(self)
         case .hang:
             break
+        case .failure(let code):
+            client?.urlProtocol(self, didFailWithError: URLError(code))
         case nil:
             client?.urlProtocol(self, didFailWithError: URLError(.cannotConnectToHost))
         }

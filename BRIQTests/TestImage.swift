@@ -11,6 +11,7 @@ import UniformTypeIdentifiers
 enum TestImage {
     static let httpOK = 200
     static let httpNotFound = 404
+    static let httpServiceUnavailable = 503
 
     /// An opaque PNG of the given size in pixels.
     static func png(width: Int, height: Int) -> Data {
