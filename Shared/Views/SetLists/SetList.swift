@@ -18,17 +18,26 @@ struct SetList: View {
     @State private var showSettings = false
     #endif
     @AppStorage("viewMode") private var viewMode: SetListViewMode = .icon
-    @AppStorage("filterFavoriteThemes") private var filterFavoriteThemes = true
-    @AppStorage("filterOwnedState") private var filterOwnedState = 0 // 0=all, 1=owned, 2=not owned
-    @AppStorage("filterFavoriteState") private var filterFavoriteState = 0 // 0=all, 1=favorite, 2=not favorite
-    @AppStorage("excludePackages") private var excludePackages = true
-    @AppStorage("excludeUnreleased") private var excludeUnreleased = true
-    @AppStorage("excludeAccessories") private var excludeAccessories = true
-    @AppStorage("displayUSNumbers") private var displayUSNumbers = false
+    @AppStorage(SetListFilterKey.favoriteThemesOnly)
+    private var filterFavoriteThemes = SetListFilterDefault.favoriteThemesOnly
+    @AppStorage(SetListFilterKey.ownership) private var ownershipFilter = SetListFilterDefault.ownership
+    @AppStorage(SetListFilterKey.favorite) private var favoriteFilter = SetListFilterDefault.favorite
+    @AppStorage(SetListFilterKey.excludePackages) private var excludePackages = SetListFilterDefault.excludePackages
+    @AppStorage(SetListFilterKey.excludeUnreleased)
+    private var excludeUnreleased = SetListFilterDefault.excludeUnreleased
+    @AppStorage(SetListFilterKey.excludeAccessories)
+    private var excludeAccessories = SetListFilterDefault.excludeAccessories
+    @AppStorage(SetListFilterKey.displayUSNumbers)
+    private var displayUSNumbers = SetListFilterDefault.displayUSNumbers
     @AppStorage("favoriteThemes") private var favoriteThemesString: String = ""
     @AppStorage("sortOrder") private var sortOrder: SetListSortOrder = .year
     private var favoriteThemes: Swift.Set<Int> {
         Swift.Set(favoriteThemesString.split(separator: ",").compactMap { Int($0) })
+    }
+
+    /// The stored mode, or `.icon` when this platform does not offer it.
+    private var availableViewMode: Binding<SetListViewMode> {
+        Binding(get: { viewMode.availableOrDefault }, set: { viewMode = $0 })
     }
 
     var body: some View {
@@ -37,14 +46,14 @@ struct SetList: View {
             SetListContent(
                 predicate: predicate,
                 sortDescriptors: sortOrder.sortDescriptors,
-                viewMode: $viewMode,
+                viewMode: availableViewMode,
                 selectedTheme: $selectedTheme
             )
             #elseif os(iOS)
             SetListContent(
                 predicate: predicate,
                 sortDescriptors: sortOrder.sortDescriptors,
-                viewMode: $viewMode,
+                viewMode: availableViewMode,
                 selectedTheme: $selectedTheme,
                 showSettings: $showSettings
             )
@@ -53,15 +62,7 @@ struct SetList: View {
         .searchable(text: $searchText, placement: .toolbar)
         #if os(iOS)
         .popover(isPresented: $showSettings) {
-            SettingsPopover(
-                filterFavoriteThemes: $filterFavoriteThemes,
-                filterOwnedState: $filterOwnedState,
-                filterFavoriteState: $filterFavoriteState,
-                excludePackages: $excludePackages,
-                excludeUnreleased: $excludeUnreleased,
-                excludeAccessories: $excludeAccessories,
-                displayUSNumbers: $displayUSNumbers
-            )
+            SettingsPopover()
         }
         #endif
     }
@@ -76,23 +77,7 @@ struct SetList: View {
             ))
         }
 
-        // Owned state filter
-        switch filterOwnedState {
-        case 1: // owned only
-            predicates.append(NSPredicate(format: "userData.owned == YES"))
-        case 2: // not owned only
-            predicates.append(NSPredicate(format: "userData.owned == NO OR userData == nil"))
-        default: break // all
-        }
-
-        // Favorite state filter
-        switch filterFavoriteState {
-        case 1: // favorites only
-            predicates.append(NSPredicate(format: "userData.favorite == YES"))
-        case 2: // not favorites only
-            predicates.append(NSPredicate(format: "userData.favorite == NO OR userData == nil"))
-        default: break // all
-        }
+        predicates.append(contentsOf: [ownershipFilter.predicate, favoriteFilter.predicate].compactMap { $0 })
 
         // Theme filter
         if let selectedTheme = selectedTheme {
@@ -169,7 +154,8 @@ private struct SetListContent: View {
             Group {
                 #if os(macOS)
                 switch viewMode {
-                case .icon:
+                // .list is not offered on macOS; SetList already maps it to .icon.
+                case .icon, .list:
                     SetListIconView(sets: setsArray, viewMode: $viewMode, selectedTheme: $selectedTheme)
                 case .split:
                     SetListSplitView(sets: setsArray, viewMode: $viewMode, selectedTheme: $selectedTheme)
@@ -177,12 +163,13 @@ private struct SetListContent: View {
                     SetListTableView(sets: setsArray, viewMode: $viewMode, selectedTheme: $selectedTheme)
                 }
                 #elseif os(iOS)
-                switch viewMode {
-                case .icon:
-                    SetListIconView(sets: setsArray, viewMode: $viewMode, selectedTheme: $selectedTheme, showSettings: $showSettings)
-                case .list:
-                    SetListIconView(sets: setsArray, viewMode: $viewMode, selectedTheme: $selectedTheme, showSettings: $showSettings)
-                }
+                // .list has no view of its own yet and shows the icon grid.
+                SetListIconView(
+                    sets: setsArray,
+                    viewMode: $viewMode,
+                    selectedTheme: $selectedTheme,
+                    showSettings: $showSettings
+                )
                 #endif
             }
             .navigationTitle("Sets")

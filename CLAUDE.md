@@ -10,12 +10,13 @@ BRIQ is a cross-platform SwiftUI application for iOS and macOS that manages LEGO
 
 - **BRIQ-ios/**: iOS-specific app files and views
 - **BRIQ-macos/**: macOS-specific app files, views, and platform features (menu commands, user data import/export)
+- **BRIQTests/**: Unit tests (Swift Testing), hosted in the macOS app
 - **Shared/**: Cross-platform code including models, views, and business logic
   - **Auto-Generated/**: Auto-generated theme, category, and color data (Themes.swift, PartCategories.swift, PartColors.swift)
   - **CoreData/**: Core Data models and stack (Set, Part, Minifig, SetPart, SetMinifig, SetUserData)
   - **SampleData/**: Sample data providers for SwiftUI previews
-  - **Views/**: Shared SwiftUI views organized by feature (Minifigs/, Parts/, SetDetails/, SetLists/, Themes/)
-  - Root-level utilities: Theme.swift, PartColor.swift, EnvironmentKeys.swift, SetListSortOrder.swift, Database.swift, BundledData.swift, InitializationState.swift
+  - **Views/**: Shared SwiftUI views organized by feature (Minifigs/, Parts/, PartsLists/, SetDetails/, SetLists/, Settings/, Themes/)
+  - Root-level utilities: Theme.swift, PartColor.swift, EnvironmentKeys.swift, SetListSortOrder.swift, SetListFilters.swift (filter `@AppStorage` keys and defaults), Database.swift, BundledData.swift, InitializationState.swift
 
 ## Build Commands
 
@@ -24,6 +25,7 @@ This is an Xcode project. Use Xcode to build and run:
 - Select target (BRIQ-ios or BRIQ-macos) 
 - Build: ⌘+B
 - Run: ⌘+R
+- Test: ⌘+U (BRIQ-macos scheme)
 
 ## Core Architecture
 
@@ -67,3 +69,4 @@ All models are defined in `Shared/CoreData/` with the data model at `Shared/Core
 - Core Data migrations are handled automatically with `shouldMigrateStoreAutomatically`
 - Views are organized by feature area (Sets, Parts, Minifigs)
 - Platform-specific code is isolated to respective app target directories
+- `Shared/` is not a target member as a whole: a new file there must be added to both targets' membership exceptions in `project.pbxproj` (Xcode's target membership checkboxes)

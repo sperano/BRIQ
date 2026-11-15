@@ -26,6 +26,18 @@ class PartColor: Identifiable, Sendable {
         self.year2 = year2
     }
 
+    /// Stands in for a color id outside `AllPartColors`.
+    static let unknown = PartColor(
+        name: "Unknown", rgb: "000000", isTransparent: false,
+        partsCount: 0, setsCount: 0, year1: nil, year2: nil
+    )
+
+    /// The color whose index in `AllPartColors` is `id`, or `unknown`.
+    static func lookup(id: Int32) -> PartColor {
+        let index = Int(id)
+        return AllPartColors.indices.contains(index) ? AllPartColors[index] : unknown
+    }
+
     var swiftUIColor: Color {
         let scanner = Scanner(string: rgb)
         var rgbValue: UInt64 = 0

@@ -9,23 +9,20 @@ import SwiftUI
 
 struct ViewModeCommands: View {
     @AppStorage("viewMode") private var viewMode: SetListViewMode = .icon
-    
+
     var body: some View {
         Group {
-            ForEach(SetListViewMode.allCases, id: \.self) { mode in
+            ForEach(Array(SetListViewMode.availableCases.enumerated()), id: \.element) { index, mode in
                 Button(mode.displayName + " View") {
                     viewMode = mode
                 }
-                .keyboardShortcut(keyboardShortcut(for: mode), modifiers: .command)
+                .keyboardShortcut(Self.keyboardShortcut(forPosition: index), modifiers: .command)
             }
         }
     }
-    
-    private func keyboardShortcut(for mode: SetListViewMode) -> KeyEquivalent {
-        switch mode {
-        case .icon: return "1"
-        case .split: return "2"
-        case .table: return "3"
-        }
+
+    /// ⌘1, ⌘2, ... in menu order.
+    private static func keyboardShortcut(forPosition index: Int) -> KeyEquivalent {
+        KeyEquivalent(Character(String(index + 1)))
     }
 }

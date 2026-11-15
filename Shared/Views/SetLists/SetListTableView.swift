@@ -31,9 +31,6 @@ struct SetListTableView: View {
     var sets: [Set]
     @Binding var viewMode: SetListViewMode
     @Binding var selectedTheme: Theme?
-    #if os(iOS)
-    @Binding var showSettings: Bool
-    #endif
 
     @State private var sortOrder = [KeyPathComparator<Set>(\.number)]
 
@@ -153,9 +150,6 @@ struct SetListTableView: View {
         .toolbar {
             ThemeDropdownToolbarItem(selectedTheme: $selectedTheme)
             ViewModeMenuToolbarItem(viewMode: $viewMode)
-            #if os(iOS)
-            SettingsButtonToolbarItem(showSettings: $showSettings)
-            #endif
         }
     }
 }

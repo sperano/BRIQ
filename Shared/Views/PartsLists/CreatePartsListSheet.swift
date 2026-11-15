@@ -64,15 +64,8 @@ struct CreatePartsListSheet: View {
 
         let partsList = PartsList.create(in: context, name: trimmedName)
 
-        if let setPart = partToAdd, let part = setPart.part {
-            PartsListPart.create(
-                in: context,
-                partsList: partsList,
-                part: part,
-                colorID: setPart.colorID,
-                quantity: setPart.quantity,
-                imageURL: setPart.imageURL
-            )
+        if let setPart = partToAdd {
+            PartsListPart.create(in: context, partsList: partsList, copying: setPart)
         }
 
         do {

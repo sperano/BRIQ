@@ -7,7 +7,6 @@
 
 import Foundation
 import CoreData
-import OSLog
 
 @objc(Set)
 public class Set: NSManagedObject, Identifiable, Comparable {
@@ -115,15 +114,6 @@ extension Set {
     }
 
     static func fetch(byNumber number: String, in context: NSManagedObjectContext) -> Set? {
-        let request = fetchRequest()
-        request.predicate = NSPredicate(format: "number == %@", number)
-        request.fetchLimit = 1
-
-        do {
-            return try context.fetch(request).first
-        } catch {
-            Logger.database.error("Error fetching set by number: \(error)")
-            return nil
-        }
+        context.fetchFirst(fetchRequest(), where: "number", equals: number)
     }
 }

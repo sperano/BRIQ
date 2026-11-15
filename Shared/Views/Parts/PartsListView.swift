@@ -9,9 +9,6 @@ import SwiftUI
 import CoreData
 
 struct PartsListView: View {
-    @Environment(\.managedObjectContext) private var context
-    @EnvironmentObject private var coreDataStack: CoreDataStack
-
     let parts: [SetPart]
 
     @FetchRequest(
@@ -27,7 +24,7 @@ struct PartsListView: View {
             ForEach(parts) { part in
                 PartRow(part: part)
                     .contextMenu {
-                        addToPartsListMenu(for: part)
+                        AddToPartsListMenu(setPart: part, partsLists: partsLists, partToAddAfterCreate: $partToAddAfterCreate)
                     }
             }
         }
@@ -35,49 +32,7 @@ struct PartsListView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(Color.gray.opacity(0.1))
         .cornerRadius(8)
-        .sheet(item: $partToAddAfterCreate) { setPart in
-            CreatePartsListSheet(partToAdd: setPart)
-        }
-    }
-
-    @ViewBuilder
-    private func addToPartsListMenu(for setPart: SetPart) -> some View {
-        Menu {
-            ForEach(partsLists) { partsList in
-                Button {
-                    addToPartsList(partsList, part: setPart)
-                } label: {
-                    Text(partsList.name)
-                }
-            }
-
-            if !partsLists.isEmpty {
-                Divider()
-            }
-
-            Button {
-                partToAddAfterCreate = setPart
-            } label: {
-                Label("New Parts List...", systemImage: "plus")
-            }
-        } label: {
-            Label("Add to Parts List", systemImage: "list.bullet.rectangle")
-        }
-    }
-
-    private func addToPartsList(_ partsList: PartsList, part setPart: SetPart) {
-        guard let part = setPart.part else { return }
-
-        PartsListPart.create(
-            in: context,
-            partsList: partsList,
-            part: part,
-            colorID: setPart.colorID,
-            quantity: setPart.quantity,
-            imageURL: setPart.imageURL
-        )
-
-        coreDataStack.saveViewContext()
+        .addToPartsListSheet(item: $partToAddAfterCreate)
     }
 }
 

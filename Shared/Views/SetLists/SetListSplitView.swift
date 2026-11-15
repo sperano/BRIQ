@@ -12,9 +12,6 @@ struct SetListSplitView: View {
     var sets: [Set]
     @Binding var viewMode: SetListViewMode
     @Binding var selectedTheme: Theme?
-    #if os(iOS)
-    @Binding var showSettings: Bool
-    #endif
     @State private var selectedSet: Set?
 
     var body: some View {
@@ -27,9 +24,6 @@ struct SetListSplitView: View {
             .toolbar {
                 ThemeDropdownToolbarItem(selectedTheme: $selectedTheme)
                 ViewModeMenuToolbarItem(viewMode: $viewMode)
-                #if os(iOS)
-                SettingsButtonToolbarItem(showSettings: $showSettings)
-                #endif
             }
         } detail: {
             if let selectedSet = selectedSet {
