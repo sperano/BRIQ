@@ -62,3 +62,6 @@ fastlane/screenshots/**/*.png
 fastlane/test_output
 .DS_Store
 build/
+
+# Personal briq-utils input data, not used by the app itself
+/my-sets.yaml
