@@ -38,15 +38,15 @@ The app uses Core Data with these core entities:
 - `SetUserData`: User preferences per set (owned, favorite, instructions)
 - `PartsList`/`PartsListPart`: User-created parts lists and their line items
 
-All models are defined in `Shared/CoreData/` with the data model at `Shared/CoreData/BRIQ.xcdatamodeld/BRIQ.xcdatamodel`. The Core Data stack is managed by `CoreDataStack.swift`.
+All models are defined in `Shared/CoreData/` with the versioned data model at `Shared/CoreData/BRIQ.xcdatamodeld` (current version: `BRIQ 2.xcdatamodel`, named in `.xccurrentversion`). The Core Data stack is managed by `CoreDataStack.swift`.
+
+The identity attributes behind each `Identifiable.id` carry uniqueness constraints: `number` on `Set`, `SetUserData`, `Part` and `Minifig`, `name` on `PartsList`.
 
 ### Database Initialization
 - First launch loads data from bundled `init.zip` file containing comprehensive LEGO database
-- `ContentView.swift` triggers `DatabaseInitializer.initializeIfNeeded()`, which calls `BundledData.loadAll()`
+- `ContentView.swift` triggers `DatabaseInitializer.initializeIfNeeded()`, which calls `BundledData.loadAll(from:into:progress:)`
 - Progress tracking shows loading status to user
-- Database reset functionality (manual reinitialization, partial-import cleanup) lives in
-  `DatabaseInitializer` and `CoreDataStack.resetStore()`; `Database.swift` only handles
-  user-data import/export
+- Database reset: `DatabaseInitializer.reinitialize(preserveUserData:)` wipes the store with `CoreDataStack.resetStore()` and reloads it; `DatabaseInitializer` also uses `resetStore()` to clear a partial import. `Database.swift` only handles user-data import/export
 
 ### Platform Differences
 - **iOS**: Basic app structure with navigation
@@ -56,7 +56,7 @@ All models are defined in `Shared/CoreData/` with the data model at `Shared/Core
 - `CoreDataStack`: Manages the Core Data persistent container, contexts, and store reset/recovery
 - `DatabaseInitializer`: Owns first-launch import, failure recovery, and reinitialization
 - `BundledData`: Handles loading and parsing of LEGO data from ZIP archive
-- `Database.swift`: User-data import/export utilities
+- `Database.swift`: Typed (`Codable`) user-data export and import; import validates the whole file before changing anything, throws `UserDataImportError` for invalid input and rethrows the Core Data error when the save fails
 - `ContentView`: Main entry point handling initialization flow vs main app UI
 - `ImageLoader` / `ThumbnailImage`: remote images, decoded at the size they are drawn and cached in memory; URLs that cannot load (HTTP error, not an image) are not requested again until Retry. Use `ThumbnailImage` rather than `AsyncImage` for grids and rows
 - `SetContentTotals`: status-bar minifig and part totals, summed by the store (`SUM(quantity)`) instead of faulting each set's relationships
@@ -72,9 +72,9 @@ All models are defined in `Shared/CoreData/` with the data model at `Shared/Core
   (`loadStoreRecoveringFromCorruption`); `resetStore()` itself is invoked later, by
   `DatabaseInitializer`, for user-triggered reinitialization (macOS "Database > Re-Initialize")
   and to clear a partial import left behind by a crash
-- User data can be preserved during database reinitialization (macOS only)
+- User data can be preserved during database reinitialization (macOS only): it is checked to import again before the wipe, and kept in `UserDefaults` until the reloaded store has it back (a failed or interrupted restore is retried on the next launch, and before a later re-initialize exports again)
 - Large dataset loading is batched in `BundledData` (`setImportBatchSize`), cooperating with task cancellation between batches
-- Core Data migrations are handled automatically with `shouldMigrateStoreAutomatically`
+- Core Data migrations are lightweight (`shouldMigrateStoreAutomatically`). A model change needs a new model version, never an in-place edit: migration needs the old version to read the store. Before migrating, `StoreDeduplicator` resolves rows that would violate the uniqueness constraints, since a failed migration recreates the store
 - Views are organized by feature area (Sets, Parts, Minifigs)
 - Platform-specific code mostly lives in `BRIQ-ios/`/`BRIQ-macos/`, but some shared views and utilities also branch on platform internally (`#if os(...)`)
 - Unit tests (Swift Testing) live in `BRIQTests/` (the `BRIQTests` target, hosted in the macOS app); they need Xcode to build and run

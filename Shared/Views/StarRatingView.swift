@@ -9,7 +9,7 @@ import SwiftUI
 
 struct StarRatingView: View {
     @Binding var rating: Int
-    let maxRating: Int = 5
+    nonisolated static let maxRating = 5
     let isInteractive: Bool
     
     init(rating: Binding<Int>, isInteractive: Bool = true) {
@@ -19,7 +19,7 @@ struct StarRatingView: View {
     
     var body: some View {
         HStack(spacing: 4) {
-            ForEach(1...maxRating, id: \.self) { star in
+            ForEach(1...Self.maxRating, id: \.self) { star in
                 Image(systemName: star <= rating ? "star.fill" : "star")
                     .foregroundColor(star <= rating ? .yellow : .gray)
                     .onTapGesture {

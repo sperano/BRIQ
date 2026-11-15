@@ -27,7 +27,7 @@ struct ContentView: View {
             await databaseInitializer.initializeIfNeeded()
         }
         .alert(
-            "Save Failed",
+            "Database Error",
             isPresented: Binding(
                 get: { coreDataStack.lastSaveError != nil },
                 set: { if !$0 { coreDataStack.lastSaveError = nil } }
