@@ -5,7 +5,6 @@
 
 import Foundation
 import CoreData
-import OSLog
 
 @objc(PartsList)
 public class PartsList: NSManagedObject, Identifiable {
@@ -39,15 +38,6 @@ extension PartsList {
     }
 
     static func fetch(byName name: String, in context: NSManagedObjectContext) -> PartsList? {
-        let request = fetchRequest()
-        request.predicate = NSPredicate(format: "name == %@", name)
-        request.fetchLimit = 1
-
-        do {
-            return try context.fetch(request).first
-        } catch {
-            Logger.database.error("Error fetching parts list by name: \(error)")
-            return nil
-        }
+        context.fetchFirst(fetchRequest(), where: "name", equals: name)
     }
 }

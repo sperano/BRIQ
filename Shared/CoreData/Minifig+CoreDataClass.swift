@@ -7,7 +7,6 @@
 
 import Foundation
 import CoreData
-import OSLog
 
 @objc(Minifig)
 public class Minifig: NSManagedObject, Identifiable {
@@ -45,15 +44,6 @@ extension Minifig {
     }
 
     static func fetch(byNumber number: String, in context: NSManagedObjectContext) -> Minifig? {
-        let request = fetchRequest()
-        request.predicate = NSPredicate(format: "number == %@", number)
-        request.fetchLimit = 1
-
-        do {
-            return try context.fetch(request).first
-        } catch {
-            Logger.database.error("Error fetching minifig by number: \(error)")
-            return nil
-        }
+        context.fetchFirst(fetchRequest(), where: "number", equals: number)
     }
 }

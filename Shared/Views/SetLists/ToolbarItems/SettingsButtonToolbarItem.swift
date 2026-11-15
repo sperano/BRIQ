@@ -9,16 +9,14 @@ import SwiftUI
 
 struct SettingsButtonToolbarItem: ToolbarContent {
     @Binding var showSettings: Bool
-    
+
     var body: some ToolbarContent {
         ToolbarItem {
-            #if os(iOS)
             Button(action: {
                 showSettings.toggle()
             }) {
                 Image(systemName: "gearshape")
             }
-            #endif
         }
     }
 }

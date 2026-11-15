@@ -7,7 +7,6 @@
 
 import Foundation
 import CoreData
-import OSLog
 
 @objc(Part)
 public class Part: NSManagedObject, Identifiable {
@@ -51,15 +50,6 @@ extension Part {
     }
 
     static func fetch(byNumber number: String, in context: NSManagedObjectContext) -> Part? {
-        let request = fetchRequest()
-        request.predicate = NSPredicate(format: "number == %@", number)
-        request.fetchLimit = 1
-
-        do {
-            return try context.fetch(request).first
-        } catch {
-            Logger.database.error("Error fetching part by number: \(error)")
-            return nil
-        }
+        context.fetchFirst(fetchRequest(), where: "number", equals: number)
     }
 }

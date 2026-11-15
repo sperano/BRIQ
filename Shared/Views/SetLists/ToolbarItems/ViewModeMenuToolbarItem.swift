@@ -9,11 +9,11 @@ import SwiftUI
 
 struct ViewModeMenuToolbarItem: ToolbarContent {
     @Binding var viewMode: SetListViewMode
-    
+
     var body: some ToolbarContent {
         ToolbarItem {
             Menu {
-                ForEach(SetListViewMode.allCases, id: \.self) { mode in
+                ForEach(SetListViewMode.availableCases, id: \.self) { mode in
                     Button(action: {
                         viewMode = mode
                     }) {

@@ -71,6 +71,8 @@
 				CoreData/BRIQ.xcdatamodeld,
 				CoreData/CoreDataStack.swift,
 				"CoreData/Minifig+CoreDataClass.swift",
+				"CoreData/NSManagedObjectContext+FetchFirst.swift",
+				"CoreData/NSManagedObjectContext+SaveOrRollback.swift",
 				"CoreData/Part+CoreDataClass.swift",
 				"CoreData/Set+CoreDataClass.swift",
 				CoreData/SetContentTotals.swift,
@@ -87,6 +89,7 @@
 				PDFGenerator.swift,
 				"SampleData/SampleData+Extensions.swift",
 				SampleData/SampleDataProvider.swift,
+				SetListFilters.swift,
 				SetListSortOrder.swift,
 				Theme.swift,
 				Views/ContentView.swift,
@@ -101,6 +104,7 @@
 				Views/Parts/PartsIconView.swift,
 				Views/Parts/SetPartsDisplay.swift,
 				Views/Parts/PartsListView.swift,
+				Views/PartsLists/AddToPartsListMenu.swift,
 				Views/PartsLists/LegoColorPicker.swift,
 				Views/PartsLists/PartsListDetailIconView.swift,
 				Views/PartsLists/PartsListDetailTableView.swift,
@@ -118,12 +122,14 @@
 				Views/SetLists/SetListIconView.swift,
 				Views/SetLists/SetListSplitView.swift,
 				Views/SetLists/SetListStatusBar.swift,
+				Views/SetLists/SetListViewMode.swift,
 				Views/SetLists/SetListTableView.swift,
 				Views/SetLists/ToolbarItems/IconSizeSliderToolbarItem.swift,
 				Views/SetLists/ToolbarItems/SettingsButtonToolbarItem.swift,
 				Views/SetLists/ToolbarItems/ThemeDropdownToolbarItem.swift,
 				Views/SetLists/ToolbarItems/ViewModeMenuToolbarItem.swift,
 				Views/SetRow.swift,
+				Views/Settings/SetListFilterSettings.swift,
 				Views/StarRatingView.swift,
 				Views/Themes/FavoriteThemes.swift,
 				Views/Themes/ThemeDropdown.swift,
@@ -142,6 +148,8 @@
 				CoreData/BRIQ.xcdatamodeld,
 				CoreData/CoreDataStack.swift,
 				"CoreData/Minifig+CoreDataClass.swift",
+				"CoreData/NSManagedObjectContext+FetchFirst.swift",
+				"CoreData/NSManagedObjectContext+SaveOrRollback.swift",
 				"CoreData/Part+CoreDataClass.swift",
 				"CoreData/Set+CoreDataClass.swift",
 				CoreData/SetContentTotals.swift,
@@ -158,6 +166,7 @@
 				PDFGenerator.swift,
 				"SampleData/SampleData+Extensions.swift",
 				SampleData/SampleDataProvider.swift,
+				SetListFilters.swift,
 				SetListSortOrder.swift,
 				Theme.swift,
 				Views/ContentView.swift,
@@ -172,6 +181,7 @@
 				Views/Parts/PartsIconView.swift,
 				Views/Parts/SetPartsDisplay.swift,
 				Views/Parts/PartsListView.swift,
+				Views/PartsLists/AddToPartsListMenu.swift,
 				Views/PartsLists/LegoColorPicker.swift,
 				Views/PartsLists/PartsListDetailIconView.swift,
 				Views/PartsLists/PartsListViewMode.swift,
@@ -187,10 +197,12 @@
 				Views/SetLists/SetList.swift,
 				Views/SetLists/SetListIconView.swift,
 				Views/SetLists/SetListStatusBar.swift,
+				Views/SetLists/SetListViewMode.swift,
 				Views/SetLists/ToolbarItems/SettingsButtonToolbarItem.swift,
 				Views/SetLists/ToolbarItems/ThemeDropdownToolbarItem.swift,
 				Views/SetLists/ToolbarItems/ViewModeMenuToolbarItem.swift,
 				Views/SetRow.swift,
+				Views/Settings/SetListFilterSettings.swift,
 				Views/StarRatingView.swift,
 				Views/Themes/FavoriteThemes.swift,
 				Views/Themes/ThemeDropdown.swift,
@@ -235,7 +247,7 @@
 			path = "BRIQ-ios";
 			sourceTree = "<group>";
 		};
-		07AB20C12E9F00010000AB01 /* BRIQTests */ = {
+		0B51E7A12F00A00100C0FFEE /* BRIQTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = BRIQTests;
 			sourceTree = "<group>";
@@ -276,7 +288,7 @@
 				073347ED2E73BDA3006CBBAA /* Shared */,
 				073347F32E73BDC7006CBBAA /* BRIQ-macos */,
 				075C34DD2E73BE4300CE4BC0 /* BRIQ-ios */,
-				07AB20C12E9F00010000AB01 /* BRIQTests */,
+				0B51E7A12F00A00100C0FFEE /* BRIQTests */,
 				073301E92E73C3140057EDBB /* Frameworks */,
 				070756002E739D24007C1FA4 /* Products */,
 				3AB14CD881422C6FB7853AAE /* PartsListRow.swift */,
@@ -355,7 +367,7 @@
 				074180EF2E77C94B00B9FF22 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				07AB20C12E9F00010000AB01 /* BRIQTests */,
+				0B51E7A12F00A00100C0FFEE /* BRIQTests */,
 			);
 			name = BRIQTests;
 			packageProductDependencies = (
