@@ -15,7 +15,7 @@ struct SetListIconView: View {
     #if os(iOS)
     @Binding var showSettings: Bool
     #endif
-    @State private var iconSize: CGFloat = 120
+    @AppStorage(IconSize.storageKey) private var iconSize = IconSize.defaultSize
     
     var body: some View {
         ScrollView {
@@ -33,13 +33,18 @@ struct SetListIconView: View {
         .toolbar {
             ThemeDropdownToolbarItem(selectedTheme: $selectedTheme)
             #if !os(iOS)
-            IconSizeSliderToolbarItem(iconSize: $iconSize)
+            IconSizeSliderToolbarItem(iconSize: iconSizeBinding)
             #endif
             ViewModeMenuToolbarItem(viewMode: $viewMode)
             #if os(iOS)
             SettingsButtonToolbarItem(showSettings: $showSettings)
             #endif
         }
+    }
+
+    /// The slider works in `CGFloat`; `@AppStorage` stores a `Double`.
+    private var iconSizeBinding: Binding<CGFloat> {
+        Binding(get: { CGFloat(iconSize) }, set: { iconSize = Double($0) })
     }
 }
 

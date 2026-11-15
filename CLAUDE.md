@@ -15,7 +15,7 @@ BRIQ is a cross-platform SwiftUI application for iOS and macOS that manages LEGO
   - **CoreData/**: Core Data models and stack (Set, Part, Minifig, SetPart, SetMinifig, SetUserData, PartsList, PartsListPart)
   - **SampleData/**: Sample data providers for SwiftUI previews
   - **Views/**: Shared SwiftUI views organized by feature (Minifigs/, Parts/, PartsLists/, SetDetails/, SetLists/, Themes/)
-  - Root-level utilities: Theme.swift, PartColor.swift, SetListSortOrder.swift, Database.swift, BundledData.swift, DatabaseInitializer.swift, Logging.swift, PDFGenerator.swift, FocusedValues.swift
+  - Root-level utilities: Theme.swift, PartColor.swift, SetListSortOrder.swift, Database.swift, BundledData.swift, DatabaseInitializer.swift, Logging.swift, PDFGenerator.swift, ImageLoader.swift, ConcurrentMap.swift, IconSize.swift, FocusedValues.swift
 
 ## Build Commands
 
@@ -56,6 +56,8 @@ All models are defined in `Shared/CoreData/` with the data model at `Shared/Core
 - `BundledData`: Handles loading and parsing of LEGO data from ZIP archive
 - `Database.swift`: User-data import/export utilities
 - `ContentView`: Main entry point handling initialization flow vs main app UI
+- `ImageLoader` / `ThumbnailImage`: remote images, decoded at the size they are drawn and cached in memory; URLs that cannot load (HTTP error, not an image) are not requested again until Retry. Use `ThumbnailImage` rather than `AsyncImage` for grids and rows
+- `SetContentTotals`: status-bar minifig and part totals, summed by the store (`SUM(quantity)`) instead of faulting each set's relationships
 
 ### Theme System
 - Themes are loaded via `initThemesTree()` function in app initialization
@@ -73,4 +75,4 @@ All models are defined in `Shared/CoreData/` with the data model at `Shared/Core
 - Core Data migrations are handled automatically with `shouldMigrateStoreAutomatically`
 - Views are organized by feature area (Sets, Parts, Minifigs)
 - Platform-specific code mostly lives in `BRIQ-ios/`/`BRIQ-macos/`, but some shared views and utilities also branch on platform internally (`#if os(...)`)
-- There are no tests: the `BRIQTests` target exists in the Xcode project but has no source files
+- Unit tests (Swift Testing) live in `BRIQTests/` (the `BRIQTests` target, hosted in the macOS app); they need Xcode to build and run

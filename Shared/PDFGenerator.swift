@@ -5,7 +5,6 @@
 
 import Foundation
 import CoreGraphics
-import ImageIO
 import OSLog
 
 #if os(macOS)
@@ -33,22 +32,33 @@ enum PDFGeneratorError: LocalizedError {
     }
 }
 
+/// Draws a parts list as a grid of images on US Letter pages. Each page's
+/// images are downloaded a few at a time, decoded at the cell's print size
+/// and released once the page is drawn.
 actor PDFGenerator {
-    private let parts: [PartsListPart]
+    private static let maxConcurrentDownloads = 6
+    /// Resolution the images are decoded at, in dots per inch.
+    private static let printResolution: CGFloat = 300
+    private static let pointsPerInch: CGFloat = 72
+
+    private let imageURLs: [URL?]
     private let columns: Int
+    private let loader: ImageLoader
 
     // US Letter size in points (72 points per inch)
     private let pageWidth: CGFloat = 612  // 8.5 inches
     private let pageHeight: CGFloat = 792 // 11 inches
     private let margin: CGFloat = 36      // 0.5 inch margin
 
-    init(parts: [PartsListPart], columns: Int) {
-        self.parts = parts
+    /// `imageURLs` holds one entry per cell; a nil entry leaves its cell empty.
+    init(imageURLs: [URL?], columns: Int, loader: ImageLoader = .shared) {
+        self.imageURLs = imageURLs
         self.columns = columns
+        self.loader = loader
     }
 
     func generate(progress: @escaping (Double, String) -> Void) async throws -> Data {
-        guard !parts.isEmpty else {
+        guard !imageURLs.isEmpty else {
             throw PDFGeneratorError.noImages
         }
 
@@ -57,14 +67,8 @@ actor PDFGenerator {
         let cellSize = availableWidth / CGFloat(columns)
         let rowsPerPage = Int((pageHeight - (margin * 2)) / cellSize)
         let partsPerPage = columns * rowsPerPage
+        let maxPixelSize = Int((cellSize * Self.printResolution / Self.pointsPerInch).rounded(.up))
 
-        // Download all images first
-        progress(0, "Downloading images...")
-        let images = try await downloadImages(progress: progress)
-
-        progress(0.9, "Creating PDF...")
-
-        // Create PDF
         let pdfData = NSMutableData()
         var mediaBox = CGRect(x: 0, y: 0, width: pageWidth, height: pageHeight)
 
@@ -73,59 +77,20 @@ actor PDFGenerator {
             throw PDFGeneratorError.pdfCreationFailed
         }
 
-        let totalPages = (images.count + partsPerPage - 1) / partsPerPage
+        let total = imageURLs.count
+        let totalPages = (total + partsPerPage - 1) / partsPerPage
 
         for pageIndex in 0..<totalPages {
-            pdfContext.beginPDFPage(nil)
-
             let startIndex = pageIndex * partsPerPage
-            let endIndex = min(startIndex + partsPerPage, images.count)
+            let endIndex = min(startIndex + partsPerPage, total)
+            progress(Double(startIndex) / Double(total), "Downloading images \(startIndex + 1)-\(endIndex) of \(total)...")
 
-            // Calculate actual rows on this page
-            let partsOnPage = endIndex - startIndex
-            let rowsOnPage = (partsOnPage + columns - 1) / columns
+            let images = try await downloadImages(Array(imageURLs[startIndex..<endIndex]), maxPixelSize: maxPixelSize)
+            try Task.checkCancellation()
 
-            // Draw cut lines (grid)
-            pdfContext.setStrokeColor(CGColor(gray: 0.75, alpha: 1.0))
-            pdfContext.setLineWidth(0.5)
-
-            // Vertical lines
-            for col in 0...columns {
-                let x = margin + CGFloat(col) * cellSize
-                let yStart = pageHeight - margin
-                let yEnd = pageHeight - margin - CGFloat(rowsOnPage) * cellSize
-                pdfContext.move(to: CGPoint(x: x, y: yStart))
-                pdfContext.addLine(to: CGPoint(x: x, y: yEnd))
-            }
-
-            // Horizontal lines
-            for row in 0...rowsOnPage {
-                let y = pageHeight - margin - CGFloat(row) * cellSize
-                let xStart = margin
-                let xEnd = margin + CGFloat(columns) * cellSize
-                pdfContext.move(to: CGPoint(x: xStart, y: y))
-                pdfContext.addLine(to: CGPoint(x: xEnd, y: y))
-            }
-
-            pdfContext.strokePath()
-
-            // Draw images
-            for i in startIndex..<endIndex {
-                let indexOnPage = i - startIndex
-                let col = indexOnPage % columns
-                let row = indexOnPage / columns
-
-                let x = margin + CGFloat(col) * cellSize
-                // PDF coordinate system has origin at bottom-left, so flip Y
-                let y = pageHeight - margin - CGFloat(row + 1) * cellSize
-
-                if let cgImage = images[i] {
-                    let imageRect = CGRect(x: x, y: y, width: cellSize, height: cellSize)
-                    let fittedRect = fitImageRect(imageSize: CGSize(width: cgImage.width, height: cgImage.height), in: imageRect)
-                    pdfContext.draw(cgImage, in: fittedRect)
-                }
-            }
-
+            pdfContext.beginPDFPage(nil)
+            drawGrid(in: pdfContext, cellSize: cellSize, rows: (images.count + columns - 1) / columns)
+            drawImages(images, in: pdfContext, cellSize: cellSize)
             pdfContext.endPDFPage()
         }
 
@@ -135,41 +100,62 @@ actor PDFGenerator {
         return pdfData as Data
     }
 
-    private func downloadImages(progress: @escaping (Double, String) -> Void) async throws -> [CGImage?] {
-        var images: [CGImage?] = []
-        let total = parts.count
+    /// Cut lines around the cells of the page's first `rows` rows.
+    private func drawGrid(in pdfContext: CGContext, cellSize: CGFloat, rows: Int) {
+        pdfContext.setStrokeColor(CGColor(gray: 0.75, alpha: 1.0))
+        pdfContext.setLineWidth(0.5)
 
-        for (index, part) in parts.enumerated() {
-            let currentProgress = Double(index) / Double(total) * 0.85
-            progress(currentProgress, "Downloading image \(index + 1) of \(total)...")
+        // Vertical lines
+        for col in 0...columns {
+            let x = margin + CGFloat(col) * cellSize
+            let yStart = pageHeight - margin
+            let yEnd = pageHeight - margin - CGFloat(rows) * cellSize
+            pdfContext.move(to: CGPoint(x: x, y: yStart))
+            pdfContext.addLine(to: CGPoint(x: x, y: yEnd))
+        }
 
-            if let urlString = part.imageURL, let url = URL(string: urlString) {
-                let image = await downloadImage(from: url)
-                images.append(image)
-            } else {
-                images.append(nil)
+        // Horizontal lines
+        for row in 0...rows {
+            let y = pageHeight - margin - CGFloat(row) * cellSize
+            let xStart = margin
+            let xEnd = margin + CGFloat(columns) * cellSize
+            pdfContext.move(to: CGPoint(x: xStart, y: y))
+            pdfContext.addLine(to: CGPoint(x: xEnd, y: y))
+        }
+
+        pdfContext.strokePath()
+    }
+
+    private func drawImages(_ images: [CGImage?], in pdfContext: CGContext, cellSize: CGFloat) {
+        for (indexOnPage, image) in images.enumerated() {
+            guard let cgImage = image else { continue }
+            let col = indexOnPage % columns
+            let row = indexOnPage / columns
+
+            let x = margin + CGFloat(col) * cellSize
+            // PDF coordinate system has origin at bottom-left, so flip Y
+            let y = pageHeight - margin - CGFloat(row + 1) * cellSize
+
+            let imageRect = CGRect(x: x, y: y, width: cellSize, height: cellSize)
+            let fittedRect = fitImageRect(imageSize: CGSize(width: cgImage.width, height: cgImage.height), in: imageRect)
+            pdfContext.draw(cgImage, in: fittedRect)
+        }
+    }
+
+    /// A cell whose image fails to download stays empty; cancellation is rethrown.
+    private func downloadImages(_ urls: [URL?], maxPixelSize: Int) async throws -> [CGImage?] {
+        let loader = self.loader
+        return try await urls.concurrentMap(maxConcurrent: Self.maxConcurrentDownloads) { url -> CGImage? in
+            guard let url else { return nil }
+            do {
+                return try await loader.downsampledImage(at: url, maxPixelSize: maxPixelSize)
+            } catch is CancellationError {
+                throw CancellationError()
+            } catch {
+                Logger.pdf.error("Failed to download image from \(url): \(error)")
+                return nil
             }
         }
-
-        return images
-    }
-
-    private func downloadImage(from url: URL) async -> CGImage? {
-        do {
-            let (data, _) = try await URLSession.shared.data(from: url)
-            return createCGImage(from: data)
-        } catch {
-            Logger.pdf.error("Failed to download image from \(url): \(error)")
-            return nil
-        }
-    }
-
-    private func createCGImage(from data: Data) -> CGImage? {
-        guard let source = CGImageSourceCreateWithData(data as CFData, nil),
-              let cgImage = CGImageSourceCreateImageAtIndex(source, 0, nil) else {
-            return nil
-        }
-        return cgImage
     }
 
     private func fitImageRect(imageSize: CGSize, in rect: CGRect) -> CGRect {

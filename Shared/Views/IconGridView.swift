@@ -9,15 +9,16 @@ import SwiftUI
 
 struct IconGridView<Item: Identifiable, MenuContent: View>: View {
     let items: [Item]
-    let imageURL: (Item) -> String
+    let imageURL: (Item) -> String?
     let quantity: (Item) -> Int
     let number: (Item) -> String
     let name: (Item) -> String
     let contextMenuContent: ((Item) -> MenuContent)?
+    @AppStorage(IconSize.storageKey) private var iconSize = IconSize.defaultSize
 
     init(
         items: [Item],
-        imageURL: @escaping (Item) -> String,
+        imageURL: @escaping (Item) -> String?,
         quantity: @escaping (Item) -> Int,
         number: @escaping (Item) -> String,
         name: @escaping (Item) -> String,
@@ -32,11 +33,11 @@ struct IconGridView<Item: Identifiable, MenuContent: View>: View {
     }
 
     var body: some View {
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 100), spacing: 4)], spacing: 4) {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: iconSize), spacing: 4)], spacing: 4) {
             ForEach(items) { item in
                 VStack(spacing: 4) {
                     ZStack(alignment: .topLeading) {
-                        IconImage(url: imageURL(item))
+                        IconImage(url: imageURL(item), size: iconSize)
                         Text("\(quantity(item))")
                             .font(.caption)
                             .fontWeight(.bold)
@@ -63,7 +64,7 @@ struct IconGridView<Item: Identifiable, MenuContent: View>: View {
 extension IconGridView where MenuContent == EmptyView {
     init(
         items: [Item],
-        imageURL: @escaping (Item) -> String,
+        imageURL: @escaping (Item) -> String?,
         quantity: @escaping (Item) -> Int,
         number: @escaping (Item) -> String,
         name: @escaping (Item) -> String

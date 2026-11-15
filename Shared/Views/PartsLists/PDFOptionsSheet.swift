@@ -82,8 +82,9 @@ struct PDFOptionsSheet: View {
 
         Task {
             do {
+                // Read on the main actor: the parts belong to the view context.
                 let generator = PDFGenerator(
-                    parts: partsList.partsArray,
+                    imageURLs: partsList.partsArray.map { $0.imageURL.flatMap(URL.init(string:)) },
                     columns: columns
                 )
 
