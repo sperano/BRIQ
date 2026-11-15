@@ -44,6 +44,7 @@ On first launch, the app will initialize its database by loading comprehensive L
 - **Minifig**: LEGO minifigures
 - **SetPart/SetMinifig**: Junction models linking sets to parts/minifigs with quantities
 - **SetUserData**: User preferences per set (owned status, favorites, instructions)
+- **PartsList/PartsListPart**: User-created parts lists and their line items
 
 ### Project Structure
 

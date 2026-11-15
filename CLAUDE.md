@@ -12,7 +12,7 @@ BRIQ is a cross-platform SwiftUI application for iOS and macOS that manages LEGO
 - **BRIQ-macos/**: macOS-specific app files, views, and platform features (menu commands, user data import/export)
 - **Shared/**: Cross-platform code including models, views, and business logic
   - **Auto-Generated/**: Auto-generated theme, category, and color data (Themes.swift, PartCategories.swift, PartColors.swift)
-  - **CoreData/**: Core Data models and stack (Set, Part, Minifig, SetPart, SetMinifig, SetUserData)
+  - **CoreData/**: Core Data models and stack (Set, Part, Minifig, SetPart, SetMinifig, SetUserData, PartsList, PartsListPart)
   - **SampleData/**: Sample data providers for SwiftUI previews
   - **Views/**: Shared SwiftUI views organized by feature (Minifigs/, Parts/, PartsLists/, SetDetails/, SetLists/, Themes/)
   - Root-level utilities: Theme.swift, PartColor.swift, SetListSortOrder.swift, Database.swift, BundledData.swift, DatabaseInitializer.swift, Logging.swift, PDFGenerator.swift, FocusedValues.swift
@@ -34,6 +34,7 @@ The app uses Core Data with these core entities:
 - `Minifig`: LEGO minifigures
 - `SetPart`/`SetMinifig`: Junction models linking sets to parts/minifigs with quantities
 - `SetUserData`: User preferences per set (owned, favorite, instructions)
+- `PartsList`/`PartsListPart`: User-created parts lists and their line items
 
 All models are defined in `Shared/CoreData/` with the data model at `Shared/CoreData/BRIQ.xcdatamodeld/BRIQ.xcdatamodel`. The Core Data stack is managed by `CoreDataStack.swift`.
 
@@ -71,5 +72,5 @@ All models are defined in `Shared/CoreData/` with the data model at `Shared/Core
 - Large dataset loading is batched in `BundledData` (`setImportBatchSize`), cooperating with task cancellation between batches
 - Core Data migrations are handled automatically with `shouldMigrateStoreAutomatically`
 - Views are organized by feature area (Sets, Parts, Minifigs)
-- Platform-specific code is isolated to respective app target directories
+- Platform-specific code mostly lives in `BRIQ-ios/`/`BRIQ-macos/`, but some shared views and utilities also branch on platform internally (`#if os(...)`/`#if canImport(...)`)
 - There are no tests: the `BRIQTests` target exists in the Xcode project but has no source files
