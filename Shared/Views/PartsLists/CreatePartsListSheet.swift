@@ -69,7 +69,7 @@ struct CreatePartsListSheet: View {
         }
 
         do {
-            try context.save()
+            try context.saveOrRollback()
             dismiss()
         } catch {
             errorMessage = "Failed to save: \(error.localizedDescription)"

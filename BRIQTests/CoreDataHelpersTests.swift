@@ -22,6 +22,21 @@ struct CoreDataHelpersTests {
         try insert("Set", as: BRIQ.Set.self).number = number
     }
 
+    private func partsListCount() throws -> Int {
+        try context.count(for: PartsList.fetchRequest())
+    }
+
+    /// `PartsList.name` is mandatory, so a list without one fails validation.
+    private func expectMissingMandatoryPropertyError(_ save: () throws -> Void) {
+        do {
+            try save()
+            Issue.record("Saving a parts list without a name succeeded")
+        } catch let error as NSError {
+            #expect(error.domain == NSCocoaErrorDomain)
+            #expect(error.code == NSValidationMissingMandatoryPropertyError)
+        }
+    }
+
     @Test func storeLoads() {
         #expect(stack.loadError == nil)
     }
@@ -47,6 +62,37 @@ struct CoreDataHelpersTests {
         let partsList = try #require(PartsList.fetch(byName: "Space", in: context))
         #expect(partsList.name == "Space")
         #expect(PartsList.fetch(byName: "space", in: context) == nil)
+    }
+
+    @Test func saveOrRollbackSavesPendingChanges() throws {
+        try insert("PartsList", as: PartsList.self).name = "Castle"
+
+        try context.saveOrRollback()
+
+        #expect(!context.hasChanges)
+        #expect(try partsListCount() == 1)
+    }
+
+    @Test func failedSaveOrRollbackDiscardsPendingInserts() throws {
+        try insert("PartsList", as: PartsList.self).name = "Castle"
+        _ = try insert("PartsList", as: PartsList.self)
+
+        expectMissingMandatoryPropertyError { try context.saveOrRollback() }
+
+        #expect(!context.hasChanges)
+        #expect(try partsListCount() == 0)
+    }
+
+    @Test func failedSaveOrRollbackRevertsEditsToSavedObjects() throws {
+        let partsList = try insert("PartsList", as: PartsList.self)
+        partsList.name = "Castle"
+        try context.save()
+
+        partsList.setValue(nil, forKey: "name")
+        expectMissingMandatoryPropertyError { try context.saveOrRollback() }
+
+        #expect(!context.hasChanges)
+        #expect(partsList.name == "Castle")
     }
 
     @Test func createCopyingASetPartCopiesItsPartColorQuantityAndImage() throws {

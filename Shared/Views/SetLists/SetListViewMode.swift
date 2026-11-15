@@ -15,18 +15,30 @@ enum SetListViewMode: Int, CaseIterable {
     case table = 2
     case list = 3
 
+    #if os(macOS)
+    private static let isMacOS = true
+    #else
+    private static let isMacOS = false
+    #endif
+
     /// The modes this platform offers, in menu order.
     static var availableCases: [SetListViewMode] {
-        #if os(macOS)
-        return [.icon, .split, .table]
-        #else
-        return [.icon, .list]
-        #endif
+        availableCases(macOS: isMacOS)
     }
 
     /// `self` when this platform offers it, `.icon` otherwise.
     var availableOrDefault: SetListViewMode {
-        Self.availableCases.contains(self) ? self : .icon
+        availableOrDefault(macOS: Self.isMacOS)
+    }
+
+    /// The modes macOS (`macOS`) or iOS offers, in menu order.
+    static func availableCases(macOS: Bool) -> [SetListViewMode] {
+        macOS ? [.icon, .split, .table] : [.icon, .list]
+    }
+
+    /// `self` when macOS (`macOS`) or iOS offers it, `.icon` otherwise.
+    func availableOrDefault(macOS: Bool) -> SetListViewMode {
+        Self.availableCases(macOS: macOS).contains(self) ? self : .icon
     }
 
     var displayName: String {

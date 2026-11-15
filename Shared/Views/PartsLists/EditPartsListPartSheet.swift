@@ -87,7 +87,7 @@ struct EditPartsListPartSheet: View {
         partsListPart.colorID = colorIndex
 
         do {
-            try context.save()
+            try context.saveOrRollback()
             dismiss()
         } catch {
             errorMessage = "Failed to save: \(error.localizedDescription)"

@@ -62,6 +62,18 @@ struct SetListFiltersTests {
         #expect(FavoriteFilter(rawValue: 2) == .notFavorites)
     }
 
+    /// `favoriteThemesOnly` defaulted to true in `SetList` before; it is
+    /// false so an untouched install shows every theme.
+    @Test func defaultsAreTheDocumentedValues() {
+        #expect(SetListFilterDefault.favoriteThemesOnly == false)
+        #expect(SetListFilterDefault.ownership == .all)
+        #expect(SetListFilterDefault.favorite == .all)
+        #expect(SetListFilterDefault.excludePackages == true)
+        #expect(SetListFilterDefault.excludeUnreleased == true)
+        #expect(SetListFilterDefault.excludeAccessories == true)
+        #expect(SetListFilterDefault.displayUSNumbers == false)
+    }
+
     @Test func keysAreTheOnesEarlierBuildsStored() {
         #expect(SetListFilterKey.favoriteThemesOnly == "filterFavoriteThemes")
         #expect(SetListFilterKey.ownership == "filterOwnedState")
