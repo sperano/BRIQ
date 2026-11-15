@@ -18,7 +18,8 @@ struct MacBRIQApp: App {
     @FocusedValue(\.exportPDFAction) private var exportPDFAction
 
     /// True when the app is running as a unit-test host; the tests create
-    /// their own in-memory stacks, so the app must not touch the real store.
+    /// their own stacks on in-memory or temporary stores, so the app must not
+    /// touch the real store.
     private static let isTestHost = NSClassFromString("XCTestCase") != nil
 
     init() {

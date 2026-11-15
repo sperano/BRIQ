@@ -23,7 +23,8 @@ final class CoreDataStack: ObservableObject {
     /// (destroying and recreating it) also failed.
     let loadError: Error?
 
-    /// Most recent user-visible save failure; ContentView presents it as an alert.
+    /// Most recent user-visible save or user-data error (export, restore,
+    /// aborted re-initialization); ContentView presents it as an alert.
     @MainActor @Published var lastSaveError: String?
 
     /// `inMemory` writes the store to /dev/null for tests and previews.

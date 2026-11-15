@@ -71,26 +71,26 @@ import CoreData
 
     @Test func ownedOnly() throws {
         var filter = SetListFilter()
-        filter.ownedState = 1
+        filter.ownership = .owned
         #expect(try numbers(matching: filter) == ["100-1", "700-1"])
     }
 
     @Test func notOwnedIncludesSetsWithoutUserData() throws {
         var filter = SetListFilter()
-        filter.ownedState = 2
+        filter.ownership = .notOwned
         filter.displayUSNumbers = true
         #expect(try numbers(matching: filter) == ["200-1", "300-1", "400-1", "500-1", "600-1"])
     }
 
     @Test func favoritesOnly() throws {
         var filter = SetListFilter()
-        filter.favoriteState = 1
+        filter.favorite = .favorites
         #expect(try numbers(matching: filter) == ["100-1"])
     }
 
     @Test func notFavoriteIncludesSetsWithoutUserData() throws {
         var filter = SetListFilter()
-        filter.favoriteState = 2
+        filter.favorite = .notFavorites
         filter.displayUSNumbers = true
         #expect(try numbers(matching: filter) == ["200-1", "300-1", "400-1", "500-1", "600-1", "700-1"])
     }

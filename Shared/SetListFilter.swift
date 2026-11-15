@@ -9,8 +9,8 @@ import Foundation
 /// turn it into a fetch-request predicate.
 struct SetListFilter {
     var searchText = ""
-    var ownedState = 0 // 0=all, 1=owned, 2=not owned
-    var favoriteState = 0 // 0=all, 1=favorite, 2=not favorite
+    var ownership = OwnershipFilter.all
+    var favorite = FavoriteFilter.all
     var filterFavoriteThemes = false
     var favoriteThemes: Swift.Set<Int> = []
     var selectedTheme: Theme?
@@ -28,22 +28,11 @@ struct SetListFilter {
             ))
         }
 
-        switch ownedState {
-        case 1:
-            predicates.append(NSPredicate(format: "userData.owned == YES"))
-        case 2:
-            predicates.append(NSPredicate(format: "userData.owned == NO OR userData == nil"))
-        default:
-            break
+        if let ownershipPredicate = ownership.predicate {
+            predicates.append(ownershipPredicate)
         }
-
-        switch favoriteState {
-        case 1:
-            predicates.append(NSPredicate(format: "userData.favorite == YES"))
-        case 2:
-            predicates.append(NSPredicate(format: "userData.favorite == NO OR userData == nil"))
-        default:
-            break
+        if let favoritePredicate = favorite.predicate {
+            predicates.append(favoritePredicate)
         }
 
         if let selectedTheme = selectedTheme {

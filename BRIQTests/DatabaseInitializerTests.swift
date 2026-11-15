@@ -45,6 +45,9 @@ private final class FixtureLocator {}
         return initializer
     }
 
+    /// A valid export owning 100-1, as `reinitialize` leaves it pending.
+    private let ownedExport = #"{"version": "1.0", "userData": [{"number": "100-1", "owned": true}]}"#
+
     private func fetchSet(_ number: String) throws -> Set {
         let request = Set.fetchRequest()
         request.predicate = NSPredicate(format: "number == %@", number)
@@ -96,6 +99,45 @@ private final class FixtureLocator {}
         #expect(try userDataCount() == 0)
     }
 
+    @Test func reinitializeWithoutPreservingDiscardsAPendingPayload() async throws {
+        let initializer = try await loadedInitializer()
+        defaults.set(ownedExport, forKey: DatabaseInitializer.pendingUserDataKey)
+
+        await initializer.reinitialize(preserveUserData: false)
+
+        #expect(initializer.state == .ready)
+        #expect(try userDataCount() == 0)
+        #expect(defaults.string(forKey: DatabaseInitializer.pendingUserDataKey) == nil)
+    }
+
+    /// A quit between the load and the restore's save leaves the payload with
+    /// `hasInitialized` already set; the next launch restores it.
+    @Test func nextLaunchRetriesAnUnfinishedRestore() async throws {
+        _ = try await loadedInitializer()
+        defaults.set(ownedExport, forKey: DatabaseInitializer.pendingUserDataKey)
+
+        _ = try await loadedInitializer()
+
+        #expect(try fetchSet("100-1").userData?.owned == true)
+        #expect(defaults.string(forKey: DatabaseInitializer.pendingUserDataKey) == nil)
+        #expect(stack.lastSaveError == nil)
+    }
+
+    /// Exporting the store while a payload is pending would overwrite the
+    /// payload with the store's missing user data.
+    @Test func reinitializeRestoresAPendingPayloadBeforeExporting() async throws {
+        let initializer = try await loadedInitializer()
+        defaults.set(ownedExport, forKey: DatabaseInitializer.pendingUserDataKey)
+
+        await initializer.reinitialize(preserveUserData: true)
+
+        #expect(initializer.state == .ready)
+        #expect(try fetchSet("100-1").userData?.owned == true)
+        #expect(try userDataCount() == 1)
+        #expect(defaults.string(forKey: DatabaseInitializer.pendingUserDataKey) == nil)
+        #expect(stack.lastSaveError == nil)
+    }
+
     /// Rows saved before the import validated its input can hold a rating
     /// the import now rejects; restoring them after the wipe would fail.
     @Test func unrestorableUserDataStopsReinitializeBeforeTheWipe() async throws {
@@ -140,5 +182,21 @@ private final class FixtureLocator {}
         #expect(stack.lastSaveError
             == "Your user data could not be restored: The user data file is not valid: it is not JSON.")
         #expect(defaults.string(forKey: DatabaseInitializer.pendingUserDataKey) == "not json at all {")
+    }
+
+    @Test func reinitializeKeepsAPendingPayloadThatStillFails() async throws {
+        defaults.set("not json at all {", forKey: DatabaseInitializer.pendingUserDataKey)
+        let initializer = try await loadedInitializer()
+        try addUserData(to: "100-1")
+        stack.lastSaveError = nil
+
+        await initializer.reinitialize(preserveUserData: true)
+
+        #expect(initializer.state == .ready)
+        #expect(try fetchSet("100-1").userData?.owned == true)
+        #expect(defaults.bool(forKey: DatabaseInitializer.hasInitializedKey))
+        #expect(defaults.string(forKey: DatabaseInitializer.pendingUserDataKey) == "not json at all {")
+        #expect(stack.lastSaveError == "The database was not re-initialized: the user data kept by the last "
+            + "re-initialization could not be restored. The user data file is not valid: it is not JSON.")
     }
 }

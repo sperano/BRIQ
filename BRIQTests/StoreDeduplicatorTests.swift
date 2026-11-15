@@ -155,8 +155,9 @@ import Foundation
         #expect(sets.first?.userData?.owned == true)
     }
 
-    /// An unlinked copy (as SetDetailFields can leave behind) is inserted
-    /// first, so keeping the group's first row would orphan the set.
+    /// An unlinked copy (as builds before `ensureUserData` adopted unlinked
+    /// rows left behind) is inserted first, so keeping the group's first row
+    /// would orphan the set.
     @Test func linkedUserDataSurvivesAndKeepsTheHigherRating() throws {
         try writeStore(model: versionOneModel()) { context in
             insert("SetUserData", ["number": "1-1", "owned": true, "instructionsQuality": 2], in: context)

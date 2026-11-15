@@ -70,7 +70,7 @@ The identity attributes behind each `Identifiable.id` carry uniqueness constrain
   (`loadStoreRecoveringFromCorruption`); `resetStore()` itself is invoked later, by
   `DatabaseInitializer`, for user-triggered reinitialization (macOS "Database > Re-Initialize")
   and to clear a partial import left behind by a crash
-- User data can be preserved during database reinitialization (macOS only): it is checked to import again before the wipe, and kept in `UserDefaults` until the reloaded store has it back
+- User data can be preserved during database reinitialization (macOS only): it is checked to import again before the wipe, and kept in `UserDefaults` until the reloaded store has it back (a failed or interrupted restore is retried on the next launch, and before a later re-initialize exports again)
 - Large dataset loading is batched in `BundledData` (`setImportBatchSize`), cooperating with task cancellation between batches
 - Core Data migrations are lightweight (`shouldMigrateStoreAutomatically`). A model change needs a new model version, never an in-place edit: migration needs the old version to read the store. Before migrating, `StoreDeduplicator` resolves rows that would violate the uniqueness constraints, since a failed migration recreates the store
 - Views are organized by feature area (Sets, Parts, Minifigs)

@@ -70,8 +70,8 @@ struct SetList: View {
     private var predicate: NSPredicate? {
         SetListFilter(
             searchText: searchText,
-            ownedState: ownershipFilter.rawValue,
-            favoriteState: favoriteFilter.rawValue,
+            ownership: ownershipFilter,
+            favorite: favoriteFilter,
             filterFavoriteThemes: filterFavoriteThemes,
             favoriteThemes: favoriteThemes,
             selectedTheme: selectedTheme,

@@ -50,16 +50,14 @@ final class DatabaseInitializer: ObservableObject {
         case .loading:
             return
         case .ready:
-            // Already initialized on a previous launch; the store may still
-            // predate newer derived attributes.
-            await backfillSortKeysIfNeeded()
+            await finishEarlierLoad()
             return
         case .idle, .failed:
             break
         }
 
         if defaults.bool(forKey: Self.hasInitializedKey) {
-            await backfillSortKeysIfNeeded()
+            await finishEarlierLoad()
             state = .ready
             return
         }
@@ -67,14 +65,22 @@ final class DatabaseInitializer: ObservableObject {
         await load()
     }
 
-    private var didCheckSortKeyBackfill = false
+    private var didFinishEarlierLoad = false
+
+    /// Runs once per launch on a store loaded by an earlier launch: it may
+    /// predate newer derived attributes, and a restore that failed, or that a
+    /// quit interrupted before it saved, is retried.
+    private func finishEarlierLoad() async {
+        guard !didFinishEarlierLoad else { return }
+        didFinishEarlierLoad = true
+        await backfillSortKeysIfNeeded()
+        restorePendingUserData()
+    }
 
     /// Stores imported before `Set.sortKey` existed hold 0 for every set after
     /// the lightweight migration; compute the keys once. Failure is logged and
     /// tolerated — sorting degrades but the app works.
     private func backfillSortKeysIfNeeded() async {
-        guard !didCheckSortKeyBackfill else { return }
-        didCheckSortKeyBackfill = true
         let context = coreDataStack.newBackgroundContext()
         do {
             try await context.perform {
@@ -97,14 +103,15 @@ final class DatabaseInitializer: ObservableObject {
     }
 
     /// Wipes the store and re-imports the bundled database, optionally
-    /// preserving user data across the reset via export/import. When the
-    /// user data cannot be exported in a form the import accepts, nothing is
-    /// wiped and the reason is published through `lastSaveError`.
+    /// preserving user data across the reset via export/import. When an
+    /// earlier restore is still pending and fails again, or the user data
+    /// cannot be exported in a form the import accepts, nothing is wiped and
+    /// the reason is published through `lastSaveError`.
     func reinitialize(preserveUserData: Bool) async {
         guard state == .ready else { return }
 
         if preserveUserData {
-            guard let exported = exportRestorableUserData() else { return }
+            guard restoreEarlierPendingUserData(), let exported = exportRestorableUserData() else { return }
             defaults.set(exported, forKey: Self.pendingUserDataKey)
         } else {
             defaults.removeObject(forKey: Self.pendingUserDataKey)
@@ -140,15 +147,33 @@ final class DatabaseInitializer: ObservableObject {
         }
     }
 
-    /// Runs after a successful load. A failed restore keeps the payload: only
-    /// a later reset (followed by a load) uses it, and `reinitialize`
-    /// replaces it first.
-    private func restorePendingUserData() {
-        guard let pending = defaults.string(forKey: Self.pendingUserDataKey) else { return }
+    /// A pending payload holds user data the store lacks, so exporting the
+    /// store over it would lose that data: restore it first, and keep it
+    /// when that fails. Re-initializing without user data discards it.
+    private func restoreEarlierPendingUserData() -> Bool {
         do {
-            try importUserData(context: coreDataStack.viewContext, jsonString: pending)
-            defaults.removeObject(forKey: Self.pendingUserDataKey)
-            Logger.database.info("User data restored after reinitialization")
+            try importPendingUserData()
+            return true
+        } catch {
+            Logger.database.error("Earlier user data restore failed again: \(error)")
+            coreDataStack.lastSaveError = "The database was not re-initialized: the user data kept by the last "
+                + "re-initialization could not be restored. \(error.localizedDescription)"
+            return false
+        }
+    }
+
+    /// The payload is removed only once its import saved, so a failed restore
+    /// keeps it for the next launch.
+    private func importPendingUserData() throws {
+        guard let pending = defaults.string(forKey: Self.pendingUserDataKey) else { return }
+        try importUserData(context: coreDataStack.viewContext, jsonString: pending)
+        defaults.removeObject(forKey: Self.pendingUserDataKey)
+        Logger.database.info("User data restored after reinitialization")
+    }
+
+    private func restorePendingUserData() {
+        do {
+            try importPendingUserData()
         } catch {
             // The reloaded database itself is fine, so stay `.ready`.
             Logger.database.error("Database reinitialized but restoring user data failed: \(error)")
@@ -167,6 +192,8 @@ final class DatabaseInitializer: ObservableObject {
                 self?.state = .loading(setsImported: setsImported, fraction: fraction)
             }
             defaults.set(true, forKey: Self.hasInitializedKey)
+            // This store is current; only its restore below is left to do.
+            didFinishEarlierLoad = true
             restorePendingUserData()
             state = .ready
         } catch is CancellationError {
