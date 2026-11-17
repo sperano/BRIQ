@@ -66,7 +66,7 @@ struct FavoriteThemes: View {
 
     var body: some View {
         VStack {
-            List(selection: $selectedSet) {
+            List(selection: selectedBinding) {
                 OutlineGroup(searchResults, children: \.children.optional) { theme in
                     ThemeRow(theme: theme, selected: selectedBinding)
                 }

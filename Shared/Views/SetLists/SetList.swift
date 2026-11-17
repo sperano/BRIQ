@@ -132,13 +132,23 @@ private struct SetListContent: View {
                     SetListTableView(sets: setsArray, viewMode: $viewMode, selectedTheme: $selectedTheme)
                 }
                 #elseif os(iOS)
-                // .list has no view of its own yet and shows the icon grid.
-                SetListIconView(
-                    sets: setsArray,
-                    viewMode: $viewMode,
-                    selectedTheme: $selectedTheme,
-                    showSettings: $showSettings
-                )
+                switch viewMode {
+                case .list:
+                    SetListListView(
+                        sets: setsArray,
+                        viewMode: $viewMode,
+                        selectedTheme: $selectedTheme,
+                        showSettings: $showSettings
+                    )
+                // .split and .table are not offered on iOS; SetList already maps them to .icon.
+                case .icon, .split, .table:
+                    SetListIconView(
+                        sets: setsArray,
+                        viewMode: $viewMode,
+                        selectedTheme: $selectedTheme,
+                        showSettings: $showSettings
+                    )
+                }
                 #endif
             }
             .navigationTitle("Sets")

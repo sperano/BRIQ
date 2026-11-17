@@ -18,6 +18,10 @@ struct PDFOptionsSheet: View {
     @State private var errorMessage: String?
     /// Cancelled when the sheet goes away, so a dismissed export stops downloading.
     @State private var exportTask: Task<Void, Never>?
+    #if os(iOS)
+    @State private var pdfDocument: PDFDataDocument?
+    @State private var isExportingFile: Bool = false
+    #endif
 
     private let columnRange = 6...20
 
@@ -72,6 +76,21 @@ struct PDFOptionsSheet: View {
         }
         #if os(macOS)
         .frame(minWidth: 350, minHeight: 250)
+        #endif
+        #if os(iOS)
+        .fileExporter(
+            isPresented: $isExportingFile,
+            document: pdfDocument,
+            contentType: .pdf,
+            defaultFilename: partsList.name
+        ) { result in
+            switch result {
+            case .success:
+                dismiss()
+            case .failure(let error):
+                errorMessage = error.localizedDescription
+            }
+        }
         #endif
         .onDisappear {
             exportTask?.cancel()
@@ -135,9 +154,34 @@ struct PDFOptionsSheet: View {
             }
         }
         #else
-        // iOS: Use share sheet or document picker
-        // For now, just dismiss
-        dismiss()
+        pdfDocument = PDFDataDocument(data: data)
+        isGenerating = false
+        isExportingFile = true
         #endif
     }
 }
+
+#if os(iOS)
+/// Wraps the generated PDF bytes so `fileExporter` can hand them to a document picker.
+private struct PDFDataDocument: FileDocument {
+    static var readableContentTypes: [UTType] { [.pdf] }
+    static var writableContentTypes: [UTType] { [.pdf] }
+
+    let data: Data
+
+    init(data: Data) {
+        self.data = data
+    }
+
+    init(configuration: ReadConfiguration) throws {
+        guard let data = configuration.file.regularFileContents else {
+            throw CocoaError(.fileReadCorruptFile)
+        }
+        self.data = data
+    }
+
+    func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
+        FileWrapper(regularFileContents: data)
+    }
+}
+#endif
