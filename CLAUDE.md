@@ -60,11 +60,20 @@ The identity attributes behind each `Identifiable.id` carry uniqueness constrain
 - `ContentView`: Main entry point handling initialization flow vs main app UI
 - `ImageLoader` / `ThumbnailImage`: remote images, decoded at the size they are drawn and cached in memory; URLs that can never load (an HTTP 4xx other than 408 and 429, a bad or unsupported URL, data that is not an image) are not requested again until Retry (only `IconImage` shows one; rows and set icons try again after a relaunch); network errors, 5xx, 408 and 429 are retried on the next appearance. Use `ThumbnailImage` rather than `AsyncImage` for grids and rows
 - `SetContentTotals`: status-bar minifig and part totals, summed by the store (`SUM(quantity)`) instead of faulting each set's relationships
+- `PDFGenerator`: Async generator for exporting parts lists as PDF with grid layout
+- `FocusedValues`: SwiftUI focused values for menu command integration
 
 ### Theme System
 - Themes are loaded via `initThemesTree()` function in app initialization
 - Auto-generated theme data in `Auto-Generated/Themes.swift`
 - Theme hierarchy accessible via the `AllThemes` global array (parent/children links set by `initThemesTree()`)
+
+### Parts Lists Feature
+- Users can create custom parts lists to track parts they need
+- Parts can be added from set detail views with specific colors and quantities
+- PDF export generates a grid of part images for printing (useful for cutting out reference cards)
+- PDF options include configurable column count (6-20, default 14)
+- Uses `focusedSceneValue` to enable menu command access (File → Export Parts List as PDF, ⇧⌘E)
 
 ## Development Notes
 
