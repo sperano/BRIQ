@@ -75,13 +75,14 @@ briq-utils run and commit them as a pair, never one without the other.
 ### iOS
 - Basic navigation and browsing interface
 - Core set, part, and minifigure management
+- PDF export for parts lists (toolbar button)
 
 ### macOS
 - Extended menu commands for database management
 - User data import/export functionality
 - Multiple view modes and settings window
 - Enhanced navigation and window management
-- PDF export for parts lists (File → Export Parts List as PDF, ⇧⌘E)
+- PDF export for parts lists (toolbar button, or File → Export Parts List as PDF, ⇧⌘E)
 
 ## Database Management
 
