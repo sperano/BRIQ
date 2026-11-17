@@ -17,14 +17,26 @@ struct PDFDataDocument: FileDocument {
         self.data = data
     }
 
-    init(configuration: ReadConfiguration) throws {
-        guard let data = configuration.file.regularFileContents else {
+    /// Shared with `init(configuration:)`: `FileDocumentReadConfiguration` has no public
+    /// initializer, so tests exercise this overload with a plain `FileWrapper` instead.
+    init(fileWrapper: FileWrapper) throws {
+        guard let data = fileWrapper.regularFileContents else {
             throw CocoaError(.fileReadCorruptFile)
         }
         self.data = data
     }
 
-    func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
+    init(configuration: ReadConfiguration) throws {
+        try self.init(fileWrapper: configuration.file)
+    }
+
+    /// Shared with `fileWrapper(configuration:)`: `FileDocumentWriteConfiguration` has no
+    /// public initializer, so tests exercise this overload directly.
+    func fileWrapper() -> FileWrapper {
         FileWrapper(regularFileContents: data)
+    }
+
+    func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
+        fileWrapper()
     }
 }
