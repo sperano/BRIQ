@@ -41,7 +41,11 @@ struct SetDetail: View {
                 Button {
                     viewModeRaw = viewMode == .list ? ViewMode.icon.rawValue : ViewMode.list.rawValue
                 } label: {
-                    Image(systemName: viewMode == .list ? "square.grid.2x2" : "list.bullet")
+                    if viewMode == .list {
+                        Label("Show as Icons", systemImage: "square.grid.2x2")
+                    } else {
+                        Label("Show as List", systemImage: "list.bullet")
+                    }
                 }
             }
         }

@@ -5,6 +5,8 @@
 //  Created by Éric Spérano on 9/11/25.
 //
 
+import Foundation
+
 /// How the set list is laid out. Raw values are persisted under the
 /// `viewMode` key and keep the macOS values they had before the iOS and
 /// macOS enums were merged; iOS used to store `list` as 1, which now reads
@@ -43,10 +45,20 @@ enum SetListViewMode: Int, CaseIterable {
 
     var displayName: String {
         switch self {
-        case .icon: return "Icon"
-        case .split: return "Split"
-        case .table: return "Table"
-        case .list: return "List"
+        case .icon: return String(localized: "Icon", comment: "View mode")
+        case .split: return String(localized: "Split", comment: "View mode")
+        case .table: return String(localized: "Table", comment: "View mode")
+        case .list: return String(localized: "List", comment: "View mode")
+        }
+    }
+
+    /// The View menu command choosing this mode.
+    var commandTitle: String {
+        switch self {
+        case .icon: return String(localized: "Icon View", comment: "View menu command")
+        case .split: return String(localized: "Split View", comment: "View menu command")
+        case .table: return String(localized: "Table View", comment: "View menu command")
+        case .list: return String(localized: "List View", comment: "View menu command")
         }
     }
 

@@ -19,8 +19,9 @@ struct PartsListViewModeMenuToolbarItem: ToolbarContent {
                     }
                 }
             } label: {
-                Image(systemName: viewMode.systemImage)
+                Label("View Mode", systemImage: viewMode.systemImage)
             }
+            .accessibilityValue(viewMode.displayName)
         }
     }
 }

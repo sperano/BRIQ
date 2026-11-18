@@ -16,7 +16,8 @@ BRIQ is a cross-platform SwiftUI application for iOS and macOS that manages LEGO
   - **CoreData/**: Core Data models and stack (Set, Part, Minifig, SetPart, SetMinifig, SetUserData, PartsList, PartsListPart)
   - **SampleData/**: Sample data providers for SwiftUI previews
   - **Views/**: Shared SwiftUI views organized by feature (Minifigs/, Parts/, PartsLists/, SetDetails/, SetLists/, Settings/, Themes/)
-  - Root-level utilities: Theme.swift, PartColor.swift, SetListSortOrder.swift, SetListFilters.swift (filter `@AppStorage` keys and defaults), Database.swift, BundledData.swift, DatabaseInitializer.swift, Logging.swift, PDFGenerator.swift, ImageLoader.swift, ConcurrentMap.swift, IconSize.swift, FocusedValues.swift
+  - Root-level utilities: Theme.swift, PartColor.swift, SetListSortOrder.swift, SetListFilters.swift (filter `@AppStorage` keys and defaults), Database.swift, BundledData.swift, DatabaseInitializer.swift, Logging.swift, PDFGenerator.swift, ImageLoader.swift, ConcurrentMap.swift, IconSize.swift, FocusedValues.swift, ImageZoom.swift (zoom levels of the iOS full-size image viewer)
+  - **Localizable.xcstrings**: String Catalog of both apps (source language English)
 
 ## Build Commands
 
@@ -85,6 +86,8 @@ The identity attributes behind each `Identifiable.id` carry uniqueness constrain
 - Large dataset loading is batched in `BundledData` (`setImportBatchSize`), cooperating with task cancellation between batches
 - Core Data migrations are lightweight (`shouldMigrateStoreAutomatically`). A model change needs a new model version, never an in-place edit: migration needs the old version to read the store. Before migrating, `StoreDeduplicator` resolves rows that would violate the uniqueness constraints, since a failed migration recreates the store
 - Views are organized by feature area (Sets, Parts, Minifigs)
+- User-facing text is localized through `Shared/Localizable.xcstrings`. String literals passed to SwiftUI (`Text`, `Button`, `Label`, `Toggle`, `.navigationTitle`, ...) are `LocalizedStringKey`s and localized as is; a title passed through a property or parameter must be typed `LocalizedStringKey` too, and text built in code (enum display names, error descriptions, alerts) uses `String(localized:)`. A ternary of literals (`cond ? "A" : "B"`) is a `String`, which SwiftUI shows verbatim: wrap each branch in `Text(...)` or `String(localized:)`. A string with a count gets plural variants in the catalog instead of `count == 1 ? ... : ...`; Xcode adds the other keys to the catalog when it builds. Data names (sets, themes, colors, part categories) are not localized
+- Icon-only controls carry a text label (`Label` in toolbars, `.accessibilityLabel` elsewhere) and decorative images are `.accessibilityHidden`; `StarRatingView` is a single VoiceOver element named by its `label`, adjustable only when `isInteractive`
 - Platform-specific code mostly lives in `BRIQ-ios/`/`BRIQ-macos/`, but some shared views and utilities also branch on platform internally (`#if os(...)`)
 - Unit tests (Swift Testing) live in `BRIQTests/` (the `BRIQTests` target, hosted in the macOS app); they need Xcode to build and run
 - `Shared/` and `Resources/` are synchronized folders of both app targets: a new file there is in both apps without touching `project.pbxproj`. A platform-only file goes in the other target's membership exceptions for the folder (unchecking that target's membership box in Xcode); the macOS-only `Shared/` files are listed in the `BRIQ-ios` exception set

@@ -63,7 +63,7 @@ struct ContentView: View {
                 ProgressView(value: fraction, total: 1.0)
                     .progressViewStyle(.linear)
                     .padding()
-                Text("\(setsImported) sets imported.")
+                Text(Self.importProgress(setsImported: setsImported))
             } else {
                 ProgressView()
                     .progressViewStyle(.circular)
@@ -78,6 +78,7 @@ struct ContentView: View {
             Image(systemName: "exclamationmark.triangle")
                 .font(.largeTitle)
                 .foregroundStyle(.yellow)
+                .accessibilityHidden(true)
             Text("Database initialization failed.")
             Text(message)
                 .font(.callout)
@@ -89,5 +90,9 @@ struct ContentView: View {
             }
         }
         .padding()
+    }
+
+    static func importProgress(setsImported: Int) -> String {
+        String(localized: "\(setsImported) sets imported.", comment: "Progress of the first-launch database import")
     }
 }

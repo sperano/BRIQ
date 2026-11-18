@@ -48,6 +48,10 @@ struct IconGridView<Item: Identifiable, MenuContent: View>: View {
                     }
                 }
                 .help("\(number(item)): \(name(item))")
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel(
+                    Self.itemDescription(quantity: quantity(item), number: number(item), name: name(item))
+                )
                 .contextMenu {
                     if let menuBuilder = contextMenuContent {
                         menuBuilder(item)
@@ -58,6 +62,13 @@ struct IconGridView<Item: Identifiable, MenuContent: View>: View {
         .padding()
         .background(Color.gray.opacity(0.1))
         .cornerRadius(8)
+    }
+
+    static func itemDescription(quantity: Int, number: String, name: String) -> String {
+        String(
+            localized: "\(name), \(number), quantity \(quantity)",
+            comment: "VoiceOver label of a part or minifig in a grid: its name, number and quantity"
+        )
     }
 }
 

@@ -36,7 +36,7 @@ struct PDFOptionsSheet: View {
                 }
 
                 Section {
-                    Text("\(partsList.partsArray.count) parts will be exported")
+                    Text(Self.exportSummary(partCount: partsList.partsArray.count))
                         .foregroundStyle(.secondary)
                 }
 
@@ -101,7 +101,7 @@ struct PDFOptionsSheet: View {
         isGenerating = true
         errorMessage = nil
         progress = 0
-        progressMessage = "Preparing..."
+        progressMessage = String(localized: "Preparing...", comment: "PDF export progress, before the first download")
 
         exportTask = Task {
             do {
@@ -146,7 +146,7 @@ struct PDFOptionsSheet: View {
                     try data.write(to: url)
                     dismiss()
                 } catch {
-                    errorMessage = "Failed to save: \(error.localizedDescription)"
+                    errorMessage = String(localized: "Failed to save: \(error.localizedDescription)")
                     isGenerating = false
                 }
             } else {
@@ -158,5 +158,9 @@ struct PDFOptionsSheet: View {
         isGenerating = false
         isExportingFile = true
         #endif
+    }
+
+    static func exportSummary(partCount: Int) -> String {
+        String(localized: "\(partCount) parts will be exported", comment: "PDF export: number of parts in the list")
     }
 }

@@ -51,13 +51,13 @@ struct CreatePartsListSheet: View {
         let trimmedName = name.trimmingCharacters(in: .whitespaces)
 
         guard !trimmedName.isEmpty else {
-            errorMessage = "Name cannot be empty."
+            errorMessage = String(localized: "Name cannot be empty.")
             showError = true
             return
         }
 
         if PartsList.fetch(byName: trimmedName, in: context) != nil {
-            errorMessage = "A parts list with this name already exists."
+            errorMessage = String(localized: "A parts list with this name already exists.")
             showError = true
             return
         }
@@ -72,7 +72,7 @@ struct CreatePartsListSheet: View {
             try context.saveOrRollback()
             dismiss()
         } catch {
-            errorMessage = "Failed to save: \(error.localizedDescription)"
+            errorMessage = String(localized: "Failed to save: \(error.localizedDescription)")
             showError = true
         }
     }

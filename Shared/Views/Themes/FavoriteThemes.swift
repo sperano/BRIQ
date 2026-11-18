@@ -21,9 +21,13 @@ struct ThemeRow:  View {
             Spacer()
             if selected.contains(theme.id) {
                 Image(systemName: "star.fill").foregroundColor(.blue)
+                    .accessibilityHidden(true)
             }
         }
         .contentShape(Rectangle()) // make row tappable
+        .accessibilityElement(children: .combine)
+        .accessibilityAddTraits(selected.contains(theme.id) ? [.isButton, .isSelected] : .isButton)
+        .accessibilityHint("Adds or removes the theme from your favorites")
         .onTapGesture {
             if selected.contains(theme.id) {
                 selected.remove(theme.id)

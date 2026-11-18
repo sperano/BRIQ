@@ -18,8 +18,8 @@ struct MinifigsIconView: View {
             items: minifigs,
             imageURL: { $0.minifig?.imageURL },
             quantity: { Int($0.quantity) },
-            number: { $0.minifig?.number ?? "Unknown" },
-            name: { $0.minifig?.name ?? "Unknown Minifig" }
+            number: { $0.minifig?.number ?? String(localized: "Unknown") },
+            name: { $0.minifig?.name ?? String(localized: "Unknown Minifig") }
         )
     }
 }

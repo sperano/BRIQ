@@ -69,7 +69,7 @@ struct LegoColorPicker: View {
     }
 
     @ViewBuilder
-    private func colorSection(title: String, colors: [(index: Int, color: PartColor)]) -> some View {
+    private func colorSection(title: LocalizedStringKey, colors: [(index: Int, color: PartColor)]) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(title)
                 .font(.headline)
@@ -130,6 +130,7 @@ struct LegoColorPicker: View {
             .padding(.vertical, 4)
         }
         .buttonStyle(.plain)
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 
     private func contrastingColor(for color: PartColor) -> Color {

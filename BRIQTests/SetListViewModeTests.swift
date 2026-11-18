@@ -45,6 +45,13 @@ struct SetListViewModeTests {
         }
     }
 
+    @Test func menuCommandsNameTheirMode() {
+        #expect(SetListViewMode.icon.commandTitle == "Icon View")
+        #expect(SetListViewMode.split.commandTitle == "Split View")
+        #expect(SetListViewMode.table.commandTitle == "Table View")
+        #expect(SetListViewMode.list.commandTitle == "List View")
+    }
+
     /// iOS builds stored their old `list` mode as 1, which now reads back
     /// as `split`.
     @Test func oldIOSListValueFallsBackToIconOnIOS() {

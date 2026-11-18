@@ -17,7 +17,7 @@ struct MinifigRow: View {
         HStack {
             Text("\(minifig.quantity) x")
             RowImage(url: minifig.minifig?.imageURL)
-            Text(minifig.minifig?.name ?? "Unknown Minifig")
+            Text(minifig.minifig?.name ?? String(localized: "Unknown Minifig"))
         }
         //.padding(.horizontal)
     }

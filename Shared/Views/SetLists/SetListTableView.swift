@@ -79,6 +79,7 @@ struct SetListTableView: View {
             SetDetailNavigationLink(set: set) {
                 Image(systemName: (set.userData?.owned ?? false) ? "checkmark.circle.fill" : "circle")
                     .foregroundColor((set.userData?.owned ?? false) ? .green : .secondary)
+                    .accessibilityLabel((set.userData?.owned ?? false) ? Text("Owned") : Text("Not Owned"))
             }
         }
         .width(min: 60, ideal: 80, max: 100)
@@ -89,6 +90,7 @@ struct SetListTableView: View {
             SetDetailNavigationLink(set: set) {
                 Image(systemName: (set.userData?.favorite ?? false) ? "heart.fill" : "heart")
                     .foregroundColor((set.userData?.favorite ?? false) ? .red : .secondary)
+                    .accessibilityLabel((set.userData?.favorite ?? false) ? Text("Favorite") : Text("Not Favorite"))
             }
         }
         .width(min: 80, ideal: 100, max: 120)
@@ -117,6 +119,7 @@ struct SetListTableView: View {
             SetDetailNavigationLink(set: set) {
                 Image(systemName: (set.userData?.ownsInstructions ?? false) ? "doc.fill" : "doc")
                     .foregroundColor((set.userData?.ownsInstructions ?? false) ? .blue : .secondary)
+                    .accessibilityLabel((set.userData?.ownsInstructions ?? false) ? Text("Has Instructions") : Text("No Instructions"))
             }
         }
         .width(min: 100, ideal: 120, max: 140)
@@ -125,7 +128,11 @@ struct SetListTableView: View {
     private var instructionsQualityColumn: some TableColumnContent<Set, KeyPathComparator<Set>> {
         TableColumn("Instr. Quality", value: \.instructionsQuality) { set in
             SetDetailNavigationLink(set: set) {
-                StarRatingView(rating: .constant(Int(set.userData?.instructionsQuality ?? 0)), isInteractive: false)
+                StarRatingView(
+                    rating: .constant(Int(set.userData?.instructionsQuality ?? 0)),
+                    isInteractive: false,
+                    label: "Instructions Quality"
+                )
                     .font(.caption)
             }
         }

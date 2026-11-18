@@ -15,7 +15,7 @@ struct SettingsButtonToolbarItem: ToolbarContent {
             Button(action: {
                 showSettings.toggle()
             }) {
-                Image(systemName: "gearshape")
+                Label("Settings", systemImage: "gearshape")
             }
         }
     }

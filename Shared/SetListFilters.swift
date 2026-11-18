@@ -37,9 +37,9 @@ enum OwnershipFilter: Int, CaseIterable {
 
     var title: String {
         switch self {
-        case .all: return "All Sets"
-        case .owned: return "Owned Only"
-        case .notOwned: return "Not Owned Only"
+        case .all: return String(localized: "All Sets", comment: "Set list filter")
+        case .owned: return String(localized: "Owned Only", comment: "Set list filter")
+        case .notOwned: return String(localized: "Not Owned Only", comment: "Set list filter")
         }
     }
 
@@ -61,9 +61,9 @@ enum FavoriteFilter: Int, CaseIterable {
 
     var title: String {
         switch self {
-        case .all: return "All Sets"
-        case .favorites: return "Favorites Only"
-        case .notFavorites: return "Not Favorites Only"
+        case .all: return String(localized: "All Sets", comment: "Set list filter")
+        case .favorites: return String(localized: "Favorites Only", comment: "Set list filter")
+        case .notFavorites: return String(localized: "Not Favorites Only", comment: "Set list filter")
         }
     }
 

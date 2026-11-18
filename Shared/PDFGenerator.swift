@@ -23,11 +23,11 @@ enum PDFGeneratorError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .noImages:
-            return "No images to export"
+            return String(localized: "No images to export")
         case .pdfCreationFailed:
-            return "Failed to create PDF"
+            return String(localized: "Failed to create PDF")
         case .imageDownloadFailed(let url):
-            return "Failed to download image: \(url)"
+            return String(localized: "Failed to download image: \(url)")
         }
     }
 }
@@ -83,7 +83,13 @@ actor PDFGenerator {
         for pageIndex in 0..<totalPages {
             let startIndex = pageIndex * partsPerPage
             let endIndex = min(startIndex + partsPerPage, total)
-            progress(Double(startIndex) / Double(total), "Downloading images \(startIndex + 1)-\(endIndex) of \(total)...")
+            progress(
+                Double(startIndex) / Double(total),
+                String(
+                    localized: "Downloading images \(startIndex + 1)-\(endIndex) of \(total)...",
+                    comment: "PDF export progress: the first and last image of the page being downloaded, and the total"
+                )
+            )
 
             let images = try await downloadImages(Array(imageURLs[startIndex..<endIndex]), maxPixelSize: maxPixelSize)
             try Task.checkCancellation()
@@ -96,7 +102,7 @@ actor PDFGenerator {
 
         pdfContext.closePDF()
 
-        progress(1.0, "Complete")
+        progress(1.0, String(localized: "Complete", comment: "PDF export progress, once done"))
         return pdfData as Data
     }
 

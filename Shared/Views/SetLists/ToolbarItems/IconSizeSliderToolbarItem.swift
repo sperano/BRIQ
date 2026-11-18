@@ -21,14 +21,17 @@ struct IconSizeSliderToolbarItem: ToolbarContent {
                     .foregroundStyle(Color.secondary)
                     .font(.caption)
                     .padding(.leading, 8)
+                    .accessibilityHidden(true)
 
                 Slider(value: $iconSize, in: Self.sizeRange, step: Self.sizeStep)
                     .frame(width: Self.sliderWidth)
+                    .accessibilityLabel("Icon Size")
 
                 Image(systemName: "plus.magnifyingglass")
                     .foregroundStyle(Color.secondary)
                     .font(.caption)
                     .padding(.trailing, 8)
+                    .accessibilityHidden(true)
             }
         }
     }

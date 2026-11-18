@@ -133,7 +133,9 @@ final class DatabaseInitializer: ObservableObject {
 
     private func exportRestorableUserData() -> String? {
         guard let exported = exportUserData(context: coreDataStack.viewContext) else {
-            coreDataStack.lastSaveError = "The database was not re-initialized: your user data could not be exported."
+            coreDataStack.lastSaveError = String(
+                localized: "The database was not re-initialized: your user data could not be exported."
+            )
             return nil
         }
         do {
@@ -141,8 +143,10 @@ final class DatabaseInitializer: ObservableObject {
             return exported
         } catch {
             Logger.database.error("Exported user data would not import again: \(error)")
-            coreDataStack.lastSaveError = "The database was not re-initialized: your user data could not be "
-                + "restored afterwards. \(error.localizedDescription)"
+            coreDataStack.lastSaveError = String(
+                localized: "The database was not re-initialized: your user data could not be restored afterwards. \(error.localizedDescription)",
+                comment: "Followed by the reason"
+            )
             return nil
         }
     }
@@ -156,8 +160,10 @@ final class DatabaseInitializer: ObservableObject {
             return true
         } catch {
             Logger.database.error("Earlier user data restore failed again: \(error)")
-            coreDataStack.lastSaveError = "The database was not re-initialized: the user data kept by the last "
-                + "re-initialization could not be restored. \(error.localizedDescription)"
+            coreDataStack.lastSaveError = String(
+                localized: "The database was not re-initialized: the user data kept by the last re-initialization could not be restored. \(error.localizedDescription)",
+                comment: "Followed by the reason"
+            )
             return false
         }
     }
@@ -177,7 +183,7 @@ final class DatabaseInitializer: ObservableObject {
         } catch {
             // The reloaded database itself is fine, so stay `.ready`.
             Logger.database.error("Database reinitialized but restoring user data failed: \(error)")
-            coreDataStack.lastSaveError = "Your user data could not be restored: \(error.localizedDescription)"
+            coreDataStack.lastSaveError = String(localized: "Your user data could not be restored: \(error.localizedDescription)")
         }
     }
 

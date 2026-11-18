@@ -16,13 +16,13 @@ enum SetListSortOrder: String, CaseIterable {
     var displayName: String {
         switch self {
         case .year:
-            return "Year"
+            return String(localized: "Year", comment: "Sort order")
         case .number:
-            return "Number"
+            return String(localized: "Number", comment: "Sort order")
         case .name:
-            return "Name"
+            return String(localized: "Name", comment: "Sort order")
         case .partsCount:
-            return "Parts Count"
+            return String(localized: "Parts Count", comment: "Sort order")
         }
     }
 

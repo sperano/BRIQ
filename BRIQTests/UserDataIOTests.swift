@@ -239,6 +239,20 @@ import Foundation
         #expect(error.errorDescription == expected)
     }
 
+    @Test func importedMessageUsesTheSingularForOneEntry() {
+        #expect(userDataImportedMessage(count: 1) == "Imported 1 user data entry.")
+    }
+
+    @Test func importedMessageUsesThePluralForMoreEntries() {
+        #expect(userDataImportedMessage(count: 0) == "Imported 0 user data entries.")
+        #expect(userDataImportedMessage(count: 12) == "Imported 12 user data entries.")
+    }
+
+    @Test func failedMessageGivesTheReasonAndSaysNothingChanged() {
+        #expect(userDataImportFailedMessage(UserDataImportError.emptyNumber)
+            == "The user data file contains an entry without a set number. Your existing user data was not changed.")
+    }
+
     @Test func fileTextMustBeUTF8() throws {
         #expect(try userDataString(from: Data(#"{"version": "1.0"}"#.utf8)) == #"{"version": "1.0"}"#)
         // 0xC3 starts a two-byte sequence that 0x28 does not continue.

@@ -13,7 +13,7 @@ struct ViewModeCommands: View {
     var body: some View {
         Group {
             ForEach(Array(SetListViewMode.availableCases.enumerated()), id: \.element) { index, mode in
-                Button(mode.displayName + " View") {
+                Button(mode.commandTitle) {
                     viewMode = mode
                 }
                 .keyboardShortcut(Self.keyboardShortcut(forPosition: index), modifiers: .command)
