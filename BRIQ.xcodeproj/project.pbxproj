@@ -7,24 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		07254BF0B1C6303A015401AD /* CreatePartsListSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA8436CAA0AABF17AAC407E /* CreatePartsListSheet.swift */; };
 		073301E82E73C3040057EDBB /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 073301E72E73C3040057EDBB /* ZIPFoundation */; };
 		073301EB2E73C3140057EDBB /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 073301EA2E73C3140057EDBB /* ZIPFoundation */; };
-		0E544A4797C7D374B2193EB1 /* PartsListsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80B442980FC58475D5BD6C7 /* PartsListsView.swift */; };
-		14AA4D74A068CB8C999EB774 /* PartsListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A314F54A936030C16257B51 /* PartsListRow.swift */; };
-		26554742B12F8AA00A2AEEA4 /* RenamePartsListSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B974990B395C8EEB7028F7B /* RenamePartsListSheet.swift */; };
-		34AF467D9E5EE6B7A884BAFE /* PartsListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB14CD881422C6FB7853AAE /* PartsListRow.swift */; };
-		35C14F32AB859CC7E66130C7 /* PartsListsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9134BEDA42F71FF38D93293 /* PartsListsView.swift */; };
-		56B7412CAF7C27340D809496 /* PartsList+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46040EFA59D6F71FB46E141 /* PartsList+CoreDataClass.swift */; };
-		615B4A19B7B32AEF7C2F3D6C /* PartsListPart+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DC4181B99C855CC442A5BE /* PartsListPart+CoreDataClass.swift */; };
-		64024AF8B2CD2BE189E548E7 /* PartsListPart+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E65458293049E4EC8892DF6 /* PartsListPart+CoreDataClass.swift */; };
-		850742CD8A5B7FF2B5DF7228 /* PartsList+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1146229C2829B277DB5AC8 /* PartsList+CoreDataClass.swift */; };
-		8ED54826903D5AF7E06AFB36 /* CreatePartsListSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4914BFBBDAB1B6D990FFA6C /* CreatePartsListSheet.swift */; };
-		A1B2C3D4E5F6A7B8C9D0E1F2 /* PartsListDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7A8B9C0D1E2F /* PartsListDetailView.swift */; };
-		B2C3D4E5F6A7B8C9D0E1F2A3 /* PartsListDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B3C4D5E6F7A8B9C0D1E2F3A /* PartsListDetailView.swift */; };
-		E5F6A7B8C9D0E1F2A3B4C5D6 /* EditPartsListPartSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E6F7A8B9C0D1E2F3A4B5C6D /* EditPartsListPartSheet.swift */; };
-		F6A7B8C9D0E1F2A3B4C5D6E7 /* EditPartsListPartSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F7A8B9C0D1E2F3A4B5C6D7E /* EditPartsListPartSheet.swift */; };
-		FA12401C977E210A11A13285 /* RenamePartsListSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40084448815506F3C4316231 /* RenamePartsListSheet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,205 +25,30 @@
 		073347F22E73BDC7006CBBAA /* BRIQ.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BRIQ.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		074180EA2E77C94B00B9FF22 /* BRIQTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BRIQTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		075C34DC2E73BE4300CE4BC0 /* BRIQ-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BRIQ-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		0EA8436CAA0AABF17AAC407E /* CreatePartsListSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CreatePartsListSheet.swift; path = Shared/Views/PartsLists/CreatePartsListSheet.swift; sourceTree = SOURCE_ROOT; };
-		1A2B3C4D5E6F7A8B9C0D1E2F /* PartsListDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PartsListDetailView.swift; path = Shared/Views/PartsLists/PartsListDetailView.swift; sourceTree = SOURCE_ROOT; };
-		2B3C4D5E6F7A8B9C0D1E2F3A /* PartsListDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PartsListDetailView.swift; path = Shared/Views/PartsLists/PartsListDetailView.swift; sourceTree = SOURCE_ROOT; };
-		3A1146229C2829B277DB5AC8 /* PartsList+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "PartsList+CoreDataClass.swift"; path = "Shared/CoreData/PartsList+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
-		3A314F54A936030C16257B51 /* PartsListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PartsListRow.swift; path = Shared/Views/PartsLists/PartsListRow.swift; sourceTree = SOURCE_ROOT; };
-		3AB14CD881422C6FB7853AAE /* PartsListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PartsListRow.swift; path = Shared/Views/PartsLists/PartsListRow.swift; sourceTree = SOURCE_ROOT; };
-		40084448815506F3C4316231 /* RenamePartsListSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RenamePartsListSheet.swift; path = Shared/Views/PartsLists/RenamePartsListSheet.swift; sourceTree = SOURCE_ROOT; };
-		58DC4181B99C855CC442A5BE /* PartsListPart+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "PartsListPart+CoreDataClass.swift"; path = "Shared/CoreData/PartsListPart+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
-		5B974990B395C8EEB7028F7B /* RenamePartsListSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RenamePartsListSheet.swift; path = Shared/Views/PartsLists/RenamePartsListSheet.swift; sourceTree = SOURCE_ROOT; };
-		5E6F7A8B9C0D1E2F3A4B5C6D /* EditPartsListPartSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EditPartsListPartSheet.swift; path = Shared/Views/PartsLists/EditPartsListPartSheet.swift; sourceTree = SOURCE_ROOT; };
-		6E65458293049E4EC8892DF6 /* PartsListPart+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "PartsListPart+CoreDataClass.swift"; path = "Shared/CoreData/PartsListPart+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
-		6F7A8B9C0D1E2F3A4B5C6D7E /* EditPartsListPartSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EditPartsListPartSheet.swift; path = Shared/Views/PartsLists/EditPartsListPartSheet.swift; sourceTree = SOURCE_ROOT; };
-		B80B442980FC58475D5BD6C7 /* PartsListsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PartsListsView.swift; path = Shared/Views/PartsLists/PartsListsView.swift; sourceTree = SOURCE_ROOT; };
-		D46040EFA59D6F71FB46E141 /* PartsList+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "PartsList+CoreDataClass.swift"; path = "Shared/CoreData/PartsList+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
-		E9134BEDA42F71FF38D93293 /* PartsListsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PartsListsView.swift; path = Shared/Views/PartsLists/PartsListsView.swift; sourceTree = SOURCE_ROOT; };
-		F4914BFBBDAB1B6D990FFA6C /* CreatePartsListSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CreatePartsListSheet.swift; path = Shared/Views/PartsLists/CreatePartsListSheet.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		0733018E2E73BF5B0057EDBB /* Exceptions for "Shared" folder in "BRIQ-macos" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				"Auto-Generated/PartCategories.swift",
-				"Auto-Generated/PartColors.swift",
-				"Auto-Generated/Themes.swift",
-				BundledData.swift,
-				ConcurrentMap.swift,
-				CoreData/BRIQ.xcdatamodeld,
-				CoreData/CoreDataStack.swift,
-				"CoreData/Minifig+CoreDataClass.swift",
-				"CoreData/NSManagedObjectContext+FetchFirst.swift",
-				"CoreData/NSManagedObjectContext+SaveOrRollback.swift",
-				"CoreData/Part+CoreDataClass.swift",
-				"CoreData/Set+CoreDataClass.swift",
-				CoreData/SetContentTotals.swift,
-				"CoreData/SetMinifig+CoreDataClass.swift",
-				"CoreData/SetPart+CoreDataClass.swift",
-				"CoreData/SetUserData+CoreDataClass.swift",
-				CoreData/StoreDeduplicator.swift,
-				Database.swift,
-				DatabaseInitializer.swift,
-				FocusedValues.swift,
-				IconSize.swift,
-				ImageLoader.swift,
-				Logging.swift,
-				PartColor.swift,
-				PDFGenerator.swift,
-				"SampleData/SampleData+Extensions.swift",
-				SampleData/SampleDataProvider.swift,
-				SetListFilter.swift,
-				SetListFilters.swift,
-				SetListSortOrder.swift,
-				Theme.swift,
-				Views/ContentView.swift,
-				Views/IconGridView.swift,
-				Views/IconImage.swift,
-				Views/InfoTable.swift,
-				Views/Minifigs/MinifigRow.swift,
-				Views/Minifigs/MinifigsIconView.swift,
-				Views/Minifigs/MinifigList.swift,
-				Views/Minifigs/MinifigsListView.swift,
-				Views/Parts/PartRow.swift,
-				Views/Parts/PartsIconView.swift,
-				Views/Parts/SetPartsDisplay.swift,
-				Views/Parts/PartsListView.swift,
-				Views/PartsLists/AddToPartsListMenu.swift,
-				Views/PartsLists/LegoColorPicker.swift,
-				Views/PartsLists/PartsListDetailIconView.swift,
-				Views/PartsLists/PartsListDetailTableView.swift,
-				Views/PartsLists/PartsListViewMode.swift,
-				Views/PartsLists/PartsListViewModeMenuToolbarItem.swift,
-				Views/PartsLists/PDFDataDocument.swift,
-				Views/PartsLists/PDFOptionsSheet.swift,
-				Views/SetDetails/SetContentSection.swift,
-				Views/SetDetails/SetDetail.swift,
-				Views/SetDetails/SetDetailFields.swift,
-				Views/SetDetails/SetExternalLinks.swift,
-				Views/SetDetails/SetImageDisplay.swift,
-				Views/SetLists/SetDetailNavigationLink.swift,
-				Views/SetLists/SetIconView.swift,
-				Views/SetLists/SetList.swift,
-				Views/SetLists/SetListIconView.swift,
-				Views/SetLists/SetListListView.swift,
-				Views/SetLists/SetListSplitView.swift,
-				Views/SetLists/SetListStatusBar.swift,
-				Views/SetLists/SetListViewMode.swift,
-				Views/SetLists/SetListTableView.swift,
-				Views/SetLists/ToolbarItems/IconSizeSliderToolbarItem.swift,
-				Views/SetLists/ToolbarItems/SettingsButtonToolbarItem.swift,
-				Views/SetLists/ToolbarItems/ThemeDropdownToolbarItem.swift,
-				Views/SetLists/ToolbarItems/ViewModeMenuToolbarItem.swift,
-				Views/SetRow.swift,
-				Views/Settings/SetListFilterSettings.swift,
-				Views/StarRatingView.swift,
-				Views/Themes/FavoriteThemes.swift,
-				Views/Themes/ThemeDropdown.swift,
-				Views/ThumbnailImage.swift,
-			);
-			target = 073347F12E73BDC7006CBBAA /* BRIQ-macos */;
-		};
 		0733018F2E73BF5B0057EDBB /* Exceptions for "Shared" folder in "BRIQ-ios" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				"Auto-Generated/PartCategories.swift",
-				"Auto-Generated/PartColors.swift",
-				"Auto-Generated/Themes.swift",
-				BundledData.swift,
-				ConcurrentMap.swift,
-				CoreData/BRIQ.xcdatamodeld,
-				CoreData/CoreDataStack.swift,
-				"CoreData/Minifig+CoreDataClass.swift",
-				"CoreData/NSManagedObjectContext+FetchFirst.swift",
-				"CoreData/NSManagedObjectContext+SaveOrRollback.swift",
-				"CoreData/Part+CoreDataClass.swift",
-				"CoreData/Set+CoreDataClass.swift",
-				CoreData/SetContentTotals.swift,
-				"CoreData/SetMinifig+CoreDataClass.swift",
-				"CoreData/SetPart+CoreDataClass.swift",
-				"CoreData/SetUserData+CoreDataClass.swift",
-				CoreData/StoreDeduplicator.swift,
-				Database.swift,
-				DatabaseInitializer.swift,
-				FocusedValues.swift,
-				IconSize.swift,
-				ImageLoader.swift,
-				Logging.swift,
-				PartColor.swift,
-				PDFGenerator.swift,
-				"SampleData/SampleData+Extensions.swift",
-				SampleData/SampleDataProvider.swift,
-				SetListFilter.swift,
-				SetListFilters.swift,
-				SetListSortOrder.swift,
-				Theme.swift,
-				Views/ContentView.swift,
-				Views/IconGridView.swift,
-				Views/IconImage.swift,
-				Views/InfoTable.swift,
-				Views/Minifigs/MinifigRow.swift,
-				Views/Minifigs/MinifigsIconView.swift,
-				Views/Minifigs/MinifigList.swift,
-				Views/Minifigs/MinifigsListView.swift,
-				Views/Parts/PartRow.swift,
-				Views/Parts/PartsIconView.swift,
-				Views/Parts/SetPartsDisplay.swift,
-				Views/Parts/PartsListView.swift,
-				Views/PartsLists/AddToPartsListMenu.swift,
-				Views/PartsLists/LegoColorPicker.swift,
-				Views/PartsLists/PartsListDetailIconView.swift,
-				Views/PartsLists/PartsListViewMode.swift,
-				Views/PartsLists/PartsListViewModeMenuToolbarItem.swift,
-				Views/PartsLists/PDFDataDocument.swift,
-				Views/PartsLists/PDFOptionsSheet.swift,
-				Views/SetDetails/SetContentSection.swift,
-				Views/SetDetails/SetDetail.swift,
-				Views/SetDetails/SetDetailFields.swift,
-				Views/SetDetails/SetExternalLinks.swift,
-				Views/SetDetails/SetImageDisplay.swift,
-				Views/SetLists/SetDetailNavigationLink.swift,
-				Views/SetLists/SetIconView.swift,
-				Views/SetLists/SetList.swift,
-				Views/SetLists/SetListIconView.swift,
-				Views/SetLists/SetListListView.swift,
-				Views/SetLists/SetListStatusBar.swift,
-				Views/SetLists/SetListViewMode.swift,
-				Views/SetLists/ToolbarItems/SettingsButtonToolbarItem.swift,
-				Views/SetLists/ToolbarItems/ThemeDropdownToolbarItem.swift,
-				Views/SetLists/ToolbarItems/ViewModeMenuToolbarItem.swift,
-				Views/SetRow.swift,
-				Views/Settings/SetListFilterSettings.swift,
-				Views/StarRatingView.swift,
-				Views/Themes/FavoriteThemes.swift,
-				Views/Themes/ThemeDropdown.swift,
-				Views/ThumbnailImage.swift,
+				Views/PartsLists/PartsListDetailTableView.swift,
+				Views/SetLists/SetListSplitView.swift,
+				Views/SetLists/SetListTableView.swift,
+				Views/SetLists/ToolbarItems/IconSizeSliderToolbarItem.swift,
 			);
 			target = 075C34DB2E73BE4300CE4BC0 /* BRIQ-ios */;
-		};
-		073302582E73D80D0057EDBB /* Exceptions for "Resources" folder in "BRIQ-macos" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				init.zip,
-			);
-			target = 073347F12E73BDC7006CBBAA /* BRIQ-macos */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		073302542E73D7F90057EDBB /* Resources */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				073302582E73D80D0057EDBB /* Exceptions for "Resources" folder in "BRIQ-macos" target */,
-			);
 			path = Resources;
 			sourceTree = "<group>";
 		};
 		073347ED2E73BDA3006CBBAA /* Shared */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				0733018E2E73BF5B0057EDBB /* Exceptions for "Shared" folder in "BRIQ-macos" target */,
 				0733018F2E73BF5B0057EDBB /* Exceptions for "Shared" folder in "BRIQ-ios" target */,
 			);
 			path = Shared;
@@ -299,22 +108,6 @@
 				0B51E7A12F00A00100C0FFEE /* BRIQTests */,
 				073301E92E73C3140057EDBB /* Frameworks */,
 				070756002E739D24007C1FA4 /* Products */,
-				3AB14CD881422C6FB7853AAE /* PartsListRow.swift */,
-				3A314F54A936030C16257B51 /* PartsListRow.swift */,
-				B80B442980FC58475D5BD6C7 /* PartsListsView.swift */,
-				E9134BEDA42F71FF38D93293 /* PartsListsView.swift */,
-				0EA8436CAA0AABF17AAC407E /* CreatePartsListSheet.swift */,
-				F4914BFBBDAB1B6D990FFA6C /* CreatePartsListSheet.swift */,
-				40084448815506F3C4316231 /* RenamePartsListSheet.swift */,
-				5B974990B395C8EEB7028F7B /* RenamePartsListSheet.swift */,
-				3A1146229C2829B277DB5AC8 /* PartsList+CoreDataClass.swift */,
-				D46040EFA59D6F71FB46E141 /* PartsList+CoreDataClass.swift */,
-				58DC4181B99C855CC442A5BE /* PartsListPart+CoreDataClass.swift */,
-				6E65458293049E4EC8892DF6 /* PartsListPart+CoreDataClass.swift */,
-				1A2B3C4D5E6F7A8B9C0D1E2F /* PartsListDetailView.swift */,
-				2B3C4D5E6F7A8B9C0D1E2F3A /* PartsListDetailView.swift */,
-				5E6F7A8B9C0D1E2F3A4B5C6D /* EditPartsListPartSheet.swift */,
-				6F7A8B9C0D1E2F3A4B5C6D7E /* EditPartsListPartSheet.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -351,6 +144,8 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				073302542E73D7F90057EDBB /* Resources */,
+				073347ED2E73BDA3006CBBAA /* Shared */,
 				073347F32E73BDC7006CBBAA /* BRIQ-macos */,
 			);
 			name = "BRIQ-macos";
@@ -398,6 +193,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				073302542E73D7F90057EDBB /* Resources */,
+				073347ED2E73BDA3006CBBAA /* Shared */,
 				075C34DD2E73BE4300CE4BC0 /* BRIQ-ios */,
 			);
 			name = "BRIQ-ios";
@@ -483,14 +279,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				34AF467D9E5EE6B7A884BAFE /* PartsListRow.swift in Sources */,
-				0E544A4797C7D374B2193EB1 /* PartsListsView.swift in Sources */,
-				07254BF0B1C6303A015401AD /* CreatePartsListSheet.swift in Sources */,
-				FA12401C977E210A11A13285 /* RenamePartsListSheet.swift in Sources */,
-				850742CD8A5B7FF2B5DF7228 /* PartsList+CoreDataClass.swift in Sources */,
-				615B4A19B7B32AEF7C2F3D6C /* PartsListPart+CoreDataClass.swift in Sources */,
-				A1B2C3D4E5F6A7B8C9D0E1F2 /* PartsListDetailView.swift in Sources */,
-				E5F6A7B8C9D0E1F2A3B4C5D6 /* EditPartsListPartSheet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -505,14 +293,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				14AA4D74A068CB8C999EB774 /* PartsListRow.swift in Sources */,
-				35C14F32AB859CC7E66130C7 /* PartsListsView.swift in Sources */,
-				8ED54826903D5AF7E06AFB36 /* CreatePartsListSheet.swift in Sources */,
-				26554742B12F8AA00A2AEEA4 /* RenamePartsListSheet.swift in Sources */,
-				56B7412CAF7C27340D809496 /* PartsList+CoreDataClass.swift in Sources */,
-				64024AF8B2CD2BE189E548E7 /* PartsListPart+CoreDataClass.swift in Sources */,
-				B2C3D4E5F6A7B8C9D0E1F2A3 /* PartsListDetailView.swift in Sources */,
-				F6A7B8C9D0E1F2A3B4C5D6E7 /* EditPartsListPartSheet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

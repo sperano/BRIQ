@@ -87,4 +87,4 @@ The identity attributes behind each `Identifiable.id` carry uniqueness constrain
 - Views are organized by feature area (Sets, Parts, Minifigs)
 - Platform-specific code mostly lives in `BRIQ-ios/`/`BRIQ-macos/`, but some shared views and utilities also branch on platform internally (`#if os(...)`)
 - Unit tests (Swift Testing) live in `BRIQTests/` (the `BRIQTests` target, hosted in the macOS app); they need Xcode to build and run
-- `Shared/` is not a target member as a whole: a new file there must be added to both targets' membership exceptions in `project.pbxproj` (Xcode's target membership checkboxes)
+- `Shared/` and `Resources/` are synchronized folders of both app targets: a new file there is in both apps without touching `project.pbxproj`. A platform-only file goes in the other target's membership exceptions for the folder (unchecking that target's membership box in Xcode); the macOS-only `Shared/` files are listed in the `BRIQ-ios` exception set
