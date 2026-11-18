@@ -28,6 +28,12 @@ This is an Xcode project. Use Xcode to build and run:
 - Run: ⌘+R
 - Test: ⌘+U (BRIQ-macos scheme)
 
+Lint and format, on macOS or Linux (SwiftFormat and SwiftLint on `PATH`; `brew install swiftformat swiftlint` on macOS):
+- `make lint`: SwiftFormat in check mode (`.swiftformat`), then SwiftLint `--strict` (`.swiftlint.yml`); fails on any finding
+- `make format`: rewrites what SwiftFormat can fix, then runs SwiftLint
+- `Shared/Auto-Generated/` (written by briq-utils) is excluded from both. Fix findings in the code, never with an inline `swiftlint:disable`/`swiftformat:disable` comment; a rule that does not fit the code is turned off in the config with a comment saying why
+- SwiftFormat drops a redundant `return`, so a computed property whose body would then start with `set.` parses as a setter: SwiftLint reports it as `unused_setter_value`. Write such a body as an `if` expression, or use the `Set`'s property directly
+
 ## Core Architecture
 
 ### Data Models (Core Data)
