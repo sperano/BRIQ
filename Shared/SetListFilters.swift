@@ -37,18 +37,18 @@ enum OwnershipFilter: Int, CaseIterable {
 
     var title: String {
         switch self {
-        case .all: return String(localized: "All Sets", comment: "Set list filter")
-        case .owned: return String(localized: "Owned Only", comment: "Set list filter")
-        case .notOwned: return String(localized: "Not Owned Only", comment: "Set list filter")
+        case .all: String(localized: "All Sets", comment: "Set list filter")
+        case .owned: String(localized: "Owned Only", comment: "Set list filter")
+        case .notOwned: String(localized: "Not Owned Only", comment: "Set list filter")
         }
     }
 
     /// Nil for `.all`; a set without user data counts as not owned.
     var predicate: NSPredicate? {
         switch self {
-        case .all: return nil
-        case .owned: return NSPredicate(format: "userData.owned == YES")
-        case .notOwned: return NSPredicate(format: "userData.owned == NO OR userData == nil")
+        case .all: nil
+        case .owned: NSPredicate(format: "userData.owned == YES")
+        case .notOwned: NSPredicate(format: "userData.owned == NO OR userData == nil")
         }
     }
 }
@@ -61,18 +61,18 @@ enum FavoriteFilter: Int, CaseIterable {
 
     var title: String {
         switch self {
-        case .all: return String(localized: "All Sets", comment: "Set list filter")
-        case .favorites: return String(localized: "Favorites Only", comment: "Set list filter")
-        case .notFavorites: return String(localized: "Not Favorites Only", comment: "Set list filter")
+        case .all: String(localized: "All Sets", comment: "Set list filter")
+        case .favorites: String(localized: "Favorites Only", comment: "Set list filter")
+        case .notFavorites: String(localized: "Not Favorites Only", comment: "Set list filter")
         }
     }
 
     /// Nil for `.all`; a set without user data counts as not a favorite.
     var predicate: NSPredicate? {
         switch self {
-        case .all: return nil
-        case .favorites: return NSPredicate(format: "userData.favorite == YES")
-        case .notFavorites: return NSPredicate(format: "userData.favorite == NO OR userData == nil")
+        case .all: nil
+        case .favorites: NSPredicate(format: "userData.favorite == YES")
+        case .notFavorites: NSPredicate(format: "userData.favorite == NO OR userData == nil")
         }
     }
 }

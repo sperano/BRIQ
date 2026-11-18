@@ -28,11 +28,11 @@ struct LegoColorPicker: View {
     }
 
     private var transparentColors: [(index: Int, color: PartColor)] {
-        filteredColors.filter { $0.color.isTransparent }
+        filteredColors.filter(\.color.isTransparent)
     }
 
     private let columns = [
-        GridItem(.adaptive(minimum: 80, maximum: 120), spacing: 8)
+        GridItem(.adaptive(minimum: 80, maximum: 120), spacing: 8),
     ]
 
     var body: some View {
@@ -68,7 +68,6 @@ struct LegoColorPicker: View {
         }
     }
 
-    @ViewBuilder
     private func colorSection(title: LocalizedStringKey, colors: [(index: Int, color: PartColor)]) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(title)

@@ -11,31 +11,31 @@ public struct ReinitializeConfirmationView: View {
     @Binding var preserveUserData: Bool
     let onConfirm: () -> Void
     let onCancel: () -> Void
-    
+
     public init(preserveUserData: Binding<Bool>, onConfirm: @escaping () -> Void, onCancel: @escaping () -> Void = {}) {
-        self._preserveUserData = preserveUserData
+        _preserveUserData = preserveUserData
         self.onConfirm = onConfirm
         self.onCancel = onCancel
     }
-    
+
     public var body: some View {
         VStack(spacing: 20) {
             Image(systemName: "exclamationmark.triangle")
                 .font(.largeTitle)
                 .foregroundColor(.orange)
                 .accessibilityHidden(true)
-            
+
             Text("Re-Initialize Database")
                 .font(.headline)
-            
+
             VStack(alignment: .leading, spacing: 12) {
                 Text("This will delete all data and reload from the bundled database.")
-                
+
                 Toggle("Re-import collections and favorites", isOn: $preserveUserData)
                     #if os(macOS)
                     .toggleStyle(.checkbox)
                     #endif
-                
+
                 if !preserveUserData {
                     HStack {
                         Image(systemName: "exclamationmark.triangle.fill")
@@ -47,7 +47,7 @@ public struct ReinitializeConfirmationView: View {
                     .foregroundColor(.orange)
                 }
             }
-            
+
             HStack(spacing: 0) {
                 Button("Cancel") {
                     onCancel()
@@ -61,7 +61,7 @@ public struct ReinitializeConfirmationView: View {
                         .stroke(Color.secondary, lineWidth: 1)
                 )
                 .keyboardShortcut(.cancelAction)
-                
+
                 Button("Re-Initialize") {
                     onConfirm()
                 }

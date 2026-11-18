@@ -12,7 +12,7 @@ import CoreData
 
 struct SetImageDisplay: View {
     let set: Set
-    
+
     var body: some View {
         #if os(iOS)
         ImageViewer(set: set)

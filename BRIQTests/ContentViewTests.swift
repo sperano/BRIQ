@@ -6,7 +6,7 @@
 import Testing
 @testable import BRIQ
 
-@Suite @MainActor struct ContentViewTests {
+@MainActor struct ContentViewTests {
     @Test func importProgressUsesTheSingularForOneSet() {
         #expect(ContentView.importProgress(setsImported: 1) == "1 set imported.")
     }

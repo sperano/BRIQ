@@ -45,29 +45,29 @@ enum SetListViewMode: Int, CaseIterable {
 
     var displayName: String {
         switch self {
-        case .icon: return String(localized: "Icon", comment: "View mode")
-        case .split: return String(localized: "Split", comment: "View mode")
-        case .table: return String(localized: "Table", comment: "View mode")
-        case .list: return String(localized: "List", comment: "View mode")
+        case .icon: String(localized: "Icon", comment: "View mode")
+        case .split: String(localized: "Split", comment: "View mode")
+        case .table: String(localized: "Table", comment: "View mode")
+        case .list: String(localized: "List", comment: "View mode")
         }
     }
 
     /// The View menu command choosing this mode.
     var commandTitle: String {
         switch self {
-        case .icon: return String(localized: "Icon View", comment: "View menu command")
-        case .split: return String(localized: "Split View", comment: "View menu command")
-        case .table: return String(localized: "Table View", comment: "View menu command")
-        case .list: return String(localized: "List View", comment: "View menu command")
+        case .icon: String(localized: "Icon View", comment: "View menu command")
+        case .split: String(localized: "Split View", comment: "View menu command")
+        case .table: String(localized: "Table View", comment: "View menu command")
+        case .list: String(localized: "List View", comment: "View menu command")
         }
     }
 
     var systemImage: String {
         switch self {
-        case .icon: return "grid.circle"
-        case .split: return "sidebar.left"
-        case .table: return "tablecells"
-        case .list: return "list.bullet"
+        case .icon: "grid.circle"
+        case .split: "sidebar.left"
+        case .table: "tablecells"
+        case .list: "list.bullet"
         }
     }
 }

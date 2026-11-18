@@ -85,6 +85,6 @@ extension IconGridView where MenuContent == EmptyView {
         self.quantity = quantity
         self.number = number
         self.name = name
-        self.contextMenuContent = nil
+        contextMenuContent = nil
     }
 }

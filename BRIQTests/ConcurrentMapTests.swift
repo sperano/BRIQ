@@ -6,7 +6,7 @@
 import Testing
 @testable import BRIQ
 
-@Suite struct ConcurrentMapTests {
+struct ConcurrentMapTests {
     private enum TransformError: Error {
         case failed
     }

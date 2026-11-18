@@ -20,9 +20,9 @@ final class StubURLProtocol: URLProtocol {
     }
 
     private static let lock = NSLock()
-    nonisolated(unsafe) private static var replies: [URL: Reply] = [:]
-    nonisolated(unsafe) private static var requestCounts: [URL: Int] = [:]
-    nonisolated(unsafe) private static var arrivalWaiters: [URL: [ArrivalWaiter]] = [:]
+    private nonisolated(unsafe) static var replies: [URL: Reply] = [:]
+    private nonisolated(unsafe) static var requestCounts: [URL: Int] = [:]
+    private nonisolated(unsafe) static var arrivalWaiters: [URL: [ArrivalWaiter]] = [:]
 
     private struct ArrivalWaiter {
         let count: Int
@@ -65,11 +65,11 @@ final class StubURLProtocol: URLProtocol {
         }
     }
 
-    override class func canInit(with request: URLRequest) -> Bool {
+    override static func canInit(with request: URLRequest) -> Bool {
         request.url?.host == host
     }
 
-    override class func canonicalRequest(for request: URLRequest) -> URLRequest {
+    override static func canonicalRequest(for request: URLRequest) -> URLRequest {
         request
     }
 

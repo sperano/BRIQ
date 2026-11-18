@@ -6,7 +6,7 @@
 import Testing
 @testable import BRIQ
 
-@Suite @MainActor struct PDFOptionsSheetTests {
+@MainActor struct PDFOptionsSheetTests {
     @Test func exportSummaryUsesTheSingularForOnePart() {
         #expect(PDFOptionsSheet.exportSummary(partCount: 1) == "1 part will be exported")
     }

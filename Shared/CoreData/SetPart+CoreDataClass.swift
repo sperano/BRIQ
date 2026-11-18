@@ -5,12 +5,11 @@
 //  Created by Éric Spérano on 13/09/25.
 //
 
-import Foundation
 import CoreData
+import Foundation
 
 @objc(SetPart)
 public class SetPart: NSManagedObject, Identifiable {
-
     @NSManaged public var colorID: Int32
     @NSManaged public var imageURL: String?
     @NSManaged public var quantity: Int32
@@ -18,13 +17,13 @@ public class SetPart: NSManagedObject, Identifiable {
     @NSManaged public var set: Set?
 
     public var id: String {
-        return "\(set?.number ?? "unknown")-\(part?.number ?? "unknown")-\(colorID)"
+        "\(set?.number ?? "unknown")-\(part?.number ?? "unknown")-\(colorID)"
     }
 }
 
 // MARK: - Core Data Convenience
-extension SetPart {
 
+extension SetPart {
     @discardableResult
     static func create(
         in context: NSManagedObjectContext,
@@ -42,6 +41,6 @@ extension SetPart {
     }
 
     static func fetchRequest() -> NSFetchRequest<SetPart> {
-        return NSFetchRequest<SetPart>(entityName: "SetPart")
+        NSFetchRequest<SetPart>(entityName: "SetPart")
     }
 }

@@ -6,10 +6,11 @@
 //
 
 #if DEBUG
-import Foundation
 import CoreData
+import Foundation
 
 // MARK: - Sample Data Context Helper
+
 @MainActor
 class SampleDataHelper {
     static let shared = SampleDataHelper()
@@ -17,13 +18,14 @@ class SampleDataHelper {
     private let provider = SampleDataProvider()
 
     var context: NSManagedObjectContext {
-        return provider.viewContext
+        provider.viewContext
     }
 }
 
 // MARK: - Set Sample Data
+
+@MainActor
 extension Set {
-    @MainActor
     static var sampleData: [Set] {
         let context = SampleDataHelper.shared.context
         let request = Set.fetchRequest()
@@ -36,12 +38,10 @@ extension Set {
         }
     }
 
-    @MainActor
     static var sampleSet: Set {
-        return sampleData.first ?? createFallbackSet()
+        sampleData.first ?? createFallbackSet()
     }
 
-    @MainActor
     private static func createFallbackSet() -> Set {
         let context = SampleDataHelper.shared.context
         return Set.create(
@@ -58,8 +58,9 @@ extension Set {
 }
 
 // MARK: - Part Sample Data
+
+@MainActor
 extension Part {
-    @MainActor
     static var sampleData: [Part] {
         let context = SampleDataHelper.shared.context
         let request = Part.fetchRequest()
@@ -72,12 +73,10 @@ extension Part {
         }
     }
 
-    @MainActor
     static var samplePart: Part {
-        return sampleData.first ?? createFallbackPart()
+        sampleData.first ?? createFallbackPart()
     }
 
-    @MainActor
     private static func createFallbackPart() -> Part {
         let context = SampleDataHelper.shared.context
         return Part.create(
@@ -91,8 +90,9 @@ extension Part {
 }
 
 // MARK: - Minifig Sample Data
+
+@MainActor
 extension Minifig {
-    @MainActor
     static var sampleData: [Minifig] {
         let context = SampleDataHelper.shared.context
         let request = Minifig.fetchRequest()
@@ -105,12 +105,10 @@ extension Minifig {
         }
     }
 
-    @MainActor
     static var sampleMinifig: Minifig {
-        return sampleData.first ?? createFallbackMinifig()
+        sampleData.first ?? createFallbackMinifig()
     }
 
-    @MainActor
     private static func createFallbackMinifig() -> Minifig {
         let context = SampleDataHelper.shared.context
         return Minifig.create(
@@ -124,8 +122,9 @@ extension Minifig {
 }
 
 // MARK: - SetPart Sample Data
+
+@MainActor
 extension SetPart {
-    @MainActor
     static var sampleData: [SetPart] {
         let context = SampleDataHelper.shared.context
         let request = SetPart.fetchRequest()
@@ -138,12 +137,10 @@ extension SetPart {
         }
     }
 
-    @MainActor
     static var sampleSetPart: SetPart {
-        return sampleData.first ?? createFallbackSetPart()
+        sampleData.first ?? createFallbackSetPart()
     }
 
-    @MainActor
     private static func createFallbackSetPart() -> SetPart {
         let context = SampleDataHelper.shared.context
         let part = Part.samplePart
@@ -160,8 +157,9 @@ extension SetPart {
 }
 
 // MARK: - SetMinifig Sample Data
+
+@MainActor
 extension SetMinifig {
-    @MainActor
     static var sampleData: [SetMinifig] {
         let context = SampleDataHelper.shared.context
         let request = SetMinifig.fetchRequest()
@@ -174,12 +172,10 @@ extension SetMinifig {
         }
     }
 
-    @MainActor
     static var sampleSetMinifig: SetMinifig {
-        return sampleData.first ?? createFallbackSetMinifig()
+        sampleData.first ?? createFallbackSetMinifig()
     }
 
-    @MainActor
     private static func createFallbackSetMinifig() -> SetMinifig {
         let context = SampleDataHelper.shared.context
         let minifig = Minifig.sampleMinifig
@@ -194,8 +190,9 @@ extension SetMinifig {
 }
 
 // MARK: - SetUserData Sample Data
+
+@MainActor
 extension SetUserData {
-    @MainActor
     static var sampleData: [SetUserData] {
         let context = SampleDataHelper.shared.context
         let request = SetUserData.fetchRequest()
@@ -208,12 +205,10 @@ extension SetUserData {
         }
     }
 
-    @MainActor
     static var sampleUserData: SetUserData {
-        return sampleData.first ?? createFallbackUserData()
+        sampleData.first ?? createFallbackUserData()
     }
 
-    @MainActor
     private static func createFallbackUserData() -> SetUserData {
         let context = SampleDataHelper.shared.context
         let userData = SetUserData.create(
@@ -230,23 +225,25 @@ extension SetUserData {
 }
 
 // MARK: - Preview Context Helper
+
+@MainActor
 extension NSManagedObjectContext {
-    @MainActor
     static var preview: NSManagedObjectContext {
-        return SampleDataHelper.shared.context
+        SampleDataHelper.shared.context
     }
 }
 
 // MARK: - Theme Sample Data
+
 extension Theme {
-    // Real entries from the auto-generated AllThemes array, so previews
-    // resolve the same theme names as production (indexed by position).
+    /// Real entries from the auto-generated AllThemes array, so previews
+    /// resolve the same theme names as production (indexed by position).
     static var sampleTheme: Theme {
-        return AllThemes[5] // Star Wars
+        AllThemes[5] // Star Wars
     }
 
     static var sampleThemes: [Theme] {
-        return [AllThemes[5], AllThemes[14]] // Star Wars, City
+        [AllThemes[5], AllThemes[14]] // Star Wars, City
     }
 }
 #endif

@@ -6,7 +6,7 @@
 import Testing
 @testable import BRIQ
 
-@Suite @MainActor struct PartsListRowTests {
+@MainActor struct PartsListRowTests {
     @Test func partsCountDescriptionUsesTheSingularForOne() {
         #expect(PartsListRow.partsCountDescription(1) == "1 part")
     }

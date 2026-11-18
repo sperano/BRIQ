@@ -11,13 +11,11 @@ struct ViewModeCommands: View {
     @AppStorage("viewMode") private var viewMode: SetListViewMode = .icon
 
     var body: some View {
-        Group {
-            ForEach(Array(SetListViewMode.availableCases.enumerated()), id: \.element) { index, mode in
-                Button(mode.commandTitle) {
-                    viewMode = mode
-                }
-                .keyboardShortcut(Self.keyboardShortcut(forPosition: index), modifiers: .command)
+        ForEach(Array(SetListViewMode.availableCases.enumerated()), id: \.element) { index, mode in
+            Button(mode.commandTitle) {
+                viewMode = mode
             }
+            .keyboardShortcut(Self.keyboardShortcut(forPosition: index), modifiers: .command)
         }
     }
 

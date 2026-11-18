@@ -5,12 +5,11 @@
 //  Created by Éric Spérano on 13/09/25.
 //
 
-import Foundation
 import CoreData
+import Foundation
 
 @objc(Minifig)
 public class Minifig: NSManagedObject, Identifiable {
-
     @NSManaged public var imageURL: String?
     @NSManaged public var name: String
     @NSManaged public var number: String
@@ -21,8 +20,8 @@ public class Minifig: NSManagedObject, Identifiable {
 }
 
 // MARK: - Core Data Convenience
-extension Minifig {
 
+extension Minifig {
     @discardableResult
     static func create(
         in context: NSManagedObjectContext,
@@ -40,7 +39,7 @@ extension Minifig {
     }
 
     static func fetchRequest() -> NSFetchRequest<Minifig> {
-        return NSFetchRequest<Minifig>(entityName: "Minifig")
+        NSFetchRequest<Minifig>(entityName: "Minifig")
     }
 
     static func fetch(byNumber number: String, in context: NSManagedObjectContext) -> Minifig? {

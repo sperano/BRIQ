@@ -5,8 +5,8 @@
 //  Created by Éric Spérano on 7/10/25.
 //
 
-import SwiftUI
 import CoreData
+import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var databaseInitializer: DatabaseInitializer

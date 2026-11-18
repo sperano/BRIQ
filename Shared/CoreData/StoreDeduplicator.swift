@@ -3,8 +3,8 @@
 //  BRIQ
 //
 
-import Foundation
 import CoreData
+import Foundation
 import OSLog
 
 /// Lightweight migration to a model with uniqueness constraints fails when

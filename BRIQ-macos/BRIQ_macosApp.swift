@@ -105,5 +105,3 @@ struct MacBRIQApp: App {
             }
     }
 }
-
-

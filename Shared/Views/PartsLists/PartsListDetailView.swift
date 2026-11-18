@@ -3,8 +3,8 @@
 //  BRIQ
 //
 
-import SwiftUI
 import CoreData
+import SwiftUI
 
 struct PartsListDetailView: View {
     @Environment(\.managedObjectContext) private var context

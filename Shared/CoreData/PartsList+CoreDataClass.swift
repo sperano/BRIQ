@@ -3,12 +3,11 @@
 //  BRIQ
 //
 
-import Foundation
 import CoreData
+import Foundation
 
 @objc(PartsList)
 public class PartsList: NSManagedObject, Identifiable {
-
     @NSManaged public var name: String
     @NSManaged public var parts: NSSet?
 
@@ -21,8 +20,8 @@ public class PartsList: NSManagedObject, Identifiable {
 }
 
 // MARK: - Core Data Convenience
-extension PartsList {
 
+extension PartsList {
     @discardableResult
     static func create(
         in context: NSManagedObjectContext,
@@ -34,7 +33,7 @@ extension PartsList {
     }
 
     static func fetchRequest() -> NSFetchRequest<PartsList> {
-        return NSFetchRequest<PartsList>(entityName: "PartsList")
+        NSFetchRequest<PartsList>(entityName: "PartsList")
     }
 
     static func fetch(byName name: String, in context: NSManagedObjectContext) -> PartsList? {

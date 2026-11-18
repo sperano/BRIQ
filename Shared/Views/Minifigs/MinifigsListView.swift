@@ -12,7 +12,7 @@ import CoreData
 
 struct MinifigsListView: View {
     let minifigs: [SetMinifig]
-    
+
     var body: some View {
         VStack(alignment: .leading) {
             ForEach(minifigs) { minifig in

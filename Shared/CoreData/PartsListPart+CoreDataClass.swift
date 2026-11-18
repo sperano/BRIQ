@@ -3,12 +3,11 @@
 //  BRIQ
 //
 
-import Foundation
 import CoreData
+import Foundation
 
 @objc(PartsListPart)
 public class PartsListPart: NSManagedObject, Identifiable {
-
     @NSManaged public var colorID: Int32
     @NSManaged public var imageURL: String?
     @NSManaged public var quantity: Int32
@@ -16,7 +15,7 @@ public class PartsListPart: NSManagedObject, Identifiable {
     @NSManaged public var partsList: PartsList?
 
     public var id: String {
-        return "\(partsList?.name ?? "unknown")-\(part?.number ?? "unknown")-\(colorID)"
+        "\(partsList?.name ?? "unknown")-\(part?.number ?? "unknown")-\(colorID)"
     }
 
     func color() -> PartColor {
@@ -25,8 +24,8 @@ public class PartsListPart: NSManagedObject, Identifiable {
 }
 
 // MARK: - Core Data Convenience
-extension PartsListPart {
 
+extension PartsListPart {
     @discardableResult
     static func create(
         in context: NSManagedObjectContext,
@@ -65,6 +64,6 @@ extension PartsListPart {
     }
 
     static func fetchRequest() -> NSFetchRequest<PartsListPart> {
-        return NSFetchRequest<PartsListPart>(entityName: "PartsListPart")
+        NSFetchRequest<PartsListPart>(entityName: "PartsListPart")
     }
 }

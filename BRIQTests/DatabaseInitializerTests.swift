@@ -3,16 +3,16 @@
 //  BRIQTests
 //
 
-import Testing
 import CoreData
 import Foundation
+import Testing
 @testable import BRIQ
 
 private final class FixtureLocator {}
 
 /// Runs the initializer against an on-disk store (re-initializing destroys
 /// and recreates it) loaded from the fixture archive.
-@Suite @MainActor final class DatabaseInitializerTests {
+@MainActor final class DatabaseInitializerTests {
     private let directory: URL
     private let suiteName = UUID().uuidString
     private let defaults: UserDefaults

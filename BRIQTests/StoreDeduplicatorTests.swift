@@ -3,14 +3,14 @@
 //  BRIQTests
 //
 
-import Testing
 import CoreData
 import Foundation
+import Testing
 @testable import BRIQ
 
 /// Builds an on-disk store with the pre-constraint model (version 1), runs
 /// the deduplicator, then migrates it to the current model.
-@Suite @MainActor final class StoreDeduplicatorTests {
+@MainActor final class StoreDeduplicatorTests {
     private let directory: URL
     private let storeURL: URL
 
@@ -32,7 +32,7 @@ import Foundation
     /// rows, so it does not claim the app's entity classes.
     private func versionOneModel() throws -> NSManagedObjectModel {
         try #require(bundledVersions.first { model in
-            model.entities.allSatisfy { $0.uniquenessConstraints.isEmpty }
+            model.entities.allSatisfy(\.uniquenessConstraints.isEmpty)
         })
     }
 
@@ -47,7 +47,11 @@ import Foundation
     }
 
     @discardableResult
-    private func insert(_ entity: String, _ values: [String: Any], in context: NSManagedObjectContext) -> NSManagedObject {
+    private func insert(
+        _ entity: String,
+        _ values: [String: Any],
+        in context: NSManagedObjectContext
+    ) -> NSManagedObject {
         let object = NSEntityDescription.insertNewObject(forEntityName: entity, into: context)
         object.setValuesForKeys(values)
         return object
@@ -60,7 +64,10 @@ import Foundation
 
     /// Opens the store with the current (constrained) model, migrating it.
     private func migratedContainer() throws -> NSPersistentContainer {
-        let container = NSPersistentContainer(name: CoreDataStack.modelName, managedObjectModel: CoreDataStack.managedObjectModel)
+        let container = NSPersistentContainer(
+            name: CoreDataStack.modelName,
+            managedObjectModel: CoreDataStack.managedObjectModel
+        )
         let description = NSPersistentStoreDescription(url: storeURL)
         description.shouldMigrateStoreAutomatically = true
         description.shouldInferMappingModelAutomatically = true
@@ -101,7 +108,10 @@ import Foundation
         insert("PartsList", ["name": "Wall"], in: context)
         let listCopy = insert("PartsList", ["name": "Wall"], in: context)
         insert("PartsList", ["name": "Wall (2)"], in: context)
-        insert("PartsListPart", ["quantity": 5], in: context).setValuesForKeys(["partsList": listCopy, "part": partCopy])
+        insert("PartsListPart", ["quantity": 5], in: context).setValuesForKeys([
+            "partsList": listCopy,
+            "part": partCopy,
+        ])
     }
 
     @Test func duplicatesAreResolvedSoMigrationSucceeds() throws {
@@ -161,7 +171,11 @@ import Foundation
     @Test func linkedUserDataSurvivesAndKeepsTheHigherRating() throws {
         try writeStore(model: versionOneModel()) { context in
             insert("SetUserData", ["number": "1-1", "owned": true, "instructionsQuality": 2], in: context)
-            let linked = insert("SetUserData", ["number": "1-1", "favorite": true, "instructionsQuality": 4], in: context)
+            let linked = insert(
+                "SetUserData",
+                ["number": "1-1", "favorite": true, "instructionsQuality": 4],
+                in: context
+            )
             linked.setValue(set("1-1", in: context), forKey: "set")
         }
 
@@ -214,7 +228,10 @@ import Foundation
 
         let resolved = try StoreDeduplicator.prepareForMigration(
             storeAt: storeURL, options: nil, to: CoreDataStack.managedObjectModel,
-            sourceModels: { sourceModelsRequested = true; return bundledVersions }()
+            sourceModels: {
+                sourceModelsRequested = true
+                return bundledVersions
+            }()
         )
 
         #expect(resolved == 0)

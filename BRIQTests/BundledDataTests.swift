@@ -3,13 +3,13 @@
 //  BRIQTests
 //
 
-import Testing
 import CoreData
+import Testing
 @testable import BRIQ
 
 private final class FixtureLocator {}
 
-@Suite struct BundledDataTests {
+struct BundledDataTests {
     private func fixtureURL() throws -> URL {
         try #require(Bundle(for: FixtureLocator.self).url(forResource: "test-init", withExtension: "zip"))
     }

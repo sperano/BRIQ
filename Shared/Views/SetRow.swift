@@ -22,7 +22,7 @@ struct RowImage: View {
             case .success(let image):
                 image
                     .resizable()
-                    .aspectRatio(contentMode: .fill)
+                    .scaledToFill()
             case .failure:
                 Color(.red) // or a placeholder image
             case .empty:
@@ -36,7 +36,7 @@ struct RowImage: View {
 
 struct SetRow: View {
     var set: Set
-    
+
     var body: some View {
         HStack {
             RowImage(url: set.imageURL)

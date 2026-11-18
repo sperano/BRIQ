@@ -12,9 +12,9 @@ struct PartsListViewModeMenuToolbarItem: ToolbarContent {
         ToolbarItem {
             Menu {
                 ForEach(PartsListViewMode.allCases, id: \.self) { mode in
-                    Button(action: {
+                    Button {
                         viewMode = mode
-                    }) {
+                    } label: {
                         Label(mode.displayName, systemImage: mode.systemImage)
                     }
                 }

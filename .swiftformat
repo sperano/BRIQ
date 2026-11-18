@@ -1,0 +1,34 @@
+# SwiftFormat (https://github.com/nicklockwood/SwiftFormat). `make format` rewrites, `make lint`
+# only checks. The options mirror the style the code already has.
+# The app builds with Xcode 16 (Swift 6.0) and later (README), in the Swift 5 language mode
+# (SWIFT_VERSION = 5.0): no rewrite may need a newer compiler.
+--swift-version 6.0
+--language-mode 5
+# Shared/Auto-Generated is written by briq-utils: a reformat would be undone by its next run.
+--exclude BRIQ.xcodeproj,build,**/.build,Shared/Auto-Generated
+
+--indent 4
+# The code does not indent inside `#if` blocks.
+--ifdef no-indent
+--max-width 120
+# Trailing commas in multi-line collection literals only, as SwiftLint's trailing_comma checks;
+# not in argument and parameter lists.
+--trailing-commas collections-only
+--semicolons never
+--ranges no-space
+# Digits grouped from five on (`10_000`), so that years stay `1984`.
+--decimal-grouping 3,5
+--import-grouping testable-bottom
+--strip-unused-args closure-only
+--wrap-arguments preserve
+--wrap-parameters preserve
+--wrap-collections preserve
+--extension-acl on-extension
+# The code writes `case .success(let count)`.
+--pattern-let inline
+--enable isEmpty
+# The code keeps short bodies on one line (`guard x else { return }`) and writes `try` next to the
+# call it belongs to. Test functions keep their camelCase names: from Swift 6.2 on,
+# swiftTestingTestCaseNames turns them into raw identifiers
+# (`` `reports progress once for A single batch` ``).
+--disable wrapIfStatementBodies,wrapIfExpressionBodies,wrapLoopBodies,wrapFunctionBodies,wrapPropertyBodies,hoistTry,swiftTestingTestCaseNames

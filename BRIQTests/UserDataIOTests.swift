@@ -3,12 +3,12 @@
 //  BRIQTests
 //
 
-import Testing
 import CoreData
 import Foundation
+import Testing
 @testable import BRIQ
 
-@Suite @MainActor struct UserDataIOTests {
+@MainActor struct UserDataIOTests {
     let stack = CoreDataStack(inMemory: true)
 
     private func makeSet(_ number: String) -> Set {
@@ -118,7 +118,10 @@ import Foundation
     @Test func importingAnEmptyListDeletesAllUserData() throws {
         let set = try makeOwnedSet("keep-1")
 
-        let imported = try importUserData(context: stack.viewContext, jsonString: #"{"version": "1.0", "userData": []}"#)
+        let imported = try importUserData(
+            context: stack.viewContext,
+            jsonString: #"{"version": "1.0", "userData": []}"#
+        )
 
         #expect(imported == 0)
         #expect(try allUserData().isEmpty)
@@ -233,7 +236,10 @@ import Foundation
         (.unsupportedVersion("2.0"), "User data version 2.0 is not supported."),
         (.emptyNumber, "The user data file contains an entry without a set number."),
         (.duplicateNumber("1-1"), "The user data file lists set 1-1 more than once."),
-        (.invalidInstructionsQuality(number: "1-1", value: 6), "Set 1-1 has an instructions rating of 6; expected 0–5."),
+        (
+            .invalidInstructionsQuality(number: "1-1", value: 6),
+            "Set 1-1 has an instructions rating of 6; expected 0–5."
+        ),
     ])
     func errorDescriptions(error: UserDataImportError, expected: String) {
         #expect(error.errorDescription == expected)

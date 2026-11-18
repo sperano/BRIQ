@@ -15,7 +15,7 @@ class PartColor: Identifiable, Sendable {
     let setsCount: Int
     let year1: Int?
     let year2: Int?
-    
+
     init(name: String, rgb: String, isTransparent: Bool, partsCount: Int, setsCount: Int, year1: Int?, year2: Int?) {
         self.name = name
         self.rgb = rgb

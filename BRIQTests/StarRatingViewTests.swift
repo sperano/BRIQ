@@ -7,7 +7,7 @@ import SwiftUI
 import Testing
 @testable import BRIQ
 
-@Suite @MainActor struct StarRatingViewTests {
+@MainActor struct StarRatingViewTests {
     @Test func tappingAnotherStarSetsTheRatingToIt() {
         #expect(StarRatingView.rating(afterTapping: 4, current: 2) == 4)
         #expect(StarRatingView.rating(afterTapping: 1, current: 0) == 1)

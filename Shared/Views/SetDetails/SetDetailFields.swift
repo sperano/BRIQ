@@ -5,12 +5,12 @@
 //  Created by Éric Spérano on 7/25/25.
 //
 
-import SwiftUI
 import CoreData
+import SwiftUI
 
 struct SetDetailFields: View {
     @ObservedObject var set: Set
-    var selectedSet: Binding<Set?>? = nil
+    var selectedSet: Binding<Set?>?
     @Environment(\.managedObjectContext) private var context
     @EnvironmentObject private var coreDataStack: CoreDataStack
 
@@ -93,7 +93,7 @@ struct SetDetailFields: View {
     }
 
     private func findSetByNumber(_ number: String) -> Set? {
-        return Set.fetch(byNumber: number, in: context)
+        Set.fetch(byNumber: number, in: context)
     }
 
     var body: some View {
@@ -122,16 +122,20 @@ struct SetDetailFields: View {
     }
 
     private var numberRegion: String {
-        return set.isUSNumber
-            ? String(localized: "US", comment: "Region of a set number")
-            : String(localized: "International", comment: "Region of a set number")
+        if set.isUSNumber {
+            String(localized: "US", comment: "Region of a set number")
+        } else {
+            String(localized: "International", comment: "Region of a set number")
+        }
     }
 
     /// The short form of the region the same set's other number belongs to.
     private var sameAsNumberRegion: String {
-        return set.isUSNumber
-            ? String(localized: "Intl", comment: "Short region of a set number")
-            : String(localized: "US", comment: "Region of a set number")
+        if set.isUSNumber {
+            String(localized: "Intl", comment: "Short region of a set number")
+        } else {
+            String(localized: "US", comment: "Region of a set number")
+        }
     }
 
     private var sameAsRow: (label: LocalizedStringKey, value: AnyView)? {
@@ -143,9 +147,9 @@ struct SetDetailFields: View {
     private func sameAsLink(_ sameAsNumber: String) -> some View {
         if let sameAsSet = findSetByNumber(sameAsNumber) {
             if let selectedSetBinding = selectedSet {
-                Button(action: {
+                Button {
                     selectedSetBinding.wrappedValue = sameAsSet
-                }) {
+                } label: {
                     Text("\(sameAsNumber) (\(sameAsNumberRegion)): \(sameAsSet.name)")
                         .foregroundColor(.blue)
                 }

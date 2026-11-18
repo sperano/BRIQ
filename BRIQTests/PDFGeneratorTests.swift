@@ -3,12 +3,12 @@
 //  BRIQTests
 //
 
-import Testing
-import Foundation
 import CoreGraphics
+import Foundation
+import Testing
 @testable import BRIQ
 
-@Suite struct PDFGeneratorTests {
+struct PDFGeneratorTests {
     /// Six columns on US Letter with half-inch margins: 90-point cells,
     /// 8 rows, 48 cells per page.
     private static let columns = 6
@@ -59,7 +59,10 @@ import CoreGraphics
 
         #expect(log.entries == [
             ProgressLog.Entry(fraction: 0, message: "Downloading images 1-48 of 49..."),
-            ProgressLog.Entry(fraction: Double(Self.cellsPerPage) / Double(total), message: "Downloading images 49-49 of 49..."),
+            ProgressLog.Entry(
+                fraction: Double(Self.cellsPerPage) / Double(total),
+                message: "Downloading images 49-49 of 49..."
+            ),
             ProgressLog.Entry(fraction: 1, message: "Complete"),
         ])
     }
@@ -69,9 +72,15 @@ import CoreGraphics
     @Test(arguments: [(PDFGeneratorTests.columns, 375), (3, 750)])
     func drawsEachImageDecodedAtTheCellsPrintSize(columns: Int, cellPixelSize: Int) async throws {
         let wide = StubURLProtocol.uniqueURL("wide.png")
-        StubURLProtocol.setReply(.data(status: TestImage.httpOK, body: TestImage.png(width: 2000, height: 1000)), for: wide)
+        StubURLProtocol.setReply(
+            .data(status: TestImage.httpOK, body: TestImage.png(width: 2000, height: 1000)),
+            for: wide
+        )
         let tall = StubURLProtocol.uniqueURL("tall.png")
-        StubURLProtocol.setReply(.data(status: TestImage.httpOK, body: TestImage.png(width: 800, height: 1600)), for: tall)
+        StubURLProtocol.setReply(
+            .data(status: TestImage.httpOK, body: TestImage.png(width: 800, height: 1600)),
+            for: tall
+        )
         let missing = StubURLProtocol.uniqueURL("missing.png")
         StubURLProtocol.setReply(.data(status: TestImage.httpNotFound, body: Data()), for: missing)
 
@@ -115,7 +124,8 @@ import CoreGraphics
         var resources: CGPDFDictionaryRef?
         var xObjects: CGPDFDictionaryRef?
         guard CGPDFDictionaryGetDictionary(page, "Resources", &resources), let resources,
-              CGPDFDictionaryGetDictionary(resources, "XObject", &xObjects), let xObjects else {
+              CGPDFDictionaryGetDictionary(resources, "XObject", &xObjects), let xObjects
+        else {
             return []
         }
         var sizes: [(width: Int, height: Int)] = []
@@ -129,7 +139,8 @@ import CoreGraphics
                   CGPDFDictionaryGetName(dictionary, "Subtype", &subtype), let subtype,
                   String(cString: subtype) == "Image",
                   CGPDFDictionaryGetInteger(dictionary, "Width", &width),
-                  CGPDFDictionaryGetInteger(dictionary, "Height", &height) else {
+                  CGPDFDictionaryGetInteger(dictionary, "Height", &height)
+            else {
                 return true
             }
             sizes.append((width, height))

@@ -13,18 +13,16 @@ import CoreData
 struct SetPartsDisplay: View {
     let parts: [SetPart]
     let viewMode: ViewMode
-    
+
     private var sortedParts: [SetPart] {
         parts.sorted { ($0.part?.number ?? "") < ($1.part?.number ?? "") }
     }
-    
+
     var body: some View {
-        Group {
-            if viewMode == .list {
-                PartsListView(parts: sortedParts)
-            } else {
-                PartsIconView(parts: sortedParts)
-            }
+        if viewMode == .list {
+            PartsListView(parts: sortedParts)
+        } else {
+            PartsIconView(parts: sortedParts)
         }
     }
 }

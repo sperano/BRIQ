@@ -3,17 +3,20 @@
 //  BRIQTests
 //
 
-import Testing
-import Foundation
 import CoreGraphics
+import Foundation
+import Testing
 @testable import BRIQ
 
-@Suite struct ImageLoaderTests {
+struct ImageLoaderTests {
     private let loader = ImageLoader(session: StubURLProtocol.makeSession())
 
     private func servePNG(width: Int, height: Int, name: String = "image.png") -> URL {
         let url = StubURLProtocol.uniqueURL(name)
-        StubURLProtocol.setReply(.data(status: TestImage.httpOK, body: TestImage.png(width: width, height: height)), for: url)
+        StubURLProtocol.setReply(
+            .data(status: TestImage.httpOK, body: TestImage.png(width: width, height: height)),
+            for: url
+        )
         return url
     }
 
@@ -83,7 +86,10 @@ import CoreGraphics
         StubURLProtocol.setReply(.data(status: TestImage.httpNotFound, body: Data()), for: url)
         #expect(await loader.image(at: url, maxPixelSize: 100) == nil)
 
-        StubURLProtocol.setReply(.data(status: TestImage.httpOK, body: TestImage.png(width: 100, height: 100)), for: url)
+        StubURLProtocol.setReply(
+            .data(status: TestImage.httpOK, body: TestImage.png(width: 100, height: 100)),
+            for: url
+        )
         await loader.forgetFailure(at: url)
 
         #expect(await loader.image(at: url, maxPixelSize: 100) != nil)
@@ -119,14 +125,17 @@ import CoreGraphics
     @Test func aCancelledRequestIsNotRememberedAsFailed() async {
         let url = StubURLProtocol.uniqueURL("slow.png")
         StubURLProtocol.setReply(.hang, for: url)
-        let loader = self.loader
+        let loader = loader
         let pending = Task { await loader.image(at: url, maxPixelSize: 100) }
         await StubURLProtocol.waitForRequest(to: url)
 
         pending.cancel()
 
         #expect(await pending.value == nil)
-        StubURLProtocol.setReply(.data(status: TestImage.httpOK, body: TestImage.png(width: 100, height: 100)), for: url)
+        StubURLProtocol.setReply(
+            .data(status: TestImage.httpOK, body: TestImage.png(width: 100, height: 100)),
+            for: url
+        )
         #expect(await loader.image(at: url, maxPixelSize: 100) != nil)
         #expect(StubURLProtocol.requestCount(for: url) == 2)
     }
@@ -135,7 +144,7 @@ import CoreGraphics
         let url = servePNG(width: 400, height: 200)
         let small = try #require(await loader.image(at: url, maxPixelSize: 100))
         StubURLProtocol.setReply(.hang, for: url)
-        let loader = self.loader
+        let loader = loader
         let pending = Task { await loader.image(at: url, maxPixelSize: 200) }
         await StubURLProtocol.waitForRequest(to: url, count: 2)
 

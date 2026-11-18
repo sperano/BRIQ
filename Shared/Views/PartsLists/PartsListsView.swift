@@ -3,8 +3,8 @@
 //  BRIQ
 //
 
-import SwiftUI
 import CoreData
+import SwiftUI
 
 struct PartsListsView: View {
     @Environment(\.managedObjectContext) private var context
@@ -81,7 +81,7 @@ struct PartsListsView: View {
                 Text("This will permanently delete \"\(partsListToDelete?.name ?? "")\" and all its parts.")
             }
         } detail: {
-            if let selectedPartsList = selectedPartsList {
+            if let selectedPartsList {
                 PartsListDetailView(partsList: selectedPartsList)
             } else {
                 Text("Select a parts list")

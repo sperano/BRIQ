@@ -5,24 +5,23 @@
 //  Created by Éric Spérano on 13/09/25.
 //
 
-import Foundation
 import CoreData
+import Foundation
 
 @objc(SetMinifig)
 public class SetMinifig: NSManagedObject, Identifiable {
-
     @NSManaged public var quantity: Int32
     @NSManaged public var minifig: Minifig?
     @NSManaged public var set: Set?
 
     public var id: String {
-        return "\(set?.number ?? "unknown")-\(minifig?.number ?? "unknown")"
+        "\(set?.number ?? "unknown")-\(minifig?.number ?? "unknown")"
     }
 }
 
 // MARK: - Core Data Convenience
-extension SetMinifig {
 
+extension SetMinifig {
     @discardableResult
     static func create(
         in context: NSManagedObjectContext,
@@ -36,6 +35,6 @@ extension SetMinifig {
     }
 
     static func fetchRequest() -> NSFetchRequest<SetMinifig> {
-        return NSFetchRequest<SetMinifig>(entityName: "SetMinifig")
+        NSFetchRequest<SetMinifig>(entityName: "SetMinifig")
     }
 }

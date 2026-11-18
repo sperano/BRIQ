@@ -113,8 +113,8 @@ struct PDFOptionsSheet: View {
 
                 let pdfData = try await generator.generate { currentProgress, message in
                     Task { @MainActor in
-                        self.progress = currentProgress
-                        self.progressMessage = message
+                        progress = currentProgress
+                        progressMessage = message
                     }
                 }
 

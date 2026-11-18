@@ -5,9 +5,9 @@
 //  Created by Éric Spérano on 13/09/25.
 //
 
-import Foundation
-import CoreData
 import Combine
+import CoreData
+import Foundation
 import OSLog
 
 /// Not actor-isolated: the contexts it vends enforce their own queues
@@ -57,7 +57,7 @@ final class CoreDataStack: ObservableObject {
     }
 
     var viewContext: NSManagedObjectContext {
-        return persistentContainer.viewContext
+        persistentContainer.viewContext
     }
 
     func newBackgroundContext() -> NSManagedObjectContext {
@@ -112,8 +112,8 @@ final class CoreDataStack: ObservableObject {
     /// test) makes multiple NSEntityDescriptions claim the same
     /// NSManagedObject subclasses.
     static let managedObjectModel: NSManagedObjectModel = {
-        guard let url = Bundle(for: CoreDataStack.self).url(forResource: CoreDataStack.modelName, withExtension: "momd"),
-              let model = NSManagedObjectModel(contentsOf: url) else {
+        let url = Bundle(for: CoreDataStack.self).url(forResource: CoreDataStack.modelName, withExtension: "momd")
+        guard let url, let model = NSManagedObjectModel(contentsOf: url) else {
             fatalError("BRIQ.momd is missing from the bundle")
         }
         return model
@@ -177,7 +177,8 @@ final class CoreDataStack: ObservableObject {
 
     private static func destroyStore(of container: NSPersistentContainer) throws {
         guard let description = container.persistentStoreDescriptions.first,
-              let storeURL = description.url else {
+              let storeURL = description.url
+        else {
             throw CoreDataError.storeNotFound
         }
 
@@ -190,6 +191,7 @@ final class CoreDataStack: ObservableObject {
 }
 
 // MARK: - Errors
+
 enum CoreDataError: LocalizedError {
     case storeNotFound
     case saveFailed(Error)
@@ -198,11 +200,11 @@ enum CoreDataError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .storeNotFound:
-            return String(localized: "Core Data store not found")
+            String(localized: "Core Data store not found")
         case .saveFailed(let error):
-            return String(localized: "Core Data save failed: \(error.localizedDescription)")
+            String(localized: "Core Data save failed: \(error.localizedDescription)")
         case .fetchFailed(let error):
-            return String(localized: "Core Data fetch failed: \(error.localizedDescription)")
+            String(localized: "Core Data fetch failed: \(error.localizedDescription)")
         }
     }
 }

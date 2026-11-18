@@ -12,14 +12,14 @@ import CoreData
 
 struct PartRow: View {
     var part: SetPart
-    
+
     var body: some View {
         HStack {
             Text("\(part.quantity) x")
             RowImage(url: part.imageURL)
             Text(part.part?.name ?? String(localized: "Unknown Part"))
         }
-        //.padding(.horizontal)
+        // .padding(.horizontal)
     }
 }
 

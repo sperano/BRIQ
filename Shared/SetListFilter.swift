@@ -35,17 +35,8 @@ struct SetListFilter {
             predicates.append(favoritePredicate)
         }
 
-        if let selectedTheme = selectedTheme {
-            var themeIDs = selectedTheme.getAllThemeIDs()
-            // If filtering by favorites, only include favorite themes from the hierarchy
-            if filterFavoriteThemes {
-                themeIDs = themeIDs.intersection(favoriteThemes)
-            }
-            let themeArray = Array(themeIDs).map { NSNumber(value: $0) }
-            predicates.append(NSPredicate(format: "themeID IN %@", themeArray))
-        } else if filterFavoriteThemes {
-            let themeArray = Array(favoriteThemes).map { NSNumber(value: $0) }
-            predicates.append(NSPredicate(format: "themeID IN %@", themeArray))
+        if let themePredicate {
+            predicates.append(themePredicate)
         }
 
         if excludePackages {
@@ -63,5 +54,20 @@ struct SetListFilter {
 
         guard !predicates.isEmpty else { return nil }
         return NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+    }
+
+    private var themePredicate: NSPredicate? {
+        let themeIDs: Swift.Set<Int>
+        if let selectedTheme {
+            // If filtering by favorites, only include favorite themes from the hierarchy
+            let hierarchy = selectedTheme.getAllThemeIDs()
+            themeIDs = filterFavoriteThemes ? hierarchy.intersection(favoriteThemes) : hierarchy
+        } else if filterFavoriteThemes {
+            themeIDs = favoriteThemes
+        } else {
+            return nil
+        }
+        let themeArray = Array(themeIDs).map { NSNumber(value: $0) }
+        return NSPredicate(format: "themeID IN %@", themeArray)
     }
 }

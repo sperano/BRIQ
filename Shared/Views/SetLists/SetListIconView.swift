@@ -5,8 +5,8 @@
 //  Created by Éric Spérano on 8/31/25.
 //
 
-import SwiftUI
 import CoreData
+import SwiftUI
 
 struct SetListIconView: View {
     var sets: [Set]
@@ -16,11 +16,11 @@ struct SetListIconView: View {
     @Binding var showSettings: Bool
     #endif
     @AppStorage(IconSize.storageKey) private var iconSize = IconSize.defaultSize
-    
+
     var body: some View {
         ScrollView {
             LazyVGrid(columns: [
-                GridItem(.adaptive(minimum: iconSize), spacing: 16)
+                GridItem(.adaptive(minimum: iconSize), spacing: 16),
             ], spacing: 16) {
                 ForEach(sets) { set in
                     SetDetailNavigationLink(set: set) {
@@ -49,6 +49,5 @@ struct SetListIconView: View {
 }
 
 #if DEBUG
-#Preview {
-}
+#Preview {}
 #endif

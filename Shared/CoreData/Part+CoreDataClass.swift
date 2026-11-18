@@ -5,12 +5,11 @@
 //  Created by Éric Spérano on 13/09/25.
 //
 
-import Foundation
 import CoreData
+import Foundation
 
 @objc(Part)
 public class Part: NSManagedObject, Identifiable {
-
     @NSManaged public var categoryRawValue: Int32
     @NSManaged public var material: String
     @NSManaged public var name: String
@@ -27,8 +26,8 @@ public class Part: NSManagedObject, Identifiable {
 }
 
 // MARK: - Core Data Convenience
-extension Part {
 
+extension Part {
     @discardableResult
     static func create(
         in context: NSManagedObjectContext,
@@ -46,7 +45,7 @@ extension Part {
     }
 
     static func fetchRequest() -> NSFetchRequest<Part> {
-        return NSFetchRequest<Part>(entityName: "Part")
+        NSFetchRequest<Part>(entityName: "Part")
     }
 
     static func fetch(byNumber number: String, in context: NSManagedObjectContext) -> Part? {

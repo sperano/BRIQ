@@ -5,11 +5,11 @@
 //  Created by Éric Spérano on 9/11/25.
 //
 
-import SwiftUI
 import CoreData
+import SwiftUI
 
 @main
-struct BRIQ_iosApp: App {
+struct BRIQiOSApp: App {
     @StateObject private var coreDataStack: CoreDataStack
     @StateObject private var databaseInitializer: DatabaseInitializer
 

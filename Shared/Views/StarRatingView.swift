@@ -15,7 +15,7 @@ struct StarRatingView: View {
     let label: LocalizedStringKey
 
     init(rating: Binding<Int>, isInteractive: Bool = true, label: LocalizedStringKey = "Rating") {
-        self._rating = rating
+        _rating = rating
         self.isInteractive = isInteractive
         self.label = label
     }
@@ -53,9 +53,9 @@ struct StarRatingView: View {
     /// VoiceOver's increment and decrement, kept within `0...maxRating`.
     static func rating(adjusting rating: Int, _ direction: AccessibilityAdjustmentDirection) -> Int {
         switch direction {
-        case .increment: return min(rating + 1, maxRating)
-        case .decrement: return max(rating - 1, 0)
-        @unknown default: return rating
+        case .increment: min(rating + 1, maxRating)
+        case .decrement: max(rating - 1, 0)
+        @unknown default: rating
         }
     }
 
@@ -68,9 +68,9 @@ struct StarRatingView: View {
 
 #if DEBUG
 #Preview("Interactive") {
-    @Previewable @State var rating1: Int = 3
-    @Previewable @State var rating2: Int = 5
-    @Previewable @State var rating3: Int = 0
+    @Previewable @State var rating1 = 3
+    @Previewable @State var rating2 = 5
+    @Previewable @State var rating3 = 0
 
     VStack(spacing: 20) {
         Text("Interactive Star Rating")
@@ -95,9 +95,9 @@ struct StarRatingView: View {
 }
 
 #Preview("Non-Interactive") {
-    @Previewable @State var rating1: Int = 1
-    @Previewable @State var rating2: Int = 3
-    @Previewable @State var rating3: Int = 5
+    @Previewable @State var rating1 = 1
+    @Previewable @State var rating2 = 3
+    @Previewable @State var rating3 = 5
 
     VStack(spacing: 20) {
         Text("Non-Interactive Star Rating")

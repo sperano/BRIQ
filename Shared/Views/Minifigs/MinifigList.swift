@@ -13,14 +13,12 @@ import CoreData
 struct MinifigList: View {
     let minifigs: [SetMinifig]
     let viewMode: ViewMode
-    
+
     var body: some View {
-        Group {
-            if viewMode == .list {
-                MinifigsListView(minifigs: minifigs)
-            } else {
-                MinifigsIconView(minifigs: minifigs)
-            }
+        if viewMode == .list {
+            MinifigsListView(minifigs: minifigs)
+        } else {
+            MinifigsIconView(minifigs: minifigs)
         }
     }
 }

@@ -3,8 +3,8 @@
 //  BRIQ
 //
 
-import SwiftUI
 import CoreData
+import SwiftUI
 
 struct RenamePartsListSheet: View {
     @Environment(\.managedObjectContext) private var context
@@ -58,12 +58,10 @@ struct RenamePartsListSheet: View {
             return
         }
 
-        if trimmedName != partsList.name {
-            if PartsList.fetch(byName: trimmedName, in: context) != nil {
-                errorMessage = String(localized: "A parts list with this name already exists.")
-                showError = true
-                return
-            }
+        if trimmedName != partsList.name, PartsList.fetch(byName: trimmedName, in: context) != nil {
+            errorMessage = String(localized: "A parts list with this name already exists.")
+            showError = true
+            return
         }
 
         partsList.name = trimmedName

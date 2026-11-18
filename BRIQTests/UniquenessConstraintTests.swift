@@ -3,13 +3,13 @@
 //  BRIQTests
 //
 
-import Testing
 import CoreData
+import Testing
 @testable import BRIQ
 
 /// The identity attributes back `Identifiable.id`; the store must never hold
 /// two rows with the same value.
-@Suite @MainActor struct UniquenessConstraintTests {
+@MainActor struct UniquenessConstraintTests {
     enum Entity: String, CaseIterable {
         case set = "Set"
         case setUserData = "SetUserData"

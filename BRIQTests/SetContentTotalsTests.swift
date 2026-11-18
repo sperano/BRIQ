@@ -3,11 +3,11 @@
 //  BRIQTests
 //
 
-import Testing
 import CoreData
+import Testing
 @testable import BRIQ
 
-@Suite @MainActor struct SetContentTotalsTests {
+@MainActor struct SetContentTotalsTests {
     private let stack = CoreDataStack(inMemory: true)
 
     /// Saves a set holding one part line and one minifig line per quantity.
@@ -18,7 +18,13 @@ import CoreData
             year: 2000, imageURL: nil, partsCount: 0, themeID: 0
         )
         for (index, quantity) in partQuantities.enumerated() {
-            let part = Part.create(in: context, number: "\(number)-p\(index)", name: "Part", material: "Plastic", category: 0)
+            let part = Part.create(
+                in: context,
+                number: "\(number)-p\(index)",
+                name: "Part",
+                material: "Plastic",
+                category: 0
+            )
             SetPart.create(in: context, part: part, colorID: 0, quantity: quantity).set = set
         }
         for (index, quantity) in minifigQuantities.enumerated() {

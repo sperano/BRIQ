@@ -3,8 +3,8 @@
 //  BRIQ
 //
 
-import SwiftUI
 import CoreData
+import SwiftUI
 
 /// Context menu adding a set's part to an existing parts list, or asking for
 /// a new list through `partToAddAfterCreate`. The container presents that

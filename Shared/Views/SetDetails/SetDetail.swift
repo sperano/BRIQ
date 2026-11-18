@@ -5,18 +5,18 @@
 //  Created by Éric Spérano on 7/25/25.
 //
 
-import SwiftUI
 import CoreData
+import SwiftUI
 
 struct SetDetail: View {
     @ObservedObject var set: Set
-    var selectedSet: Binding<Set?>? = nil
+    var selectedSet: Binding<Set?>?
     @AppStorage("partsMinifigsViewMode") private var viewModeRaw: String = "icon"
 
     private var viewMode: ViewMode {
         ViewMode(rawValue: viewModeRaw) ?? .list
     }
-    
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {

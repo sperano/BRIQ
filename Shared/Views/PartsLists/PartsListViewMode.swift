@@ -11,15 +11,15 @@ enum PartsListViewMode: Int, CaseIterable {
 
     var displayName: String {
         switch self {
-        case .icon: return String(localized: "Icon", comment: "View mode")
-        case .table: return String(localized: "Table", comment: "View mode")
+        case .icon: String(localized: "Icon", comment: "View mode")
+        case .table: String(localized: "Table", comment: "View mode")
         }
     }
 
     var systemImage: String {
         switch self {
-        case .icon: return "grid.circle"
-        case .table: return "tablecells"
+        case .icon: "grid.circle"
+        case .table: "tablecells"
         }
     }
 }

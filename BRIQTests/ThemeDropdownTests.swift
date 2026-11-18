@@ -6,7 +6,7 @@
 import Testing
 @testable import BRIQ
 
-@Suite @MainActor struct ThemeDropdownTests {
+@MainActor struct ThemeDropdownTests {
     @Test func entryClearingTheFilterNamesAllThemes() {
         #expect(ThemeMenuItem.allThemesTitle(showingFavorites: false) == "All Themes")
     }
