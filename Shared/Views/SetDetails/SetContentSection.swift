@@ -19,24 +19,16 @@ struct SetContentSection: View {
     let set: Set
     let viewMode: ViewMode
     
-    private var totalMinifigs: Int {
-        return set.minifigsCount
-    }
-
-    private var totalParts: Int {
-        return set.actualPartsCount
-    }
-    
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             if set.minifigsCount > 0 {
-                Text(Self.minifigsHeading(count: totalMinifigs))
+                Text(Self.minifigsHeading(count: set.minifigsCount))
                     .font(.title2)
                     .fontWeight(.bold)
                 MinifigList(minifigs: (set.minifigs?.allObjects as? [SetMinifig]) ?? [], viewMode: viewMode)
             }
             if set.actualPartsCount > 0 {
-                Text(Self.partsHeading(count: totalParts))
+                Text(Self.partsHeading(count: set.actualPartsCount))
                     .font(.title2)
                     .fontWeight(.bold)
                 SetPartsDisplay(parts: (set.parts?.allObjects as? [SetPart]) ?? [], viewMode: viewMode)

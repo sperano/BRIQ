@@ -122,16 +122,20 @@ struct SetDetailFields: View {
     }
 
     private var numberRegion: String {
-        return set.isUSNumber
-            ? String(localized: "US", comment: "Region of a set number")
-            : String(localized: "International", comment: "Region of a set number")
+        if set.isUSNumber {
+            String(localized: "US", comment: "Region of a set number")
+        } else {
+            String(localized: "International", comment: "Region of a set number")
+        }
     }
 
     /// The short form of the region the same set's other number belongs to.
     private var sameAsNumberRegion: String {
-        return set.isUSNumber
-            ? String(localized: "Intl", comment: "Short region of a set number")
-            : String(localized: "US", comment: "Region of a set number")
+        if set.isUSNumber {
+            String(localized: "Intl", comment: "Short region of a set number")
+        } else {
+            String(localized: "US", comment: "Region of a set number")
+        }
     }
 
     private var sameAsRow: (label: LocalizedStringKey, value: AnyView)? {
