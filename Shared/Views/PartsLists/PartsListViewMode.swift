@@ -3,14 +3,16 @@
 //  BRIQ
 //
 
+import Foundation
+
 enum PartsListViewMode: Int, CaseIterable {
     case icon = 0
     case table = 1
 
     var displayName: String {
         switch self {
-        case .icon: return "Icon"
-        case .table: return "Table"
+        case .icon: return String(localized: "Icon", comment: "View mode")
+        case .table: return String(localized: "Table", comment: "View mode")
         }
     }
 

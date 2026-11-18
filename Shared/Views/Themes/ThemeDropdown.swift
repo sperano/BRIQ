@@ -70,9 +70,11 @@ struct ThemeDropdown: View {
         } label: {
             HStack(spacing: 4) {
                 Image(systemName: "tag")
-                Text(selectedTheme?.name ?? (onlyShowFavorites ? "Favorite Themes" : "All Themes"))
+                    .accessibilityHidden(true)
+                Text(selectedTheme?.name ?? ThemeMenuItem.allThemesTitle(showingFavorites: onlyShowFavorites))
                 Image(systemName: "chevron.down")
                     .font(.caption2)
+                    .accessibilityHidden(true)
             }
             .foregroundColor(.primary)
         }
@@ -87,10 +89,14 @@ struct ThemeMenuItem: Identifiable {
 
     var displayName: String {
         let prefix = String(repeating: "  ", count: indentLevel)
-        if theme == nil {
-            return prefix + (showingFavorites ? "Favorite Themes" : "All Themes")
-        }
-        return prefix + (theme?.name ?? "All Themes")
+        return prefix + (theme?.name ?? Self.allThemesTitle(showingFavorites: showingFavorites))
+    }
+
+    /// The menu entry that clears the theme filter.
+    static func allThemesTitle(showingFavorites: Bool) -> String {
+        showingFavorites
+            ? String(localized: "Favorite Themes", comment: "Theme menu entry clearing the theme filter")
+            : String(localized: "All Themes", comment: "Theme menu entry clearing the theme filter")
     }
 }
 

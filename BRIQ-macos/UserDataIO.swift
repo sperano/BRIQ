@@ -60,12 +60,23 @@ func showUserDataImportResult(_ result: Result<Int, Error>) {
     let alert = NSAlert()
     switch result {
     case .success(let count):
-        alert.messageText = "User Data Imported"
-        alert.informativeText = "Imported \(count) user data \(count == 1 ? "entry" : "entries")."
+        alert.messageText = String(localized: "User Data Imported")
+        alert.informativeText = userDataImportedMessage(count: count)
     case .failure(let error):
         alert.alertStyle = .warning
-        alert.messageText = "Could Not Import User Data"
-        alert.informativeText = "\(error.localizedDescription) Your existing user data was not changed."
+        alert.messageText = String(localized: "Could Not Import User Data")
+        alert.informativeText = userDataImportFailedMessage(error)
     }
     alert.runModal()
+}
+
+func userDataImportedMessage(count: Int) -> String {
+    String(localized: "Imported \(count) user data entries.", comment: "User data import alert")
+}
+
+func userDataImportFailedMessage(_ error: Error) -> String {
+    String(
+        localized: "\(error.localizedDescription) Your existing user data was not changed.",
+        comment: "User data import alert: the reason the import failed, then this reassurance"
+    )
 }

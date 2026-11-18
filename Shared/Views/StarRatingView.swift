@@ -11,28 +11,58 @@ struct StarRatingView: View {
     @Binding var rating: Int
     nonisolated static let maxRating = 5
     let isInteractive: Bool
-    
-    init(rating: Binding<Int>, isInteractive: Bool = true) {
+    /// What VoiceOver calls the rating.
+    let label: LocalizedStringKey
+
+    init(rating: Binding<Int>, isInteractive: Bool = true, label: LocalizedStringKey = "Rating") {
         self._rating = rating
         self.isInteractive = isInteractive
+        self.label = label
     }
-    
+
     var body: some View {
-        HStack(spacing: 4) {
+        let stars = HStack(spacing: 4) {
             ForEach(1...Self.maxRating, id: \.self) { star in
                 Image(systemName: star <= rating ? "star.fill" : "star")
                     .foregroundColor(star <= rating ? .yellow : .gray)
                     .onTapGesture {
                         if isInteractive {
-                            if rating == star {
-                                rating = 0  // Tap same star to clear
-                            } else {
-                                rating = star
-                            }
+                            rating = Self.rating(afterTapping: star, current: rating)
                         }
                     }
             }
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text(label))
+        .accessibilityValue(Self.valueDescription(rating: rating))
+
+        if isInteractive {
+            stars.accessibilityAdjustableAction { direction in
+                rating = Self.rating(adjusting: rating, direction)
+            }
+        } else {
+            stars
+        }
+    }
+
+    /// Tapping the star of the current rating clears it.
+    static func rating(afterTapping star: Int, current: Int) -> Int {
+        star == current ? 0 : star
+    }
+
+    /// VoiceOver's increment and decrement, kept within `0...maxRating`.
+    static func rating(adjusting rating: Int, _ direction: AccessibilityAdjustmentDirection) -> Int {
+        switch direction {
+        case .increment: return min(rating + 1, maxRating)
+        case .decrement: return max(rating - 1, 0)
+        @unknown default: return rating
+        }
+    }
+
+    static func valueDescription(rating: Int) -> String {
+        rating == 0
+            ? String(localized: "Not rated", comment: "Star rating of zero stars")
+            : String(localized: "\(rating) stars", comment: "Star rating")
     }
 }
 

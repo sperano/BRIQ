@@ -11,7 +11,7 @@ struct SettingsPopover: View {
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 NavigationLink {
                     settingsPage(OwnershipFiltersSettings(), title: "Ownership")
@@ -49,7 +49,7 @@ struct SettingsPopover: View {
         }
     }
 
-    private func settingsPage(_ page: some View, title: String) -> some View {
+    private func settingsPage(_ page: some View, title: LocalizedStringKey) -> some View {
         page
             .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)

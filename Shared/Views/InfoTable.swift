@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct InfoTableRow<Value: View>: View {
-    let label: String
+    let label: LocalizedStringKey
     let value: Value
     
     var body: some View {
@@ -24,7 +24,7 @@ struct InfoTableRow<Value: View>: View {
 }
 
 struct InfoTable: View {
-    let rows: [(label: String, value: AnyView)?]
+    let rows: [(label: LocalizedStringKey, value: AnyView)?]
 
     var body: some View {
         VStack(spacing: 0) {

@@ -198,11 +198,11 @@ enum CoreDataError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .storeNotFound:
-            return "Core Data store not found"
+            return String(localized: "Core Data store not found")
         case .saveFailed(let error):
-            return "Core Data save failed: \(error.localizedDescription)"
+            return String(localized: "Core Data save failed: \(error.localizedDescription)")
         case .fetchFailed(let error):
-            return "Core Data fetch failed: \(error.localizedDescription)"
+            return String(localized: "Core Data fetch failed: \(error.localizedDescription)")
         }
     }
 }

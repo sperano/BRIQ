@@ -50,7 +50,7 @@ public class Set: NSManagedObject, Identifiable, Comparable {
     var themeName: String {
         let index = Int(themeID)
         guard index >= 0 && index < AllThemes.count else {
-            return "Unknown"
+            return String(localized: "Unknown")
         }
         return AllThemes[index].name
     }

@@ -99,53 +99,75 @@ struct SetDetailFields: View {
     var body: some View {
         VStack(alignment: .leading) {
             InfoTable(rows: [
-                ("Number", AnyView(Text("\(set.number) (\(set.isUSNumber ? "US" : "International"))"))),
+                ("Number", AnyView(Text("\(set.number) (\(numberRegion))"))),
                 ("Name", AnyView(Text(set.name))),
-                set.sameAsNumber == nil ? nil : ("Same as set", AnyView(
-                    Group {
-                        if let sameAsSet = findSetByNumber(set.sameAsNumber!) {
-                            if let selectedSetBinding = selectedSet {
-                                Button(action: {
-                                    selectedSetBinding.wrappedValue = sameAsSet
-                                }) {
-                                    Text("\(set.sameAsNumber!) (\(set.isUSNumber ? "Intl" : "US")): \(sameAsSet.name)")
-                                        .foregroundColor(.blue)
-                                }
-                                .buttonStyle(.plain)
-                            } else {
-                                SetDetailNavigationLink(set: sameAsSet, selectedSet: selectedSet) {
-                                    Text("\(set.sameAsNumber!) (\(set.isUSNumber ? "Intl" : "US")): \(sameAsSet.name)")
-                                        .foregroundColor(.blue)
-                                }
-                            }
-                        } else {
-                            Text(set.sameAsNumber!)
-                                .foregroundColor(.secondary)
-                        }
-                    }
-                )),
+                sameAsRow,
                 ("Year Released", AnyView(Text(String(set.year)))),
                 ("Pieces", AnyView(Text("\(set.partsCount)"))),
                 ("Theme", AnyView(Text(set.themeName))),
-                ("In Collection", AnyView(
-                    Toggle("", isOn: ownedBinding)
-                )),
-                ("Favorite", AnyView(
-                    Toggle("", isOn: favoriteBinding)
-                )),
-                ("Has Instructions", AnyView(
-                    Toggle("", isOn: ownsInstructionsBinding)
-                )),
+                toggleRow("In Collection", isOn: ownedBinding),
+                toggleRow("Favorite", isOn: favoriteBinding),
+                toggleRow("Has Instructions", isOn: ownsInstructionsBinding),
                 ("Instr. Quality", AnyView(
                     StarRatingView(
                         rating: instructionsQualityBinding,
-                        isInteractive: userData?.ownsInstructions ?? false
+                        isInteractive: userData?.ownsInstructions ?? false,
+                        label: "Instructions Quality"
                     )
                     .opacity((userData?.ownsInstructions ?? false) ? 1.0 : 0.5)
                 )),
             ])
             SetExternalLinks(set: set)
         }
+    }
+
+    private var numberRegion: String {
+        return set.isUSNumber
+            ? String(localized: "US", comment: "Region of a set number")
+            : String(localized: "International", comment: "Region of a set number")
+    }
+
+    /// The short form of the region the same set's other number belongs to.
+    private var sameAsNumberRegion: String {
+        return set.isUSNumber
+            ? String(localized: "Intl", comment: "Short region of a set number")
+            : String(localized: "US", comment: "Region of a set number")
+    }
+
+    private var sameAsRow: (label: LocalizedStringKey, value: AnyView)? {
+        guard let sameAsNumber = set.sameAsNumber else { return nil }
+        return ("Same as set", AnyView(sameAsLink(sameAsNumber)))
+    }
+
+    @ViewBuilder
+    private func sameAsLink(_ sameAsNumber: String) -> some View {
+        if let sameAsSet = findSetByNumber(sameAsNumber) {
+            if let selectedSetBinding = selectedSet {
+                Button(action: {
+                    selectedSetBinding.wrappedValue = sameAsSet
+                }) {
+                    Text("\(sameAsNumber) (\(sameAsNumberRegion)): \(sameAsSet.name)")
+                        .foregroundColor(.blue)
+                }
+                .buttonStyle(.plain)
+            } else {
+                SetDetailNavigationLink(set: sameAsSet, selectedSet: selectedSet) {
+                    Text("\(sameAsNumber) (\(sameAsNumberRegion)): \(sameAsSet.name)")
+                        .foregroundColor(.blue)
+                }
+            }
+        } else {
+            Text(sameAsNumber)
+                .foregroundColor(.secondary)
+        }
+    }
+
+    /// The row's label also names the toggle for VoiceOver; the table shows it once.
+    private func toggleRow(
+        _ label: LocalizedStringKey,
+        isOn: Binding<Bool>
+    ) -> (label: LocalizedStringKey, value: AnyView) {
+        (label, AnyView(Toggle(label, isOn: isOn).labelsHidden()))
     }
 }
 

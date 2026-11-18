@@ -28,7 +28,7 @@ class PartColor: Identifiable, Sendable {
 
     /// Stands in for a color id outside `AllPartColors`.
     static let unknown = PartColor(
-        name: "Unknown", rgb: "000000", isTransparent: false,
+        name: String(localized: "Unknown"), rgb: "000000", isTransparent: false,
         partsCount: 0, setsCount: 0, year1: nil, year2: nil
     )
 

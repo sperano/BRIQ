@@ -90,7 +90,7 @@ struct EditPartsListPartSheet: View {
             try context.saveOrRollback()
             dismiss()
         } catch {
-            errorMessage = "Failed to save: \(error.localizedDescription)"
+            errorMessage = String(localized: "Failed to save: \(error.localizedDescription)")
             showError = true
         }
     }
@@ -109,7 +109,7 @@ private struct PartHeader: View {
                 .frame(height: Self.imageHeight)
 
             VStack(spacing: 4) {
-                Text(partsListPart.part?.name ?? "Unknown Part")
+                Text(partsListPart.part?.name ?? String(localized: "Unknown Part"))
                     .font(.headline)
                     .multilineTextAlignment(.center)
 
@@ -185,6 +185,7 @@ private struct ColorRow: View {
                     Image(systemName: "chevron.right")
                         .font(.caption)
                         .foregroundStyle(.tertiary)
+                        .accessibilityHidden(true)
                 }
             }
             .contentShape(Rectangle())

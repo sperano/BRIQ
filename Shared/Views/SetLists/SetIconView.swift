@@ -63,15 +63,19 @@ struct SetIconView: View {
                     Image(systemName: "heart.fill")
                         .foregroundColor(.red)
                         .font(.system(size: max(13, size/12)))
+                        .accessibilityLabel("Favorite")
                 }
                 if set.userData?.owned == true {
                     Image(systemName: "checkmark.circle.fill")
                         .foregroundColor(.green)
                         .font(.system(size: max(13, size/12)))
+                        .accessibilityLabel("Owned")
                 }
             }
             .padding(max(2, size/30))
         }
+        // One element: number, name, then the favorite and owned badges.
+        .accessibilityElement(children: .combine)
     }
 }
 

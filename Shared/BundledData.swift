@@ -64,7 +64,7 @@ enum BundledDataError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .archiveMissing:
-            return "The bundled LEGO database archive is missing."
+            return String(localized: "The bundled LEGO database archive is missing.")
         }
     }
 }

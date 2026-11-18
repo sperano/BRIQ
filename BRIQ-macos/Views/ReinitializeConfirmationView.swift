@@ -23,6 +23,7 @@ public struct ReinitializeConfirmationView: View {
             Image(systemName: "exclamationmark.triangle")
                 .font(.largeTitle)
                 .foregroundColor(.orange)
+                .accessibilityHidden(true)
             
             Text("Re-Initialize Database")
                 .font(.headline)
@@ -39,6 +40,7 @@ public struct ReinitializeConfirmationView: View {
                     HStack {
                         Image(systemName: "exclamationmark.triangle.fill")
                             .foregroundColor(.orange)
+                            .accessibilityHidden(true)
                         Text("User data (favorites, owned sets) will be lost.")
                     }
                     .font(.caption)

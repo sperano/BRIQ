@@ -24,8 +24,8 @@ struct PartsIconView: View {
             items: parts,
             imageURL: { $0.imageURL },
             quantity: { Int($0.quantity) },
-            number: { $0.part?.number ?? "Unknown" },
-            name: { $0.part?.name ?? "Unknown Part" }
+            number: { $0.part?.number ?? String(localized: "Unknown") },
+            name: { $0.part?.name ?? String(localized: "Unknown Part") }
         ) { setPart in
             AddToPartsListMenu(setPart: setPart, partsLists: partsLists, partToAddAfterCreate: $partToAddAfterCreate)
         }

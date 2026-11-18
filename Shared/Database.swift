@@ -81,19 +81,21 @@ nonisolated enum UserDataImportError: LocalizedError, Equatable {
     var errorDescription: String? {
         switch self {
         case .notUTF8:
-            return "The user data file is not UTF-8 text."
+            return String(localized: "The user data file is not UTF-8 text.")
         case .malformed(let detail):
-            return "The user data file is not valid: \(detail)"
+            return String(localized: "The user data file is not valid: \(detail)")
         case .unsupportedVersion(let version):
-            return "User data version \(version) is not supported."
+            return String(localized: "User data version \(version) is not supported.")
         case .emptyNumber:
-            return "The user data file contains an entry without a set number."
+            return String(localized: "The user data file contains an entry without a set number.")
         case .duplicateNumber(let number):
-            return "The user data file lists set \(number) more than once."
+            return String(localized: "The user data file lists set \(number) more than once.")
         case .invalidInstructionsQuality(let number, let value):
-            return "Set \(number) has an instructions rating of \(value); expected "
-                + "\(UserDataExport.Entry.instructionsQualityRange.lowerBound)"
-                + "–\(UserDataExport.Entry.instructionsQualityRange.upperBound)."
+            let range = UserDataExport.Entry.instructionsQualityRange
+            return String(
+                localized: "Set \(number) has an instructions rating of \(value); expected \(range.lowerBound)–\(range.upperBound).",
+                comment: "User data import error: an out-of-range instructions rating and the accepted range"
+            )
         }
     }
 }
@@ -150,17 +152,19 @@ func decodeUserDataExport(_ jsonString: String) throws -> UserDataExport {
 private func describe(_ error: DecodingError) -> String {
     func path(_ context: DecodingError.Context) -> String {
         let path = context.codingPath.map { $0.intValue.map { "[\($0)]" } ?? ".\($0.stringValue)" }.joined()
-        return path.isEmpty ? "the top level" : String(path.drop { $0 == "." })
+        return path.isEmpty
+            ? String(localized: "the top level", comment: "Where in the user data file a value is invalid")
+            : String(path.drop { $0 == "." })
     }
     switch error {
     case .dataCorrupted(let context) where context.codingPath.isEmpty:
-        return "it is not JSON."
+        return String(localized: "it is not JSON.", comment: "Ends \"The user data file is not valid: %@\"")
     case .dataCorrupted(let context):
-        return "the value at \(path(context)) is invalid."
+        return String(localized: "the value at \(path(context)) is invalid.", comment: "Ends \"The user data file is not valid: %@\"")
     case .keyNotFound(let key, let context):
-        return "\"\(key.stringValue)\" is missing at \(path(context))."
+        return String(localized: "\"\(key.stringValue)\" is missing at \(path(context)).", comment: "Ends \"The user data file is not valid: %@\"")
     case .typeMismatch(_, let context), .valueNotFound(_, let context):
-        return "the value at \(path(context)) has the wrong type."
+        return String(localized: "the value at \(path(context)) has the wrong type.", comment: "Ends \"The user data file is not valid: %@\"")
     @unknown default:
         return error.localizedDescription
     }

@@ -33,14 +33,16 @@ struct SetListStatusBar: View {
     }
 
     /// The set count, followed by the minifig and part totals once they are known.
+    /// The singular and plural forms come from the String Catalog.
     static func summary(setCount: Int, totals: SetContentTotals?) -> String {
-        let setsText = counted(setCount, "set")
-        guard let totals else { return setsText }
-        return "\(setsText), \(counted(totals.minifigs, "minifig")) and \(counted(totals.parts, "part"))"
-    }
-
-    private static func counted(_ count: Int, _ noun: String) -> String {
-        "\(count) \(noun)\(count == 1 ? "" : "s")"
+        let sets = String(localized: "\(setCount) sets", comment: "Number of sets")
+        guard let totals else { return sets }
+        let minifigs = String(localized: "\(totals.minifigs) minifigs", comment: "Number of minifigs")
+        let parts = String(localized: "\(totals.parts) parts", comment: "Number of parts")
+        return String(
+            localized: "\(sets), \(minifigs) and \(parts)",
+            comment: "Set list status bar: the set count, then the minifig and part totals"
+        )
     }
 
     private func loadTotals(forSetIDs setIDs: [NSManagedObjectID]) async {
