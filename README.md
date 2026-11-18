@@ -28,10 +28,11 @@ A cross-platform SwiftUI application for iOS and macOS that manages personal LEG
 
 ### Building from Source
 
-1. Clone the repository
-2. Open `BRIQ.xcodeproj` in Xcode
-3. Select your target platform (BRIQ-ios or BRIQ-macos)
-4. Build and run (⌘+B to build, ⌘+R to run)
+1. Install [Git LFS](https://git-lfs.com) and run `git lfs install` (once per machine) before cloning; `Resources/init.zip` is stored in LFS, and without it the clone gets a pointer file instead of the database and first launch fails
+2. Clone the repository
+3. Open `BRIQ.xcodeproj` in Xcode
+4. Select your target platform (BRIQ-ios or BRIQ-macos)
+5. Build and run (⌘+B to build, ⌘+R to run)
 
 ### First Launch
 

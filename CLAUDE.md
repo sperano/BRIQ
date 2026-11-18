@@ -50,6 +50,7 @@ All models are defined in `Shared/CoreData/` with the versioned data model at `S
 The identity attributes behind each `Identifiable.id` carry uniqueness constraints: `number` on `Set`, `SetUserData`, `Part` and `Minifig`, `name` on `PartsList`.
 
 ### Database Initialization
+- `Resources/init.zip` is stored in Git LFS: `git lfs install` before cloning, otherwise the checkout gets a 133-byte pointer instead of the zip and the first-launch import fails
 - First launch loads data from bundled `init.zip` file containing comprehensive LEGO database
 - `ContentView.swift` triggers `DatabaseInitializer.initializeIfNeeded()`, which calls `BundledData.loadAll(from:into:progress:)`
 - Progress tracking shows loading status to user
