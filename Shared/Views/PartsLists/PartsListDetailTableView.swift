@@ -29,7 +29,7 @@ extension PartCategory {
         // Convert camelCase to Title Case with spaces
         var result = ""
         for char in name {
-            if char.isUppercase && !result.isEmpty {
+            if char.isUppercase, !result.isEmpty {
                 result += " "
             }
             result += String(char)
@@ -100,7 +100,8 @@ struct PartsListDetailTableView: View {
         }
         .contextMenu(forSelectionType: PartsListPart.ID.self) { selection in
             if let partId = selection.first,
-               let part = parts.first(where: { $0.id == partId }) {
+               let part = parts.first(where: { $0.id == partId })
+            {
                 Button {
                     onEdit(part)
                 } label: {

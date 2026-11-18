@@ -5,8 +5,8 @@
 //  Created by Éric Spérano on 9/11/25.
 //
 
-import Foundation
 import CoreData
+import Foundation
 import OSLog
 
 /// The on-disk format of exported user data.
@@ -64,7 +64,10 @@ nonisolated struct UserDataExport: Codable, Equatable {
                 throw UserDataImportError.duplicateNumber(entry.number)
             }
             guard Entry.instructionsQualityRange.contains(entry.instructionsQuality) else {
-                throw UserDataImportError.invalidInstructionsQuality(number: entry.number, value: entry.instructionsQuality)
+                throw UserDataImportError.invalidInstructionsQuality(
+                    number: entry.number,
+                    value: entry.instructionsQuality
+                )
             }
         }
     }
@@ -160,11 +163,20 @@ private func describe(_ error: DecodingError) -> String {
     case .dataCorrupted(let context) where context.codingPath.isEmpty:
         return String(localized: "it is not JSON.", comment: "Ends \"The user data file is not valid: %@\"")
     case .dataCorrupted(let context):
-        return String(localized: "the value at \(path(context)) is invalid.", comment: "Ends \"The user data file is not valid: %@\"")
+        return String(
+            localized: "the value at \(path(context)) is invalid.",
+            comment: "Ends \"The user data file is not valid: %@\""
+        )
     case .keyNotFound(let key, let context):
-        return String(localized: "\"\(key.stringValue)\" is missing at \(path(context)).", comment: "Ends \"The user data file is not valid: %@\"")
+        return String(
+            localized: "\"\(key.stringValue)\" is missing at \(path(context)).",
+            comment: "Ends \"The user data file is not valid: %@\""
+        )
     case .typeMismatch(_, let context), .valueNotFound(_, let context):
-        return String(localized: "the value at \(path(context)) has the wrong type.", comment: "Ends \"The user data file is not valid: %@\"")
+        return String(
+            localized: "the value at \(path(context)) has the wrong type.",
+            comment: "Ends \"The user data file is not valid: %@\""
+        )
     @unknown default:
         return error.localizedDescription
     }

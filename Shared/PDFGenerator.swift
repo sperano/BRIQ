@@ -3,15 +3,17 @@
 //  BRIQ
 //
 
-import Foundation
 import CoreGraphics
+import Foundation
 import OSLog
 
 #if os(macOS)
 import AppKit
+
 typealias PlatformImage = NSImage
 #else
 import UIKit
+
 typealias PlatformImage = UIImage
 #endif
 
@@ -23,11 +25,11 @@ enum PDFGeneratorError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .noImages:
-            return String(localized: "No images to export")
+            String(localized: "No images to export")
         case .pdfCreationFailed:
-            return String(localized: "Failed to create PDF")
+            String(localized: "Failed to create PDF")
         case .imageDownloadFailed(let url):
-            return String(localized: "Failed to download image: \(url)")
+            String(localized: "Failed to download image: \(url)")
         }
     }
 }
@@ -46,9 +48,9 @@ actor PDFGenerator {
     private let loader: ImageLoader
 
     // US Letter size in points (72 points per inch)
-    private let pageWidth: CGFloat = 612  // 8.5 inches
+    private let pageWidth: CGFloat = 612 // 8.5 inches
     private let pageHeight: CGFloat = 792 // 11 inches
-    private let margin: CGFloat = 36      // 0.5 inch margin
+    private let margin: CGFloat = 36 // 0.5 inch margin
 
     /// `imageURLs` holds one entry per cell; a nil entry leaves its cell empty.
     init(imageURLs: [URL?], columns: Int, loader: ImageLoader = .shared) {
@@ -73,7 +75,8 @@ actor PDFGenerator {
         var mediaBox = CGRect(x: 0, y: 0, width: pageWidth, height: pageHeight)
 
         guard let consumer = CGDataConsumer(data: pdfData as CFMutableData),
-              let pdfContext = CGContext(consumer: consumer, mediaBox: &mediaBox, nil) else {
+              let pdfContext = CGContext(consumer: consumer, mediaBox: &mediaBox, nil)
+        else {
             throw PDFGeneratorError.pdfCreationFailed
         }
 
@@ -143,14 +146,17 @@ actor PDFGenerator {
             let y = pageHeight - margin - CGFloat(row + 1) * cellSize
 
             let imageRect = CGRect(x: x, y: y, width: cellSize, height: cellSize)
-            let fittedRect = fitImageRect(imageSize: CGSize(width: cgImage.width, height: cgImage.height), in: imageRect)
+            let fittedRect = fitImageRect(
+                imageSize: CGSize(width: cgImage.width, height: cgImage.height),
+                in: imageRect
+            )
             pdfContext.draw(cgImage, in: fittedRect)
         }
     }
 
     /// A cell whose image fails to download stays empty; cancellation is rethrown.
     private func downloadImages(_ urls: [URL?], maxPixelSize: Int) async throws -> [CGImage?] {
-        let loader = self.loader
+        let loader = loader
         return try await urls.concurrentMap(maxConcurrent: Self.maxConcurrentDownloads) { url -> CGImage? in
             guard let url else { return nil }
             do {
@@ -172,13 +178,12 @@ actor PDFGenerator {
         let imageAspect = imageSize.width / imageSize.height
         let rectAspect = availableRect.width / availableRect.height
 
-        var fittedSize: CGSize
-        if imageAspect > rectAspect {
+        var fittedSize = if imageAspect > rectAspect {
             // Image is wider than rect
-            fittedSize = CGSize(width: availableRect.width, height: availableRect.width / imageAspect)
+            CGSize(width: availableRect.width, height: availableRect.width / imageAspect)
         } else {
             // Image is taller than rect
-            fittedSize = CGSize(width: availableRect.height * imageAspect, height: availableRect.height)
+            CGSize(width: availableRect.height * imageAspect, height: availableRect.height)
         }
 
         let x = availableRect.midX - fittedSize.width / 2

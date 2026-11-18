@@ -8,21 +8,21 @@
 import Foundation
 
 enum SetListSortOrder: String, CaseIterable {
-    case year = "year"
-    case number = "number"
-    case name = "name"
-    case partsCount = "partsCount"
+    case year
+    case number
+    case name
+    case partsCount
 
     var displayName: String {
         switch self {
         case .year:
-            return String(localized: "Year", comment: "Sort order")
+            String(localized: "Year", comment: "Sort order")
         case .number:
-            return String(localized: "Number", comment: "Sort order")
+            String(localized: "Number", comment: "Sort order")
         case .name:
-            return String(localized: "Name", comment: "Sort order")
+            String(localized: "Name", comment: "Sort order")
         case .partsCount:
-            return String(localized: "Parts Count", comment: "Sort order")
+            String(localized: "Parts Count", comment: "Sort order")
         }
     }
 
@@ -32,25 +32,25 @@ enum SetListSortOrder: String, CaseIterable {
         // to sortKey 0.
         switch self {
         case .year:
-            return [
+            [
                 NSSortDescriptor(key: "year", ascending: true),
                 NSSortDescriptor(key: "sortKey", ascending: true),
-                NSSortDescriptor(key: "number", ascending: true)
+                NSSortDescriptor(key: "number", ascending: true),
             ]
         case .number:
-            return [
+            [
                 NSSortDescriptor(key: "sortKey", ascending: true),
-                NSSortDescriptor(key: "number", ascending: true)
+                NSSortDescriptor(key: "number", ascending: true),
             ]
         case .name:
-            return [
+            [
                 NSSortDescriptor(key: "name", ascending: true),
-                NSSortDescriptor(key: "sortKey", ascending: true)
+                NSSortDescriptor(key: "sortKey", ascending: true),
             ]
         case .partsCount:
-            return [
+            [
                 NSSortDescriptor(key: "partsCount", ascending: false), // Descending for parts count (most parts first)
-                NSSortDescriptor(key: "sortKey", ascending: true)
+                NSSortDescriptor(key: "sortKey", ascending: true),
             ]
         }
     }

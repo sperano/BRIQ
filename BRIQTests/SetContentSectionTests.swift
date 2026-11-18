@@ -6,7 +6,7 @@
 import Testing
 @testable import BRIQ
 
-@Suite @MainActor struct SetContentSectionTests {
+@MainActor struct SetContentSectionTests {
     @Test func minifigsHeadingUsesTheSingularForOne() {
         #expect(SetContentSection.minifigsHeading(count: 1) == "1 mini-figurine:")
     }

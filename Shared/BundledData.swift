@@ -5,8 +5,8 @@
 //  Created by Éric Spérano on 9/11/25.
 //
 
-import Foundation
 import CoreData
+import Foundation
 import OSLog
 import ZIPFoundation
 
@@ -64,12 +64,12 @@ enum BundledDataError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .archiveMissing:
-            return String(localized: "The bundled LEGO database archive is missing.")
+            String(localized: "The bundled LEGO database archive is missing.")
         }
     }
 }
 
-struct BundledData {
+enum BundledData {
     static let setImportBatchSize = 500
 
     static func bundledArchiveURL() throws -> URL {

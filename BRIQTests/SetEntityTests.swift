@@ -3,11 +3,11 @@
 //  BRIQTests
 //
 
-import Testing
 import CoreData
+import Testing
 @testable import BRIQ
 
-@Suite struct SortKeyTests {
+struct SortKeyTests {
     @Test func plainNumber() {
         #expect(Set.sortKey(forNumber: "6080") == 6_080_000)
     }
@@ -36,7 +36,7 @@ import CoreData
     }
 }
 
-@Suite @MainActor struct SetComputedPropertyTests {
+@MainActor struct SetComputedPropertyTests {
     let stack = CoreDataStack(inMemory: true)
 
     @Test func baseNumberStripsVariantSuffix() {

@@ -3,11 +3,11 @@
 //  BRIQTests
 //
 
-import Testing
 import Foundation
+import Testing
 @testable import BRIQ
 
-@Suite struct PDFDataDocumentTests {
+struct PDFDataDocumentTests {
     @Test func roundTripsThroughAFileWrapper() throws {
         let data = Data("not a real PDF, just test bytes".utf8)
 

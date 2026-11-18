@@ -13,7 +13,7 @@ import CoreData
 struct SetIconView: View {
     @ObservedObject var set: Set
     var size: CGFloat = IconSize.defaultSize
-    
+
     var body: some View {
         VStack(spacing: 4) {
             ThumbnailImage(url: set.imageURL.flatMap(URL.init(string:)), size: size) { phase in
@@ -36,19 +36,19 @@ struct SetIconView: View {
                 }
             }
             .frame(width: size, height: size)
-            .clipShape(RoundedRectangle(cornerRadius: max(4, size/15)))
+            .clipShape(RoundedRectangle(cornerRadius: max(4, size / 15)))
             .overlay(
-                RoundedRectangle(cornerRadius: max(4, size/15))
+                RoundedRectangle(cornerRadius: max(4, size / 15))
                     .stroke(Color.gray.opacity(0.4), lineWidth: 0.5)
             )
-            
-            VStack(spacing: max(1, size/60)) {
+
+            VStack(spacing: max(1, size / 60)) {
                 Text(set.baseNumber)
                     .font(size < 100 ? .caption2 : .caption)
                     .fontWeight(.medium)
                     .foregroundColor(.primary)
                     .lineLimit(1)
-                
+
                 Text(set.name)
                     .font(size < 100 ? .system(size: 10) : .caption2)
                     .foregroundColor(.secondary)
@@ -58,21 +58,21 @@ struct SetIconView: View {
             .frame(width: size)
         }
         .overlay(alignment: .topTrailing) {
-            HStack(spacing: max(1, size/60)) {
+            HStack(spacing: max(1, size / 60)) {
                 if set.userData?.favorite == true {
                     Image(systemName: "heart.fill")
                         .foregroundColor(.red)
-                        .font(.system(size: max(13, size/12)))
+                        .font(.system(size: max(13, size / 12)))
                         .accessibilityLabel("Favorite")
                 }
                 if set.userData?.owned == true {
                     Image(systemName: "checkmark.circle.fill")
                         .foregroundColor(.green)
-                        .font(.system(size: max(13, size/12)))
+                        .font(.system(size: max(13, size / 12)))
                         .accessibilityLabel("Owned")
                 }
             }
-            .padding(max(2, size/30))
+            .padding(max(2, size / 30))
         }
         // One element: number, name, then the favorite and owned badges.
         .accessibilityElement(children: .combine)

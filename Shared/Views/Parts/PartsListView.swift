@@ -5,8 +5,8 @@
 //  Created by Éric Spérano on 7/25/25.
 //
 
-import SwiftUI
 import CoreData
+import SwiftUI
 
 struct PartsListView: View {
     let parts: [SetPart]
@@ -24,7 +24,11 @@ struct PartsListView: View {
             ForEach(parts) { part in
                 PartRow(part: part)
                     .contextMenu {
-                        AddToPartsListMenu(setPart: part, partsLists: partsLists, partToAddAfterCreate: $partToAddAfterCreate)
+                        AddToPartsListMenu(
+                            setPart: part,
+                            partsLists: partsLists,
+                            partToAddAfterCreate: $partToAddAfterCreate
+                        )
                     }
             }
         }

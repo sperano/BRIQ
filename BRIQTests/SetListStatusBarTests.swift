@@ -6,7 +6,7 @@
 import Testing
 @testable import BRIQ
 
-@Suite @MainActor struct SetListStatusBarTests {
+@MainActor struct SetListStatusBarTests {
     @Test func showsOnlyTheSetCountUntilTheTotalsAreKnown() {
         #expect(SetListStatusBar.summary(setCount: 12, totals: nil) == "12 sets")
     }

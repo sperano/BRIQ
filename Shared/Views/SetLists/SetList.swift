@@ -5,8 +5,8 @@
 //  Created by Éric Spérano on 9/11/25.
 //
 
-import SwiftUI
 import CoreData
+import SwiftUI
 
 /// Owns the filter/sort state and rebuilds the fetch request's predicate and
 /// sort descriptors in one place; `SetListContent` re-fetches whenever they
@@ -153,7 +153,7 @@ private struct SetListContent: View {
             }
             .navigationTitle("Sets")
             SetListStatusBar(sets: setsArray)
-            .padding()
+                .padding()
         }
     }
 }

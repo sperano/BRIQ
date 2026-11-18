@@ -36,7 +36,7 @@ struct RowImage: View {
 
 struct SetRow: View {
     var set: Set
-    
+
     var body: some View {
         HStack {
             RowImage(url: set.imageURL)

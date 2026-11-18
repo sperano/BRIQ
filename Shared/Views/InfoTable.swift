@@ -10,7 +10,7 @@ import SwiftUI
 struct InfoTableRow<Value: View>: View {
     let label: LocalizedStringKey
     let value: Value
-    
+
     var body: some View {
         HStack {
             Text(label)
@@ -28,21 +28,22 @@ struct InfoTable: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            let unwrappedRows = rows.compactMap { $0 }
+            let unwrappedRows = rows.compactMap(\.self)
             ForEach(Array(unwrappedRows.enumerated()), id: \.0) { index, row in
                 InfoTableRow(label: row.label, value: row.value)
                     .background(
                         index.isMultiple(of: 2) ?
-                            Color(.systemGray).opacity(0.1) : Color(.systemGray).opacity(0.3))
+                            Color(.systemGray).opacity(0.1) : Color(.systemGray).opacity(0.3)
+                    )
             }
         }
         .clipShape(RoundedRectangle(cornerRadius: 12))
         .overlay(
-            RoundedRectangle(cornerRadius: 12)  
+            RoundedRectangle(cornerRadius: 12)
                 .stroke(Color.gray.opacity(0.3), lineWidth: 1)
         )
         .shadow(radius: 2)
-        //.padding()
+        // .padding()
     }
 }
 

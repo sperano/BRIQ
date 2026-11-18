@@ -3,11 +3,11 @@
 //  BRIQTests
 //
 
-import Testing
 import CoreData
+import Testing
 @testable import BRIQ
 
-@Suite @MainActor struct SetListFilterTests {
+@MainActor struct SetListFilterTests {
     let stack = CoreDataStack(inMemory: true)
 
     init() throws {

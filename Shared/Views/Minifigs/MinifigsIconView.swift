@@ -12,7 +12,7 @@ import CoreData
 
 struct MinifigsIconView: View {
     let minifigs: [SetMinifig]
-    
+
     var body: some View {
         IconGridView(
             items: minifigs,

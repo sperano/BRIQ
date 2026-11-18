@@ -35,7 +35,7 @@ struct SetListFilter {
             predicates.append(favoritePredicate)
         }
 
-        if let selectedTheme = selectedTheme {
+        if let selectedTheme {
             var themeIDs = selectedTheme.getAllThemeIDs()
             // If filtering by favorites, only include favorite themes from the hierarchy
             if filterFavoriteThemes {

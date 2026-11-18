@@ -5,12 +5,12 @@
 //  Created by Éric Spérano on 7/25/25.
 //
 
-import SwiftUI
 import CoreData
+import SwiftUI
 
 struct SetDetailFields: View {
     @ObservedObject var set: Set
-    var selectedSet: Binding<Set?>? = nil
+    var selectedSet: Binding<Set?>?
     @Environment(\.managedObjectContext) private var context
     @EnvironmentObject private var coreDataStack: CoreDataStack
 
@@ -93,7 +93,7 @@ struct SetDetailFields: View {
     }
 
     private func findSetByNumber(_ number: String) -> Set? {
-        return Set.fetch(byNumber: number, in: context)
+        Set.fetch(byNumber: number, in: context)
     }
 
     var body: some View {

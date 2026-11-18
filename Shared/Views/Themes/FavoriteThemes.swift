@@ -11,10 +11,10 @@ extension Array {
     var optional: [Element]? { isEmpty ? nil : self }
 }
 
-struct ThemeRow:  View {
+struct ThemeRow: View {
     let theme: Theme
     @Binding var selected: Swift.Set<Int>
-    
+
     var body: some View {
         HStack {
             Text(theme.name)
@@ -39,25 +39,25 @@ struct ThemeRow:  View {
 }
 
 struct FavoriteThemes: View {
-    //@State private var selected: Swift.Set<Int> = []
+    // @State private var selected: Swift.Set<Int> = []
     @State private var searchText = ""
     @AppStorage("onlyShowFavoriteThemes") private var onlyShowFavorites: Bool = false
 
     @AppStorage("favoriteThemes") private var favoriteThemesString: String = ""
     @State private var selectedSet: Swift.Set<Int> = []
-    
+
     init() {
         _selectedSet = State(initialValue: Swift.Set(
             favoriteThemesString
                 .split(separator: ",")
-                .compactMap { Int($0) })
-        )
+                .compactMap { Int($0) }
+        ))
     }
-    
+
     private func saveSelected() {
         favoriteThemesString = selectedSet.map(String.init).joined(separator: ",")
     }
-    
+
     var selectedBinding: Binding<Swift.Set<Int>> {
         Binding(
             get: { selectedSet },
@@ -84,17 +84,16 @@ struct FavoriteThemes: View {
     }
 
     var searchResults: [Theme] {
-        return ThemesTree.filter { theme in
+        ThemesTree.filter { theme in
             (!onlyShowFavorites || hasSelectedDescendant(theme)) &&
-            (searchText.isEmpty || theme.name.localizedCaseInsensitiveContains(searchText))
+                (searchText.isEmpty || theme.name.localizedCaseInsensitiveContains(searchText))
         }
     }
-    
+
     func hasSelectedDescendant(_ theme: Theme) -> Bool {
         if selectedSet.contains(theme.id) { return true }
         return theme.children.contains(where: hasSelectedDescendant)
     }
-
 }
 
 #Preview {

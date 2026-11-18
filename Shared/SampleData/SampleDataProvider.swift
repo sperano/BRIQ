@@ -6,8 +6,8 @@
 //
 
 #if DEBUG
-import Foundation
 import CoreData
+import Foundation
 
 class SampleDataProvider {
     static let shared = SampleDataProvider()
@@ -21,7 +21,7 @@ class SampleDataProvider {
         container.persistentStoreDescriptions = [description]
 
         container.loadPersistentStores { _, error in
-            if let error = error {
+            if let error {
                 fatalError("Sample data container failed to load: \(error)")
             }
         }
@@ -33,7 +33,7 @@ class SampleDataProvider {
     }()
 
     var viewContext: NSManagedObjectContext {
-        return persistentContainer.viewContext
+        persistentContainer.viewContext
     }
 
     private func populateSampleData(in context: NSManagedObjectContext) {
@@ -124,19 +124,164 @@ class SampleDataProvider {
         let architecture: Int32 = 116
 
         let setsData: [(String, Bool, String, Int32, String?, Int32, Int32, String?, Bool, Bool, Bool)] = [
-            // (number, isUSNumber, name, year, imageURL, partsCount, themeID, sameAsNumber, isPack, isUnreleased, isAccessory)
-            ("75301", false, "Luke Skywalker's X-wing Fighter", 2021, "https://images.brickset.com/sets/images/75301-1.jpg", 474, starWars, nil, false, false, false),
-            ("10267", false, "Gingerbread House", 2019, "https://images.brickset.com/sets/images/10267-1.jpg", 1477, creator, nil, false, false, false),
-            ("60320", false, "Fire Station", 2022, "https://images.brickset.com/sets/images/60320-1.jpg", 540, city, nil, false, false, false),
-            ("21034", false, "London", 2017, "https://images.brickset.com/sets/images/21034-1.jpg", 468, architecture, nil, false, false, false),
-            ("75300", false, "Imperial TIE Fighter", 2021, "https://images.brickset.com/sets/images/75300-1.jpg", 432, starWars, nil, false, false, false),
-            ("60319", false, "Fire Rescue Helicopter", 2022, "https://images.brickset.com/sets/images/60319-1.jpg", 212, city, nil, false, false, false),
-            ("31120", false, "Medieval Castle", 2021, "https://images.brickset.com/sets/images/31120-1.jpg", 1426, creator, nil, false, false, false),
-            ("75299", false, "Trouble on Tatooine", 2020, "https://images.brickset.com/sets/images/75299-1.jpg", 277, starWars, nil, false, false, false),
-            ("21058", false, "Great Pyramid of Giza", 2022, "https://images.brickset.com/sets/images/21058-1.jpg", 1476, architecture, nil, false, false, false),
-            ("60321", false, "Fire Rescue Team", 2022, "https://images.brickset.com/sets/images/60321-1.jpg", 177, city, nil, false, false, false),
-            ("75302", false, "Imperial Shuttle", 2021, "https://images.brickset.com/sets/images/75302-1.jpg", 660, starWars, nil, false, false, false),
-            ("30624", false, "Obi-Wan Kenobi Minifigure", 2022, "https://images.brickset.com/sets/images/30624-1.jpg", 31, starWars, nil, true, false, false), // Package
+            // (number, isUSNumber, name, year, imageURL, partsCount, themeID, sameAsNumber, isPack, isUnreleased,
+            // isAccessory)
+            (
+                "75301",
+                false,
+                "Luke Skywalker's X-wing Fighter",
+                2021,
+                "https://images.brickset.com/sets/images/75301-1.jpg",
+                474,
+                starWars,
+                nil,
+                false,
+                false,
+                false
+            ),
+            (
+                "10267",
+                false,
+                "Gingerbread House",
+                2019,
+                "https://images.brickset.com/sets/images/10267-1.jpg",
+                1477,
+                creator,
+                nil,
+                false,
+                false,
+                false
+            ),
+            (
+                "60320",
+                false,
+                "Fire Station",
+                2022,
+                "https://images.brickset.com/sets/images/60320-1.jpg",
+                540,
+                city,
+                nil,
+                false,
+                false,
+                false
+            ),
+            (
+                "21034",
+                false,
+                "London",
+                2017,
+                "https://images.brickset.com/sets/images/21034-1.jpg",
+                468,
+                architecture,
+                nil,
+                false,
+                false,
+                false
+            ),
+            (
+                "75300",
+                false,
+                "Imperial TIE Fighter",
+                2021,
+                "https://images.brickset.com/sets/images/75300-1.jpg",
+                432,
+                starWars,
+                nil,
+                false,
+                false,
+                false
+            ),
+            (
+                "60319",
+                false,
+                "Fire Rescue Helicopter",
+                2022,
+                "https://images.brickset.com/sets/images/60319-1.jpg",
+                212,
+                city,
+                nil,
+                false,
+                false,
+                false
+            ),
+            (
+                "31120",
+                false,
+                "Medieval Castle",
+                2021,
+                "https://images.brickset.com/sets/images/31120-1.jpg",
+                1426,
+                creator,
+                nil,
+                false,
+                false,
+                false
+            ),
+            (
+                "75299",
+                false,
+                "Trouble on Tatooine",
+                2020,
+                "https://images.brickset.com/sets/images/75299-1.jpg",
+                277,
+                starWars,
+                nil,
+                false,
+                false,
+                false
+            ),
+            (
+                "21058",
+                false,
+                "Great Pyramid of Giza",
+                2022,
+                "https://images.brickset.com/sets/images/21058-1.jpg",
+                1476,
+                architecture,
+                nil,
+                false,
+                false,
+                false
+            ),
+            (
+                "60321",
+                false,
+                "Fire Rescue Team",
+                2022,
+                "https://images.brickset.com/sets/images/60321-1.jpg",
+                177,
+                city,
+                nil,
+                false,
+                false,
+                false
+            ),
+            (
+                "75302",
+                false,
+                "Imperial Shuttle",
+                2021,
+                "https://images.brickset.com/sets/images/75302-1.jpg",
+                660,
+                starWars,
+                nil,
+                false,
+                false,
+                false
+            ),
+            (
+                "30624",
+                false,
+                "Obi-Wan Kenobi Minifigure",
+                2022,
+                "https://images.brickset.com/sets/images/30624-1.jpg",
+                31,
+                starWars,
+                nil,
+                true,
+                false,
+                false
+            ), // Package
         ]
 
         return setsData.map { data in
@@ -173,7 +318,12 @@ class SampleDataProvider {
         }
     }
 
-    private func createSampleRelationships(sets: [Set], parts: [Part], minifigs: [Minifig], in context: NSManagedObjectContext) {
+    private func createSampleRelationships(
+        sets: [Set],
+        parts: [Part],
+        minifigs: [Minifig],
+        in context: NSManagedObjectContext
+    ) {
         // Create sample SetPart relationships
         for set in sets {
             let numParts = Int.random(in: 3...8)

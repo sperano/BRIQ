@@ -3,8 +3,8 @@
 //  BRIQ
 //
 
-import Foundation
 import CoreGraphics
+import Foundation
 import ImageIO
 import OSLog
 
@@ -142,7 +142,7 @@ actor ImageLoader {
 
 /// `pixelSize` is the size that was requested, not the decoded one: an
 /// original smaller than the request is not fetched again for the same size.
-private nonisolated final class CachedImage {
+private final nonisolated class CachedImage {
     let image: CGImage
     let pixelSize: Int
 

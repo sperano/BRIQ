@@ -5,8 +5,8 @@
 //  Created by Éric Spérano on 7/25/25.
 //
 
-import SwiftUI
 import CoreData
+import SwiftUI
 
 struct PartsIconView: View {
     let parts: [SetPart]

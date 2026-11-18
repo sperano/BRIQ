@@ -3,8 +3,8 @@
 //  BRIQ
 //
 
-import Foundation
 import CoreData
+import Foundation
 
 /// Total minifigs and parts across a group of sets, summed by the store
 /// (`SUM(quantity)` in SQL) so no `SetPart` or `SetMinifig` row is loaded.

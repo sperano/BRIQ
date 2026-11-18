@@ -5,8 +5,8 @@
 //  Created by Éric Spérano on 9/11/25.
 //
 
-import SwiftUI
 import CoreData
+import SwiftUI
 
 @main
 struct BRIQ_iosApp: App {

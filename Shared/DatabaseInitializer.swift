@@ -183,7 +183,9 @@ final class DatabaseInitializer: ObservableObject {
         } catch {
             // The reloaded database itself is fine, so stay `.ready`.
             Logger.database.error("Database reinitialized but restoring user data failed: \(error)")
-            coreDataStack.lastSaveError = String(localized: "Your user data could not be restored: \(error.localizedDescription)")
+            coreDataStack
+                .lastSaveError =
+                String(localized: "Your user data could not be restored: \(error.localizedDescription)")
         }
     }
 

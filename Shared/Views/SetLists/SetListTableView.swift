@@ -5,22 +5,25 @@
 //  Created by Éric Spérano on 8/31/25.
 //
 
-import SwiftUI
 import CoreData
+import SwiftUI
 
 extension Set {
     var isOwnedStr: String {
         if userData == nil { return "0" }
         return String(userData!.owned)
     }
+
     var isFavoriteStr: String {
         if userData == nil { return "0" }
         return String(userData!.favorite)
     }
+
     var hasInstructionsStr: String {
         if userData == nil { return "0" }
         return String(userData!.ownsInstructions)
     }
+
     var instructionsQuality: Int32 {
         if userData == nil { return 0 }
         return userData!.instructionsQuality
@@ -37,7 +40,7 @@ struct SetListTableView: View {
     private var sortedSets: [Set] {
         sets.sorted(using: sortOrder)
     }
-    
+
     private var numberColumn: some TableColumnContent<Set, KeyPathComparator<Set>> {
         TableColumn("Number", value: \.number) { set in
             SetDetailNavigationLink(set: set) {
@@ -46,7 +49,7 @@ struct SetListTableView: View {
         }
         .width(min: 80, ideal: 100, max: 120)
     }
-    
+
     private var nameColumn: some TableColumnContent<Set, KeyPathComparator<Set>> {
         TableColumn("Name", value: \.name) { set in
             SetDetailNavigationLink(set: set) {
@@ -55,7 +58,7 @@ struct SetListTableView: View {
         }
         .width(min: 200, ideal: 300, max: 500)
     }
-    
+
     private var yearColumn: some TableColumnContent<Set, KeyPathComparator<Set>> {
         TableColumn("Year", value: \.year) { set in
             SetDetailNavigationLink(set: set) {
@@ -84,7 +87,7 @@ struct SetListTableView: View {
         }
         .width(min: 60, ideal: 80, max: 100)
     }
-    
+
     private var favoriteColumn: some TableColumnContent<Set, KeyPathComparator<Set>> {
         TableColumn("Favorite", value: \.isFavoriteStr) { set in
             SetDetailNavigationLink(set: set) {
@@ -95,7 +98,7 @@ struct SetListTableView: View {
         }
         .width(min: 80, ideal: 100, max: 120)
     }
-    
+
     private var minifigsColumn: some TableColumnContent<Set, KeyPathComparator<Set>> {
         TableColumn("Minifigs", value: \.minifigsCount) { set in
             SetDetailNavigationLink(set: set) {
@@ -104,7 +107,7 @@ struct SetListTableView: View {
         }
         .width(min: 80, ideal: 100, max: 120)
     }
-    
+
     private var partsColumn: some TableColumnContent<Set, KeyPathComparator<Set>> {
         TableColumn("Parts", value: \.actualPartsCount) { set in
             SetDetailNavigationLink(set: set) {
@@ -113,18 +116,19 @@ struct SetListTableView: View {
         }
         .width(min: 80, ideal: 100, max: 120)
     }
-    
+
     private var instructionsColumn: some TableColumnContent<Set, KeyPathComparator<Set>> {
         TableColumn("Has Instructions", value: \.hasInstructionsStr) { set in
             SetDetailNavigationLink(set: set) {
                 Image(systemName: (set.userData?.ownsInstructions ?? false) ? "doc.fill" : "doc")
                     .foregroundColor((set.userData?.ownsInstructions ?? false) ? .blue : .secondary)
-                    .accessibilityLabel((set.userData?.ownsInstructions ?? false) ? Text("Has Instructions") : Text("No Instructions"))
+                    .accessibilityLabel((set.userData?.ownsInstructions ?? false) ? Text("Has Instructions") :
+                        Text("No Instructions"))
             }
         }
         .width(min: 100, ideal: 120, max: 140)
     }
-    
+
     private var instructionsQualityColumn: some TableColumnContent<Set, KeyPathComparator<Set>> {
         TableColumn("Instr. Quality", value: \.instructionsQuality) { set in
             SetDetailNavigationLink(set: set) {
@@ -133,12 +137,12 @@ struct SetListTableView: View {
                     isInteractive: false,
                     label: "Instructions Quality"
                 )
-                    .font(.caption)
+                .font(.caption)
             }
         }
         .width(min: 100, ideal: 120, max: 140)
     }
-    
+
     var body: some View {
         VStack {
             Table(sortedSets, sortOrder: $sortOrder) {

@@ -18,7 +18,7 @@ enum ViewMode: String, CaseIterable {
 struct SetContentSection: View {
     let set: Set
     let viewMode: ViewMode
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             if set.minifigsCount > 0 {

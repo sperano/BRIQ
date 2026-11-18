@@ -91,4 +91,3 @@ struct IconImage: View {
     .padding()
 }
 #endif
-

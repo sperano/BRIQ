@@ -5,8 +5,8 @@
 //  Created by Éric Spérano on 8/31/25.
 //
 
-import SwiftUI
 import CoreData
+import SwiftUI
 
 struct SetListSplitView: View {
     var sets: [Set]
@@ -26,7 +26,7 @@ struct SetListSplitView: View {
                 ViewModeMenuToolbarItem(viewMode: $viewMode)
             }
         } detail: {
-            if let selectedSet = selectedSet {
+            if let selectedSet {
                 SetDetail(set: selectedSet, selectedSet: $selectedSet)
             } else {
                 Text("Select a set to view details")

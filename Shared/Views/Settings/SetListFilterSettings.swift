@@ -110,9 +110,9 @@ private extension View {
     /// Segmented on iOS, radio buttons on macOS.
     func filterPickerStyle() -> some View {
         #if os(macOS)
-        return pickerStyle(.radioGroup)
+        pickerStyle(.radioGroup)
         #else
-        return pickerStyle(.segmented)
+        pickerStyle(.segmented)
         #endif
     }
 }

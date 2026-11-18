@@ -12,14 +12,14 @@ import CoreData
 
 struct MinifigRow: View {
     var minifig: SetMinifig
-    
+
     var body: some View {
         HStack {
             Text("\(minifig.quantity) x")
             RowImage(url: minifig.minifig?.imageURL)
             Text(minifig.minifig?.name ?? String(localized: "Unknown Minifig"))
         }
-        //.padding(.horizontal)
+        // .padding(.horizontal)
     }
 }
 

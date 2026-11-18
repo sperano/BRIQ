@@ -20,7 +20,7 @@ nonisolated extension Array where Element: Sendable {
             func startNext() {
                 let index = nextIndex
                 let element = self[index]
-                group.addTask { (index, try await transform(element)) }
+                group.addTask { await (index, try transform(element)) }
                 nextIndex += 1
             }
             while nextIndex < Swift.min(maxConcurrent, count) {

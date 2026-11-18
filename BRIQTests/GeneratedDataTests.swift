@@ -10,7 +10,7 @@
 import Testing
 @testable import BRIQ
 
-@Suite struct GeneratedDataTests {
+struct GeneratedDataTests {
     @Test func allThemesIDsMatchTheirIndices() {
         #expect(!AllThemes.isEmpty)
         let mismatches = AllThemes.enumerated().filter { $0.element.id != $0.offset }

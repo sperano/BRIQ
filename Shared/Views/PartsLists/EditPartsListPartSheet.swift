@@ -2,8 +2,8 @@
 //  EditPartsListPartSheet.swift
 //  BRIQ
 
-import SwiftUI
 import CoreData
+import SwiftUI
 
 struct EditPartsListPartSheet: View {
     private static let quantityRange: ClosedRange<Int32> = 1...9999

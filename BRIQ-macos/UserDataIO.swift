@@ -5,10 +5,10 @@
 //  Created by Éric Spérano on 9/10/25.
 //
 
-import UniformTypeIdentifiers
 import CoreData
 import OSLog
 import SwiftUI
+import UniformTypeIdentifiers
 
 @MainActor
 func saveUserDataToFile(_ data: String) {

@@ -1,13 +1,13 @@
 //
-//  SetList.swift
+//  SetListStatusBar.swift
 //  SharedBRIQ
 //
 //  Created by Éric Spérano on 9/10/25.
 //
 
-import SwiftUI
 import CoreData
 import OSLog
+import SwiftUI
 
 struct SetListStatusBar: View {
     let sets: [Set]
