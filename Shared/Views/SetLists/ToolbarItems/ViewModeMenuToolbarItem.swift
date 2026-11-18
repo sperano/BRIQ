@@ -14,9 +14,9 @@ struct ViewModeMenuToolbarItem: ToolbarContent {
         ToolbarItem {
             Menu {
                 ForEach(SetListViewMode.availableCases, id: \.self) { mode in
-                    Button(action: {
+                    Button {
                         viewMode = mode
-                    }) {
+                    } label: {
                         Label(mode.displayName, systemImage: mode.systemImage)
                     }
                 }

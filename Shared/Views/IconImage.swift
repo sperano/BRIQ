@@ -19,7 +19,7 @@ struct IconImage: View {
             case .success(let image):
                 image
                     .resizable()
-                    .aspectRatio(contentMode: .fill)
+                    .scaledToFill()
             case .failure(let retry):
                 VStack(spacing: 4) {
                     Image(systemName: "photo")

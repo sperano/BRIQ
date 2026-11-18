@@ -22,7 +22,7 @@ struct RowImage: View {
             case .success(let image):
                 image
                     .resizable()
-                    .aspectRatio(contentMode: .fill)
+                    .scaledToFill()
             case .failure:
                 Color(.red) // or a placeholder image
             case .empty:

@@ -120,10 +120,10 @@ struct SetListTableView: View {
     private var instructionsColumn: some TableColumnContent<Set, KeyPathComparator<Set>> {
         TableColumn("Has Instructions", value: \.hasInstructionsStr) { set in
             SetDetailNavigationLink(set: set) {
-                Image(systemName: (set.userData?.ownsInstructions ?? false) ? "doc.fill" : "doc")
-                    .foregroundColor((set.userData?.ownsInstructions ?? false) ? .blue : .secondary)
-                    .accessibilityLabel((set.userData?.ownsInstructions ?? false) ? Text("Has Instructions") :
-                        Text("No Instructions"))
+                let ownsInstructions = set.userData?.ownsInstructions ?? false
+                Image(systemName: ownsInstructions ? "doc.fill" : "doc")
+                    .foregroundColor(ownsInstructions ? .blue : .secondary)
+                    .accessibilityLabel(ownsInstructions ? Text("Has Instructions") : Text("No Instructions"))
             }
         }
         .width(min: 100, ideal: 120, max: 140)

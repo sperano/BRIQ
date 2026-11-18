@@ -112,12 +112,8 @@ final class CoreDataStack: ObservableObject {
     /// test) makes multiple NSEntityDescriptions claim the same
     /// NSManagedObject subclasses.
     static let managedObjectModel: NSManagedObjectModel = {
-        guard let url = Bundle(for: CoreDataStack.self).url(
-                  forResource: CoreDataStack.modelName,
-                  withExtension: "momd"
-              ),
-              let model = NSManagedObjectModel(contentsOf: url)
-        else {
+        let url = Bundle(for: CoreDataStack.self).url(forResource: CoreDataStack.modelName, withExtension: "momd")
+        guard let url, let model = NSManagedObjectModel(contentsOf: url) else {
             fatalError("BRIQ.momd is missing from the bundle")
         }
         return model

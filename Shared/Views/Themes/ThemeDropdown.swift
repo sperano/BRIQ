@@ -55,9 +55,9 @@ struct ThemeDropdown: View {
     var body: some View {
         Menu {
             ForEach(buildThemeMenu(), id: \.id) { item in
-                Button(action: {
+                Button {
                     selectedTheme = item.theme
-                }) {
+                } label: {
                     HStack {
                         Text(item.displayName)
                         Spacer()

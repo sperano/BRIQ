@@ -25,10 +25,15 @@ struct PartsIconView: View {
             imageURL: { $0.imageURL },
             quantity: { Int($0.quantity) },
             number: { $0.part?.number ?? String(localized: "Unknown") },
-            name: { $0.part?.name ?? String(localized: "Unknown Part") }
-        ) { setPart in
-            AddToPartsListMenu(setPart: setPart, partsLists: partsLists, partToAddAfterCreate: $partToAddAfterCreate)
-        }
+            name: { $0.part?.name ?? String(localized: "Unknown Part") },
+            contextMenuContent: { setPart in
+                AddToPartsListMenu(
+                    setPart: setPart,
+                    partsLists: partsLists,
+                    partToAddAfterCreate: $partToAddAfterCreate
+                )
+            }
+        )
         .addToPartsListSheet(item: $partToAddAfterCreate)
     }
 }

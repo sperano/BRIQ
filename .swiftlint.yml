@@ -57,10 +57,11 @@ line_length:
   warning: 120
   error: 160
   ignores_urls: true
-  # A line that is a string literal alone (a log message, a sentence shown to the user) stays
-  # whole rather than being split and concatenated.
+  # A line that is a string literal alone, or a labelled argument that is one
+  # (`localized: "..."`), stays whole rather than being split and concatenated: a String Catalog
+  # key is the whole sentence.
   excluded_lines_patterns:
-    - '^\s*"'
+    - '^\s*(\w+: )?"'
 # SwiftFormat puts the brace of a wrapped condition or signature on its own line (its
 # wrapMultilineStatementBraces rule); this rule must agree.
 opening_brace:
@@ -68,6 +69,19 @@ opening_brace:
   ignore_multiline_function_signatures: true
 trailing_comma:
   mandatory_comma: true
+# SwiftFormat's modifierOrder writes `private nonisolated static`, as the code already did; this
+# rule's default wants the isolation first.
+modifier_order:
+  preferred_modifier_order:
+    [override, acl, setterACL, final, dynamic, required, convenience, isolation, lazy, owned, typeMethods, mutators]
+# The Core Data `create` factories take one argument per attribute (`Set.create` has eight
+# without a default).
+function_parameter_count:
+  warning: 8
+  error: 10
+# `@Entry` takes the entry's default value from the initializer, so its `= nil` stays.
+implicit_optional_initialization:
+  ignore_attributes: [Entry]
 identifier_name:
   min_length: 2
   excluded: [i, j, n, x, y, id, dx, dy, to, at, by]

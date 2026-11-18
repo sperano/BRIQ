@@ -20,7 +20,7 @@ struct ImageViewer: View {
                     } label: {
                         image
                             .resizable()
-                            .aspectRatio(contentMode: .fit)
+                            .scaledToFit()
                     }
                     .buttonStyle(.plain)
                     .accessibilityLabel("Show Full-Size Image")

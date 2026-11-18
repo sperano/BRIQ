@@ -17,19 +17,20 @@ struct PartsListDetailIconView: View {
                 imageURL: { $0.imageURL },
                 quantity: { Int($0.quantity) },
                 number: { $0.part?.number ?? "" },
-                name: { $0.part?.name ?? "" }
-            ) { part in
-                Button {
-                    onEdit(part)
-                } label: {
-                    Label("Edit", systemImage: "pencil")
+                name: { $0.part?.name ?? "" },
+                contextMenuContent: { part in
+                    Button {
+                        onEdit(part)
+                    } label: {
+                        Label("Edit", systemImage: "pencil")
+                    }
+                    Button(role: .destructive) {
+                        onDelete(part)
+                    } label: {
+                        Label("Delete", systemImage: "trash")
+                    }
                 }
-                Button(role: .destructive) {
-                    onDelete(part)
-                } label: {
-                    Label("Delete", systemImage: "trash")
-                }
-            }
+            )
         }
     }
 }

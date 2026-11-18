@@ -58,61 +58,55 @@ class SampleDataProvider {
     }
 
     private func createSampleParts(in context: NSManagedObjectContext) -> [Part] {
-        let partsData: [(String, String, String, Int32)] = [
-            ("3001", "Brick 2 x 4", "ABS", 11), // bricks
-            ("3024", "Plate 1 x 1", "ABS", 14), // plates
-            ("3003", "Brick 2 x 2", "ABS", 11), // bricks
-            ("3068b", "Tile 2 x 2", "ABS", 19), // tiles
-            ("3023", "Plate 1 x 2", "ABS", 14), // plates
-            ("3004", "Brick 1 x 2", "ABS", 11), // bricks
-            ("3070b", "Tile 1 x 1", "ABS", 19), // tiles
-            ("4073", "Plate Round 1 x 1", "ABS", 21), // plates round
-            ("3005", "Brick 1 x 1", "ABS", 11), // bricks
-            ("3069b", "Tile 1 x 2", "ABS", 19), // tiles
-            ("50950", "Slope Brick Curved 3 x 1", "ABS", 3), // slopes
-            ("3665", "Slope Brick 45° 2 x 1 Inverted", "ABS", 3), // slopes
-            ("3022", "Plate 2 x 2", "ABS", 14), // plates
-            ("87087", "Brick Modified 1 x 1 with Stud on 1 Side", "ABS", 5), // bricks special
-            ("6141", "Plate Round 1 x 1 Straight Side", "ABS", 21), // plates round
-            ("30374", "Bar 4L (Lightsaber Blade / Wand)", "ABS", 27), // minifig accessories
-            ("3626cpb0274", "Minifigure Head Dual Sided", "ABS", 13), // minifigs
-            ("973pb0927c01", "Minifigure Torso", "ABS", 13), // minifigs
-            ("970c00", "Minifigure Hips and Legs", "ABS", 13), // minifigs
-            ("4624", "Wheel 8mm D. x 6mm", "Rubber", 29), // wheels
-        ]
-
-        return partsData.map { data in
-            Part.create(
-                in: context,
-                number: data.0,
-                name: data.1,
-                material: data.2,
-                category: data.3
-            )
+        func part(_ number: String, _ name: String, _ material: String, _ category: Int32) -> Part {
+            Part.create(in: context, number: number, name: name, material: material, category: category)
         }
+
+        return [
+            part("3001", "Brick 2 x 4", "ABS", 11), // bricks
+            part("3024", "Plate 1 x 1", "ABS", 14), // plates
+            part("3003", "Brick 2 x 2", "ABS", 11), // bricks
+            part("3068b", "Tile 2 x 2", "ABS", 19), // tiles
+            part("3023", "Plate 1 x 2", "ABS", 14), // plates
+            part("3004", "Brick 1 x 2", "ABS", 11), // bricks
+            part("3070b", "Tile 1 x 1", "ABS", 19), // tiles
+            part("4073", "Plate Round 1 x 1", "ABS", 21), // plates round
+            part("3005", "Brick 1 x 1", "ABS", 11), // bricks
+            part("3069b", "Tile 1 x 2", "ABS", 19), // tiles
+            part("50950", "Slope Brick Curved 3 x 1", "ABS", 3), // slopes
+            part("3665", "Slope Brick 45° 2 x 1 Inverted", "ABS", 3), // slopes
+            part("3022", "Plate 2 x 2", "ABS", 14), // plates
+            part("87087", "Brick Modified 1 x 1 with Stud on 1 Side", "ABS", 5), // bricks special
+            part("6141", "Plate Round 1 x 1 Straight Side", "ABS", 21), // plates round
+            part("30374", "Bar 4L (Lightsaber Blade / Wand)", "ABS", 27), // minifig accessories
+            part("3626cpb0274", "Minifigure Head Dual Sided", "ABS", 13), // minifigs
+            part("973pb0927c01", "Minifigure Torso", "ABS", 13), // minifigs
+            part("970c00", "Minifigure Hips and Legs", "ABS", 13), // minifigs
+            part("4624", "Wheel 8mm D. x 6mm", "Rubber", 29), // wheels
+        ]
     }
 
     private func createSampleMinifigs(in context: NSManagedObjectContext) -> [Minifig] {
-        let minifigsData: [(String, String, Int32, String?)] = [
-            ("sw0527", "Luke Skywalker (Pilot)", 8, "https://img.bricklink.com/ItemImage/MN/0/sw0527.png"),
-            ("sw0187", "Princess Leia (White Dress)", 7, "https://img.bricklink.com/ItemImage/MN/0/sw0187.png"),
-            ("cty0013", "Firefighter - Red Fire Helmet", 6, "https://img.bricklink.com/ItemImage/MN/0/cty0013.png"),
-            ("cty0008", "Police Officer - City", 5, "https://img.bricklink.com/ItemImage/MN/0/cty0008.png"),
-            ("con001", "Construction Worker", 6, "https://img.bricklink.com/ItemImage/MN/0/con001.png"),
-            ("sw0621", "Imperial Officer", 4, "https://img.bricklink.com/ItemImage/MN/0/sw0621.png"),
-            ("cty0025", "Coast Guard", 5, "https://img.bricklink.com/ItemImage/MN/0/cty0025.png"),
-            ("sw0698", "BB-8", 3, "https://img.bricklink.com/ItemImage/MN/0/sw0698.png"),
-        ]
-
-        return minifigsData.map { data in
+        func minifig(_ number: String, _ name: String, _ partsCount: Int32) -> Minifig {
             Minifig.create(
                 in: context,
-                number: data.0,
-                name: data.1,
-                partsCount: data.2,
-                imageURL: data.3
+                number: number,
+                name: name,
+                partsCount: partsCount,
+                imageURL: "https://img.bricklink.com/ItemImage/MN/0/\(number).png"
             )
         }
+
+        return [
+            minifig("sw0527", "Luke Skywalker (Pilot)", 8),
+            minifig("sw0187", "Princess Leia (White Dress)", 7),
+            minifig("cty0013", "Firefighter - Red Fire Helmet", 6),
+            minifig("cty0008", "Police Officer - City", 5),
+            minifig("con001", "Construction Worker", 6),
+            minifig("sw0621", "Imperial Officer", 4),
+            minifig("cty0025", "Coast Guard", 5),
+            minifig("sw0698", "BB-8", 3),
+        ]
     }
 
     private func createSampleSets(in context: NSManagedObjectContext) -> [Set] {
@@ -123,199 +117,65 @@ class SampleDataProvider {
         let city: Int32 = 14
         let architecture: Int32 = 116
 
-        let setsData: [(String, Bool, String, Int32, String?, Int32, Int32, String?, Bool, Bool, Bool)] = [
-            // (number, isUSNumber, name, year, imageURL, partsCount, themeID, sameAsNumber, isPack, isUnreleased,
-            // isAccessory)
-            (
-                "75301",
-                false,
-                "Luke Skywalker's X-wing Fighter",
-                2021,
-                "https://images.brickset.com/sets/images/75301-1.jpg",
-                474,
-                starWars,
-                nil,
-                false,
-                false,
-                false
-            ),
-            (
-                "10267",
-                false,
-                "Gingerbread House",
-                2019,
-                "https://images.brickset.com/sets/images/10267-1.jpg",
-                1477,
-                creator,
-                nil,
-                false,
-                false,
-                false
-            ),
-            (
-                "60320",
-                false,
-                "Fire Station",
-                2022,
-                "https://images.brickset.com/sets/images/60320-1.jpg",
-                540,
-                city,
-                nil,
-                false,
-                false,
-                false
-            ),
-            (
-                "21034",
-                false,
-                "London",
-                2017,
-                "https://images.brickset.com/sets/images/21034-1.jpg",
-                468,
-                architecture,
-                nil,
-                false,
-                false,
-                false
-            ),
-            (
-                "75300",
-                false,
-                "Imperial TIE Fighter",
-                2021,
-                "https://images.brickset.com/sets/images/75300-1.jpg",
-                432,
-                starWars,
-                nil,
-                false,
-                false,
-                false
-            ),
-            (
-                "60319",
-                false,
-                "Fire Rescue Helicopter",
-                2022,
-                "https://images.brickset.com/sets/images/60319-1.jpg",
-                212,
-                city,
-                nil,
-                false,
-                false,
-                false
-            ),
-            (
-                "31120",
-                false,
-                "Medieval Castle",
-                2021,
-                "https://images.brickset.com/sets/images/31120-1.jpg",
-                1426,
-                creator,
-                nil,
-                false,
-                false,
-                false
-            ),
-            (
-                "75299",
-                false,
-                "Trouble on Tatooine",
-                2020,
-                "https://images.brickset.com/sets/images/75299-1.jpg",
-                277,
-                starWars,
-                nil,
-                false,
-                false,
-                false
-            ),
-            (
-                "21058",
-                false,
-                "Great Pyramid of Giza",
-                2022,
-                "https://images.brickset.com/sets/images/21058-1.jpg",
-                1476,
-                architecture,
-                nil,
-                false,
-                false,
-                false
-            ),
-            (
-                "60321",
-                false,
-                "Fire Rescue Team",
-                2022,
-                "https://images.brickset.com/sets/images/60321-1.jpg",
-                177,
-                city,
-                nil,
-                false,
-                false,
-                false
-            ),
-            (
-                "75302",
-                false,
-                "Imperial Shuttle",
-                2021,
-                "https://images.brickset.com/sets/images/75302-1.jpg",
-                660,
-                starWars,
-                nil,
-                false,
-                false,
-                false
-            ),
-            (
-                "30624",
-                false,
-                "Obi-Wan Kenobi Minifigure",
-                2022,
-                "https://images.brickset.com/sets/images/30624-1.jpg",
-                31,
-                starWars,
-                nil,
-                true,
-                false,
-                false
-            ), // Package
-        ]
-
-        return setsData.map { data in
+        func sampleSet(
+            _ number: String,
+            _ name: String,
+            year: Int32,
+            partsCount: Int32,
+            themeID: Int32,
+            isPack: Bool = false
+        ) -> Set {
             let set = Set.create(
                 in: context,
-                number: data.0,
-                isUSNumber: data.1,
-                name: data.2,
-                year: data.3,
-                imageURL: data.4,
-                partsCount: data.5,
-                themeID: data.6,
-                sameAsNumber: data.7,
-                isPack: data.8,
-                isUnreleased: data.9,
-                isAccessory: data.10
+                number: number,
+                isUSNumber: false,
+                name: name,
+                year: year,
+                imageURL: "https://images.brickset.com/sets/images/\(number)-1.jpg",
+                partsCount: partsCount,
+                themeID: themeID,
+                isPack: isPack
             )
-
-            // Add sample user data for some sets
-            if Bool.random() {
-                let userData = SetUserData.create(
-                    in: context,
-                    number: data.0,
-                    owned: Bool.random(),
-                    favorite: Bool.random(),
-                    ownsInstructions: Bool.random(),
-                    instructionsQuality: Int32.random(in: 1...5)
-                )
-                set.userData = userData
-                userData.set = set
-            }
-
+            addRandomUserData(to: set, in: context)
             return set
         }
+
+        return [
+            sampleSet("75301", "Luke Skywalker's X-wing Fighter", year: 2021, partsCount: 474, themeID: starWars),
+            sampleSet("10267", "Gingerbread House", year: 2019, partsCount: 1477, themeID: creator),
+            sampleSet("60320", "Fire Station", year: 2022, partsCount: 540, themeID: city),
+            sampleSet("21034", "London", year: 2017, partsCount: 468, themeID: architecture),
+            sampleSet("75300", "Imperial TIE Fighter", year: 2021, partsCount: 432, themeID: starWars),
+            sampleSet("60319", "Fire Rescue Helicopter", year: 2022, partsCount: 212, themeID: city),
+            sampleSet("31120", "Medieval Castle", year: 2021, partsCount: 1426, themeID: creator),
+            sampleSet("75299", "Trouble on Tatooine", year: 2020, partsCount: 277, themeID: starWars),
+            sampleSet("21058", "Great Pyramid of Giza", year: 2022, partsCount: 1476, themeID: architecture),
+            sampleSet("60321", "Fire Rescue Team", year: 2022, partsCount: 177, themeID: city),
+            sampleSet("75302", "Imperial Shuttle", year: 2021, partsCount: 660, themeID: starWars),
+            sampleSet(
+                "30624",
+                "Obi-Wan Kenobi Minifigure",
+                year: 2022,
+                partsCount: 31,
+                themeID: starWars,
+                isPack: true
+            ),
+        ]
+    }
+
+    /// Gives some sets sample user data.
+    private func addRandomUserData(to set: Set, in context: NSManagedObjectContext) {
+        guard Bool.random() else { return }
+        let userData = SetUserData.create(
+            in: context,
+            number: set.number,
+            owned: Bool.random(),
+            favorite: Bool.random(),
+            ownsInstructions: Bool.random(),
+            instructionsQuality: Int32.random(in: 1...5)
+        )
+        set.userData = userData
+        userData.set = set
     }
 
     private func createSampleRelationships(
@@ -346,25 +206,23 @@ class SampleDataProvider {
             }
         }
 
-        // Create sample SetMinifig relationships
-        for set in sets {
-            if Bool.random() { // Not all sets have minifigs
-                let numMinifigs = Int.random(in: 1...3)
-                let selectedMinifigs = minifigs.shuffled().prefix(numMinifigs)
+        // Create sample SetMinifig relationships; not all sets have minifigs
+        for set in sets where Bool.random() {
+            let numMinifigs = Int.random(in: 1...3)
+            let selectedMinifigs = minifigs.shuffled().prefix(numMinifigs)
 
-                for minifig in selectedMinifigs {
-                    let setMinifig = SetMinifig.create(
-                        in: context,
-                        minifig: minifig,
-                        quantity: Int32.random(in: 1...2)
-                    )
-                    setMinifig.set = set
+            for minifig in selectedMinifigs {
+                let setMinifig = SetMinifig.create(
+                    in: context,
+                    minifig: minifig,
+                    quantity: Int32.random(in: 1...2)
+                )
+                setMinifig.set = set
 
-                    // Add to set's minifigs relationship
-                    let currentMinifigs = set.minifigs?.mutableCopy() as? NSMutableSet ?? NSMutableSet()
-                    currentMinifigs.add(setMinifig)
-                    set.minifigs = currentMinifigs
-                }
+                // Add to set's minifigs relationship
+                let currentMinifigs = set.minifigs?.mutableCopy() as? NSMutableSet ?? NSMutableSet()
+                currentMinifigs.add(setMinifig)
+                set.minifigs = currentMinifigs
             }
         }
     }

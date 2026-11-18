@@ -47,9 +47,11 @@ import Testing
     }
 
     @discardableResult
-    private func insert(_ entity: String, _ values: [String: Any],
-                        in context: NSManagedObjectContext) -> NSManagedObject
-    {
+    private func insert(
+        _ entity: String,
+        _ values: [String: Any],
+        in context: NSManagedObjectContext
+    ) -> NSManagedObject {
         let object = NSEntityDescription.insertNewObject(forEntityName: entity, into: context)
         object.setValuesForKeys(values)
         return object
@@ -226,7 +228,8 @@ import Testing
 
         let resolved = try StoreDeduplicator.prepareForMigration(
             storeAt: storeURL, options: nil, to: CoreDataStack.managedObjectModel,
-            sourceModels: { sourceModelsRequested = true
+            sourceModels: {
+                sourceModelsRequested = true
                 return bundledVersions
             }()
         )

@@ -147,9 +147,9 @@ struct SetDetailFields: View {
     private func sameAsLink(_ sameAsNumber: String) -> some View {
         if let sameAsSet = findSetByNumber(sameAsNumber) {
             if let selectedSetBinding = selectedSet {
-                Button(action: {
+                Button {
                     selectedSetBinding.wrappedValue = sameAsSet
-                }) {
+                } label: {
                     Text("\(sameAsNumber) (\(sameAsNumberRegion)): \(sameAsSet.name)")
                         .foregroundColor(.blue)
                 }

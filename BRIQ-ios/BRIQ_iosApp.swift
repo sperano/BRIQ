@@ -9,7 +9,7 @@ import CoreData
 import SwiftUI
 
 @main
-struct BRIQ_iosApp: App {
+struct BRIQiOSApp: App {
     @StateObject private var coreDataStack: CoreDataStack
     @StateObject private var databaseInitializer: DatabaseInitializer
 

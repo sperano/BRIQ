@@ -12,9 +12,9 @@ struct SettingsButtonToolbarItem: ToolbarContent {
 
     var body: some ToolbarContent {
         ToolbarItem {
-            Button(action: {
+            Button {
                 showSettings.toggle()
-            }) {
+            } label: {
                 Label("Settings", systemImage: "gearshape")
             }
         }
