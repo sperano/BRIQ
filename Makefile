@@ -1,5 +1,6 @@
-# The lint checks (brew install swiftlint swiftformat). Both tools read their configuration from
-# the repository root. The app itself builds and tests in Xcode.
+# The lint checks (brew install swiftlint swiftformat), and the test/coverage targets for BRIQKit
+# (needs llvm-cov/llvm-profdata, part of the Swift toolchain). Both lint tools read their
+# configuration from the repository root. The app itself builds and tests in Xcode.
 .PHONY: lint format test coverage
 
 # Checks only; fails on any finding.
@@ -24,12 +25,23 @@ COVERAGE_MIN := 95
 # auto-generated tables (same as `lint`, see CLAUDE.md) and the test sources themselves.
 COVERAGE_IGNORE_REGEX := \.build/|Auto-Generated|/Tests/
 
+# On macOS the xctest product is a bundle (the binary is inside it) and llvm-cov is reached
+# through xcrun, not PATH; on Linux the xctest product is the binary itself and llvm-cov is on
+# PATH directly.
 coverage:
 	swift test --package-path BRIQKit --enable-code-coverage
 	@bin=$$(swift build --package-path BRIQKit --show-bin-path); \
-	report=$$(llvm-cov report "$$bin/BRIQKitPackageTests.xctest" \
+	xctest="$$bin/BRIQKitPackageTests.xctest"; \
+	if [ "$$(uname -s)" = "Darwin" ]; then \
+		llvm_cov="$$(xcrun --find llvm-cov)"; \
+		xctest="$$xctest/Contents/MacOS/BRIQKitPackageTests"; \
+	else \
+		llvm_cov="llvm-cov"; \
+	fi; \
+	report=$$("$$llvm_cov" report "$$xctest" \
 		-instr-profile="$$bin/codecov/default.profdata" \
-		-ignore-filename-regex='$(COVERAGE_IGNORE_REGEX)'); \
+		-ignore-filename-regex='$(COVERAGE_IGNORE_REGEX)') \
+		|| { echo "llvm-cov failed"; exit 1; }; \
 	echo "$$report"; \
 	pct=$$(echo "$$report" | awk '/^TOTAL/ { gsub("%","",$$10); print $$10 }'); \
 	echo "Line coverage: $$pct% (minimum $(COVERAGE_MIN)%)"; \
