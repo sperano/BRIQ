@@ -3,6 +3,7 @@
 //  BRIQ
 //
 
+import BRIQKit
 import Combine
 import CoreData
 import Foundation
@@ -92,7 +93,7 @@ final class DatabaseInitializer: ObservableObject {
 
                 Logger.database.info("Backfilling sortKey for \(total) sets")
                 for set in try context.fetch(Set.fetchRequest()) {
-                    set.sortKey = Set.sortKey(forNumber: set.number)
+                    set.sortKey = SetNumber.sortKey(for: set.number)
                 }
                 try context.save()
                 context.reset()

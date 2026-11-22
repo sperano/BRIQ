@@ -5,20 +5,18 @@
 //  Created by Éric Spérano on 7/12/25.
 //
 
-import Foundation
+public final class Theme: Identifiable, Equatable {
+    public let id: Int
+    public let name: String
+    public var parent: Theme?
+    public var children: [Theme] = []
 
-class Theme: Identifiable, Equatable {
-    let id: Int
-    let name: String
-    var parent: Theme?
-    var children: [Theme] = []
-
-    var sortedChildren: [Theme] {
+    public var sortedChildren: [Theme] {
         children.sorted { $0.name < $1.name }
     }
 
-    func getAllThemeIDs() -> Swift.Set<Int> {
-        var themeIDs: Swift.Set<Int> = [id]
+    public func getAllThemeIDs() -> Set<Int> {
+        var themeIDs: Set<Int> = [id]
 
         func addChildrenIDs(_ theme: Theme) {
             for child in theme.children {
@@ -31,12 +29,12 @@ class Theme: Identifiable, Equatable {
         return themeIDs
     }
 
-    init(id: Int, name: String) {
+    public init(id: Int, name: String) {
         self.id = id
         self.name = name
     }
 
-    static func == (lhs: Theme, rhs: Theme) -> Bool {
+    public static func == (lhs: Theme, rhs: Theme) -> Bool {
         lhs.id == rhs.id
     }
 }

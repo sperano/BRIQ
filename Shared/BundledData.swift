@@ -5,58 +5,10 @@
 //  Created by Éric Spérano on 9/11/25.
 //
 
+import BRIQKit
 import CoreData
 import Foundation
 import OSLog
-import ZIPFoundation
-
-struct JSONPart: Decodable {
-    let number: String
-    let name: String
-    let partCategoryId: Int
-    let material: String
-}
-
-struct JSONMinifig: Decodable {
-    let number: String
-    let name: String
-    let partsCount: Int
-    let imgUrl: String?
-}
-
-struct JSONSetMinifig: Decodable {
-    let number: String
-    let quantity: Int
-}
-
-struct JSONSetPart: Decodable {
-    let number: String
-    let colorId: Int
-    let quantity: Int
-    let imgUrl: String?
-}
-
-struct JSONSet: Decodable {
-    let number: String
-    let isUsNumber: Bool
-    let sameAsNumber: String?
-    let name: String
-    let year: Int
-    let themeId: Int64
-    let partsCount: Int
-    let imgUrl: String?
-    let minifigs: [JSONSetMinifig]
-    let parts: [JSONSetPart]
-    let isPack: Bool
-    let isUnreleased: Bool
-    let isAccessories: Bool
-}
-
-struct JSONData: Decodable {
-    let parts: [JSONPart]
-    let minifigs: [JSONMinifig]
-    let sets: [JSONSet]
-}
 
 enum BundledDataError: LocalizedError {
     case archiveMissing
@@ -91,17 +43,9 @@ enum BundledData {
         guard fileManager.fileExists(atPath: zipURL.path) else {
             throw BundledDataError.archiveMissing
         }
-        let tempDir = fileManager.temporaryDirectory.appendingPathComponent(UUID().uuidString)
-        try fileManager.createDirectory(at: tempDir, withIntermediateDirectories: true)
-        defer { try? fileManager.removeItem(at: tempDir) }
-
         let start = DispatchTime.now()
 
-        try fileManager.unzipItem(at: zipURL, to: tempDir)
-        let jsonData = try Data(contentsOf: tempDir.appendingPathComponent("init.json"))
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
-        let decoded = try decoder.decode(JSONData.self, from: jsonData)
+        let decoded = try BundledArchive.decode(contentsOf: zipURL)
 
         try Task.checkCancellation()
         let minifigIDs = try await importMinifigs(decoded.minifigs, into: context)

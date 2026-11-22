@@ -5,6 +5,7 @@
 //  Created by Éric Spérano on 8/19/25.
 //
 
+import BRIQKit
 import SwiftUI
 
 extension Array {

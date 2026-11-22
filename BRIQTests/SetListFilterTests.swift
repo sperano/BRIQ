@@ -3,6 +3,7 @@
 //  BRIQTests
 //
 
+import BRIQKit
 import CoreData
 import Testing
 @testable import BRIQ

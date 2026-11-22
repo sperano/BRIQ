@@ -8,13 +8,15 @@
 included:
   - BRIQ-ios
   - BRIQ-macos
+  - BRIQKit
   - BRIQTests
   - Shared
 excluded:
   - BRIQ.xcodeproj
+  - BRIQKit/.build
   - build
   # Written by briq-utils: a fix by hand would be undone by its next run.
-  - Shared/Auto-Generated
+  - BRIQKit/Sources/BRIQKit/Auto-Generated
 
 opt_in_rules:
   - closure_spacing
