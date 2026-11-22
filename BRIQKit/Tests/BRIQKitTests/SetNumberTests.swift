@@ -33,4 +33,31 @@ struct SetNumberTests {
     @Test func oversizedSuffixIsClamped() {
         #expect(SetNumber.sortKey(for: "100-2000") == 100_999)
     }
+
+    @Test func suffixBelowRangeIsExact() {
+        #expect(SetNumber.sortKey(for: "100-999") == 100_999)
+    }
+
+    @Test func suffixAtAndAboveRangeClampToTheSameKey() {
+        #expect(SetNumber.sortKey(for: "100-1000") == 100_999)
+        #expect(SetNumber.sortKey(for: "100-1001") == 100_999)
+    }
+
+    @Test func emptyStringFallsBackToZero() {
+        #expect(SetNumber.sortKey(for: "") == 0)
+    }
+
+    @Test func extraDashesIgnoreEverythingAfterTheFirstSuffix() {
+        #expect(SetNumber.sortKey(for: "100-1-2") == 100_001)
+    }
+
+    @Test func nonNumericSuffixFallsBackToZero() {
+        #expect(SetNumber.sortKey(for: "100-x") == 100_000)
+    }
+
+    @Test func sortingByKeyMatchesNumericThenVariantOrder() {
+        let numbers = ["10030-1", "605-1", "605", "605-2", "100-999", "100-1000"]
+        let expected = ["100-999", "100-1000", "605", "605-1", "605-2", "10030-1"]
+        #expect(numbers.sorted { SetNumber.sortKey(for: $0) < SetNumber.sortKey(for: $1) } == expected)
+    }
 }
