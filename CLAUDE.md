@@ -37,6 +37,11 @@ Lint and format, on macOS or Linux (SwiftFormat and SwiftLint on `PATH`; `brew i
 - `BRIQKit/Sources/BRIQKit/Auto-Generated/` (written by briq-utils) is excluded from both. Fix findings in the code, never with an inline `swiftlint:disable`/`swiftformat:disable` comment; a rule that does not fit the code is turned off in the config with a comment saying why
 - SwiftFormat drops a redundant `return`, so a computed property whose body would then start with `set.` parses as a setter: SwiftLint reports it as `unused_setter_value`. Write such a body as an `if` expression, or use the `Set`'s property directly
 
+Test and coverage, on macOS or Linux (needs `llvm-cov`/`llvm-profdata`, part of the Swift toolchain):
+- `make test`: `swift test --package-path BRIQKit --parallel`, BRIQKit's own tests (`BRIQKit/Tests/BRIQKitTests`, Swift Testing)
+- `make coverage`: runs those tests with `--enable-code-coverage`, then `llvm-cov report` on `BRIQKit/Sources/BRIQKit` (excluding `Auto-Generated/`); fails if total line coverage drops below `COVERAGE_MIN` in the `Makefile`, set from the coverage the tests first reached, with a few points of slack
+- What `make test`/`make coverage` do **not** cover, because it needs Xcode and macOS: the app build and its Core Data import (`BRIQTests`, hosted in the `BRIQ-macos` scheme, run with ⌘+U), and anything under `BRIQ-ios/`, `BRIQ-macos/` or `Shared/` that imports a Core Data or SwiftUI type
+
 ## Core Architecture
 
 ### Data Models (Core Data)
