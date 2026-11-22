@@ -22,6 +22,11 @@ struct RGBColorTests {
         #expect(RGBColor(hex: "") == RGBColor(red: 0, green: 0, blue: 0))
     }
 
+    @Test func onlyLeadingHexDigitsCount() {
+        // "FF00ZZ" scans as 0xFF00: the two digits after "FF" land in blue's place.
+        #expect(RGBColor(hex: "FF00ZZ") == RGBColor(red: 0, green: 1, blue: 0))
+    }
+
     @Test func partColorParsesItsRGB() {
         let color = PartColor(
             name: "Red", rgb: "FF0000", isTransparent: false,

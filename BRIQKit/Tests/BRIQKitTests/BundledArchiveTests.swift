@@ -102,10 +102,23 @@ struct BundledArchiveTests {
         }
     }
 
-    @Test func malformedJSONThrowsDecodingError() throws {
+    @Test func missingKeyThrowsKeyNotFound() throws {
         let fixture = try ArchiveFixture(json: #"{"parts": []}"#)
-        #expect(throws: DecodingError.self) {
+        #expect {
             try BundledArchive.decode(contentsOf: fixture.zipURL)
+        } throws: { error in
+            guard case .keyNotFound(let key, _) = error as? DecodingError else { return false }
+            return key.stringValue == "minifigs"
+        }
+    }
+
+    @Test func truncatedJSONThrowsDataCorrupted() throws {
+        let fixture = try ArchiveFixture(json: #"{"parts": ["#)
+        #expect {
+            try BundledArchive.decode(contentsOf: fixture.zipURL)
+        } throws: { error in
+            guard case .dataCorrupted = error as? DecodingError else { return false }
+            return true
         }
     }
 
