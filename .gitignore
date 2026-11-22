@@ -63,5 +63,9 @@ fastlane/test_output
 .DS_Store
 build/
 
+# BRIQKit/Package.resolved is committed: it pins the package's own builds (CI's Linux job). Xcode
+# ignores it and uses the app project's Package.resolved.
+/BRIQKit/.swiftpm/
+
 # Personal briq-utils input data, not used by the app itself
 /my-sets.yaml

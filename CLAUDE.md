@@ -10,13 +10,16 @@ BRIQ is a cross-platform SwiftUI application for iOS and macOS that manages LEGO
 
 - **BRIQ-ios/**: iOS-specific app files and views
 - **BRIQ-macos/**: macOS-specific app files, views, and platform features (menu commands, user data import/export)
+- **BRIQKit/**: Local Swift package, a dependency of both app targets, holding the code that imports no Apple-only framework; it builds and tests on Linux (`swift test --package-path BRIQKit`). Declare `public` only what the app uses
+  - **Sources/BRIQKit/Auto-Generated/**: Auto-generated theme, category, and color data (Themes.swift, PartCategories.swift, PartColors.swift)
+  - Theme.swift (the theme tree), PartColor.swift (color data), RGBColor.swift (hex parsing, luminance), SetNumber.swift (set-number sort key), BundledArchive.swift (the `init.zip` format: the `JSON*` types and unzip + decode)
+  - **Tests/BRIQKitTests/**: its unit tests (Swift Testing)
 - **BRIQTests/**: Unit tests (Swift Testing), hosted in the macOS app
 - **Shared/**: Cross-platform code including models, views, and business logic
-  - **Auto-Generated/**: Auto-generated theme, category, and color data (Themes.swift, PartCategories.swift, PartColors.swift)
   - **CoreData/**: Core Data models and stack (Set, Part, Minifig, SetPart, SetMinifig, SetUserData, PartsList, PartsListPart)
   - **SampleData/**: Sample data providers for SwiftUI previews
   - **Views/**: Shared SwiftUI views organized by feature (Minifigs/, Parts/, PartsLists/, SetDetails/, SetLists/, Settings/, Themes/)
-  - Root-level utilities: Theme.swift, PartColor.swift, SetListSortOrder.swift, SetListFilters.swift (filter `@AppStorage` keys and defaults), Database.swift, BundledData.swift, DatabaseInitializer.swift, Logging.swift, PDFGenerator.swift, ImageLoader.swift, ConcurrentMap.swift, IconSize.swift, FocusedValues.swift, ImageZoom.swift (zoom levels of the iOS full-size image viewer)
+  - Root-level utilities: PartColor.swift (`swiftUIColor`, `lookup(id:)`), SetListSortOrder.swift, SetListFilters.swift (filter `@AppStorage` keys and defaults), Database.swift, BundledData.swift, DatabaseInitializer.swift, Logging.swift, PDFGenerator.swift, ImageLoader.swift, ConcurrentMap.swift, IconSize.swift, FocusedValues.swift, ImageZoom.swift (zoom levels of the iOS full-size image viewer)
   - **Localizable.xcstrings**: String Catalog of both apps (source language English)
 
 ## Build Commands
@@ -31,7 +34,7 @@ This is an Xcode project. Use Xcode to build and run:
 Lint and format, on macOS or Linux (SwiftFormat and SwiftLint on `PATH`; `brew install swiftformat swiftlint` on macOS):
 - `make lint`: SwiftFormat in check mode (`.swiftformat`), then SwiftLint `--strict` (`.swiftlint.yml`); fails on any finding
 - `make format`: rewrites what SwiftFormat can fix, then runs SwiftLint
-- `Shared/Auto-Generated/` (written by briq-utils) is excluded from both. Fix findings in the code, never with an inline `swiftlint:disable`/`swiftformat:disable` comment; a rule that does not fit the code is turned off in the config with a comment saying why
+- `BRIQKit/Sources/BRIQKit/Auto-Generated/` (written by briq-utils) is excluded from both. Fix findings in the code, never with an inline `swiftlint:disable`/`swiftformat:disable` comment; a rule that does not fit the code is turned off in the config with a comment saying why
 - SwiftFormat drops a redundant `return`, so a computed property whose body would then start with `set.` parses as a setter: SwiftLint reports it as `unused_setter_value`. Write such a body as an `if` expression, or use the `Set`'s property directly
 
 ## Core Architecture
@@ -63,7 +66,8 @@ The identity attributes behind each `Identifiable.id` carry uniqueness constrain
 ### Key Components
 - `CoreDataStack`: Manages the Core Data persistent container, contexts, and store reset/recovery
 - `DatabaseInitializer`: Owns first-launch import, failure recovery, and reinitialization
-- `BundledData`: Handles loading and parsing of LEGO data from ZIP archive
+- `BundledArchive` (BRIQKit): unzips `init.zip` and decodes it into `JSONData`
+- `BundledData`: imports the decoded `JSONData` into Core Data
 - `Database.swift`: Typed (`Codable`) user-data export and import; import validates the whole file before changing anything, throws `UserDataImportError` for invalid input and rethrows the Core Data error when the save fails
 - `ContentView`: Main entry point handling initialization flow vs main app UI
 - `ImageLoader` / `ThumbnailImage`: remote images, decoded at the size they are drawn and cached in memory; URLs that can never load (an HTTP 4xx other than 408 and 429, a bad or unsupported URL, data that is not an image) are not requested again until Retry (only `IconImage` shows one; rows and set icons try again after a relaunch); network errors, 5xx, 408 and 429 are retried on the next appearance. Use `ThumbnailImage` rather than `AsyncImage` for grids and rows
@@ -73,7 +77,7 @@ The identity attributes behind each `Identifiable.id` carry uniqueness constrain
 
 ### Theme System
 - Themes are loaded via `initThemesTree()` function in app initialization
-- Auto-generated theme data in `Auto-Generated/Themes.swift`
+- Auto-generated theme data in `BRIQKit/Sources/BRIQKit/Auto-Generated/Themes.swift`
 - Theme hierarchy accessible via the `AllThemes` global array (parent/children links set by `initThemesTree()`)
 
 ### Parts Lists Feature
@@ -96,5 +100,5 @@ The identity attributes behind each `Identifiable.id` carry uniqueness constrain
 - User-facing text is localized through `Shared/Localizable.xcstrings`. String literals passed to SwiftUI (`Text`, `Button`, `Label`, `Toggle`, `.navigationTitle`, ...) are `LocalizedStringKey`s and localized as is; a title passed through a property or parameter must be typed `LocalizedStringKey` too, and text built in code (enum display names, error descriptions, alerts) uses `String(localized:)`. A ternary of literals (`cond ? "A" : "B"`) is a `String`, which SwiftUI shows verbatim: wrap each branch in `Text(...)` or `String(localized:)`. A string with a count gets plural variants in the catalog instead of `count == 1 ? ... : ...`; Xcode adds the other keys to the catalog when it builds. Data names (sets, themes, colors, part categories) are not localized
 - Icon-only controls carry a text label (`Label` in toolbars, `.accessibilityLabel` elsewhere) and decorative images are `.accessibilityHidden`; `StarRatingView` is a single VoiceOver element named by its `label`, adjustable only when `isInteractive`
 - Platform-specific code mostly lives in `BRIQ-ios/`/`BRIQ-macos/`, but some shared views and utilities also branch on platform internally (`#if os(...)`)
-- Unit tests (Swift Testing) live in `BRIQTests/` (the `BRIQTests` target, hosted in the macOS app); they need Xcode to build and run
+- Unit tests (Swift Testing) of the app code live in `BRIQTests/` (the `BRIQTests` target, hosted in the macOS app) and need Xcode to build and run; those of BRIQKit live in `BRIQKit/Tests/BRIQKitTests/` and run anywhere with `swift test --package-path BRIQKit`
 - `Shared/` and `Resources/` are synchronized folders of both app targets: a new file there is in both apps without touching `project.pbxproj`. A platform-only file goes in the other target's membership exceptions for the folder (unchecking that target's membership box in Xcode); the macOS-only `Shared/` files are listed in the `BRIQ-ios` exception set

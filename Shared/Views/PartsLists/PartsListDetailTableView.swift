@@ -3,6 +3,7 @@
 //  BRIQ
 //
 
+import BRIQKit
 import SwiftUI
 
 extension PartsListPart {

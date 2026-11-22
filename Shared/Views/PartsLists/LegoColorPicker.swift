@@ -3,6 +3,7 @@
 //  BRIQ
 //
 
+import BRIQKit
 import SwiftUI
 
 struct LegoColorPicker: View {
@@ -30,6 +31,9 @@ struct LegoColorPicker: View {
     private var transparentColors: [(index: Int, color: PartColor)] {
         filteredColors.filter(\.color.isTransparent)
     }
+
+    /// A swatch brighter than this gets black text, a darker one white.
+    private static let darkTextLuminance = 0.5
 
     private let columns = [
         GridItem(.adaptive(minimum: 80, maximum: 120), spacing: 8),
@@ -133,19 +137,7 @@ struct LegoColorPicker: View {
     }
 
     private func contrastingColor(for color: PartColor) -> Color {
-        // Parse RGB to determine luminance
-        let scanner = Scanner(string: color.rgb)
-        var rgbValue: UInt64 = 0
-        scanner.scanHexInt64(&rgbValue)
-
-        let red = Double((rgbValue & 0xFF0000) >> 16) / 255.0
-        let green = Double((rgbValue & 0x00FF00) >> 8) / 255.0
-        let blue = Double(rgbValue & 0x0000FF) / 255.0
-
-        // Calculate relative luminance
-        let luminance = 0.299 * red + 0.587 * green + 0.114 * blue
-
-        return luminance > 0.5 ? .black : .white
+        color.rgbValue.luminance > Self.darkTextLuminance ? .black : .white
     }
 }
 

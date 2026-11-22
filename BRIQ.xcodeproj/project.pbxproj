@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		073301E82E73C3040057EDBB /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 073301E72E73C3040057EDBB /* ZIPFoundation */; };
-		073301EB2E73C3140057EDBB /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 073301EA2E73C3140057EDBB /* ZIPFoundation */; };
+		0B51E7B42F00A00100C0FFEE /* BRIQKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0B51E7B22F00A00100C0FFEE /* BRIQKit */; };
+		0B51E7B52F00A00100C0FFEE /* BRIQKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0B51E7B32F00A00100C0FFEE /* BRIQKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,7 +76,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				073301E82E73C3040057EDBB /* ZIPFoundation in Frameworks */,
+				0B51E7B42F00A00100C0FFEE /* BRIQKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -91,7 +91,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				073301EB2E73C3140057EDBB /* ZIPFoundation in Frameworks */,
+				0B51E7B52F00A00100C0FFEE /* BRIQKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -150,7 +150,7 @@
 			);
 			name = "BRIQ-macos";
 			packageProductDependencies = (
-				073301E72E73C3040057EDBB /* ZIPFoundation */,
+				0B51E7B22F00A00100C0FFEE /* BRIQKit */,
 			);
 			productName = "BRIQ-macos";
 			productReference = 073347F22E73BDC7006CBBAA /* BRIQ.app */;
@@ -198,7 +198,7 @@
 			);
 			name = "BRIQ-ios";
 			packageProductDependencies = (
-				073301EA2E73C3140057EDBB /* ZIPFoundation */,
+				0B51E7B32F00A00100C0FFEE /* BRIQKit */,
 			);
 			productName = "BRIQ-ios";
 			productReference = 075C34DC2E73BE4300CE4BC0 /* BRIQ-ios.app */;
@@ -236,7 +236,7 @@
 			mainGroup = 070755F62E739D24007C1FA4;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				073301E62E73C3040057EDBB /* XCRemoteSwiftPackageReference "ZIPFoundation" */,
+				0B51E7B12F00A00100C0FFEE /* XCLocalSwiftPackageReference "BRIQKit" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 070756002E739D24007C1FA4 /* Products */;
@@ -687,27 +687,21 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		073301E62E73C3040057EDBB /* XCRemoteSwiftPackageReference "ZIPFoundation" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/weichsel/ZIPFoundation";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.9.19;
-			};
+/* Begin XCLocalSwiftPackageReference section */
+		0B51E7B12F00A00100C0FFEE /* XCLocalSwiftPackageReference "BRIQKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = BRIQKit;
 		};
-/* End XCRemoteSwiftPackageReference section */
+/* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		073301E72E73C3040057EDBB /* ZIPFoundation */ = {
+		0B51E7B22F00A00100C0FFEE /* BRIQKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 073301E62E73C3040057EDBB /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
-			productName = ZIPFoundation;
+			productName = BRIQKit;
 		};
-		073301EA2E73C3140057EDBB /* ZIPFoundation */ = {
+		0B51E7B32F00A00100C0FFEE /* BRIQKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 073301E62E73C3040057EDBB /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
-			productName = ZIPFoundation;
+			productName = BRIQKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

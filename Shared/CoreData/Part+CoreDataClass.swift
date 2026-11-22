@@ -5,6 +5,7 @@
 //  Created by Éric Spérano on 13/09/25.
 //
 
+import BRIQKit
 import CoreData
 import Foundation
 

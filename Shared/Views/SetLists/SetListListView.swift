@@ -3,6 +3,7 @@
 //  BRIQ
 //
 
+import BRIQKit
 import SwiftUI
 
 /// iOS-only "List" view mode: a plain list of rows pushing into the

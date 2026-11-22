@@ -5,6 +5,7 @@
 //  Created by Éric Spérano on 9/11/25.
 //
 
+import BRIQKit
 import CoreData
 import SwiftUI
 

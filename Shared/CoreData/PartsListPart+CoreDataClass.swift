@@ -3,6 +3,7 @@
 //  BRIQ
 //
 
+import BRIQKit
 import CoreData
 import Foundation
 

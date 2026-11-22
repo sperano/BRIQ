@@ -4,8 +4,9 @@
 # (SWIFT_VERSION = 5.0): no rewrite may need a newer compiler.
 --swift-version 6.0
 --language-mode 5
-# Shared/Auto-Generated is written by briq-utils: a reformat would be undone by its next run.
---exclude BRIQ.xcodeproj,build,**/.build,Shared/Auto-Generated
+# BRIQKit/Sources/BRIQKit/Auto-Generated is written by briq-utils: a reformat would be undone by its
+# next run.
+--exclude BRIQ.xcodeproj,build,**/.build,BRIQKit/Sources/BRIQKit/Auto-Generated
 
 --indent 4
 # The code does not indent inside `#if` blocks.

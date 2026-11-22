@@ -7,35 +7,6 @@ import CoreData
 import Testing
 @testable import BRIQ
 
-struct SortKeyTests {
-    @Test func plainNumber() {
-        #expect(Set.sortKey(forNumber: "6080") == 6_080_000)
-    }
-
-    @Test func variantSuffix() {
-        #expect(Set.sortKey(forNumber: "6080-1") == 6_080_001)
-        #expect(Set.sortKey(forNumber: "6080-2") == 6_080_002)
-    }
-
-    @Test func plainNumberSortsBeforeItsVariants() {
-        #expect(Set.sortKey(forNumber: "6080") < Set.sortKey(forNumber: "6080-1"))
-    }
-
-    @Test func numericOrderBeatsStringOrder() {
-        // String comparison would put "10030-1" before "605-1"
-        #expect(Set.sortKey(forNumber: "605-1") < Set.sortKey(forNumber: "10030-1"))
-    }
-
-    @Test func nonNumericBaseFallsBackToZero() {
-        #expect(Set.sortKey(forNumber: "K123-1") == 1)
-        #expect(Set.sortKey(forNumber: "Build-a-Mini-2025") == 0)
-    }
-
-    @Test func oversizedSuffixIsClamped() {
-        #expect(Set.sortKey(forNumber: "100-2000") == 100_999)
-    }
-}
-
 @MainActor struct SetComputedPropertyTests {
     let stack = CoreDataStack(inMemory: true)
 

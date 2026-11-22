@@ -6,6 +6,7 @@
 //
 
 #if DEBUG
+import BRIQKit
 import CoreData
 import Foundation
 

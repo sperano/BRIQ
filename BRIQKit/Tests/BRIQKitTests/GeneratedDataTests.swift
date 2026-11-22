@@ -1,14 +1,14 @@
 //
 //  GeneratedDataTests.swift
-//  BRIQTests
+//  BRIQKitTests
 //
 //  Production code silently depends on positional lookup into the
 //  auto-generated tables (e.g. Set.themeName indexes AllThemes by themeID);
 //  these tests make that invariant explicit.
 //
 
+import BRIQKit
 import Testing
-@testable import BRIQ
 
 struct GeneratedDataTests {
     @Test func allThemesIDsMatchTheirIndices() {

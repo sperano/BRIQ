@@ -47,3 +47,14 @@ jobs:
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
             build
+
+  briqkit-linux:
+    runs-on: ubuntu-latest
+    container: swift:6.0
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build and test BRIQKit (Linux)
+        run: swift test --package-path BRIQKit

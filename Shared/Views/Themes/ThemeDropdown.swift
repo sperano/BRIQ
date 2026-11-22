@@ -5,6 +5,7 @@
 //  Created by Éric Spérano
 //
 
+import BRIQKit
 import SwiftUI
 
 struct ThemeDropdown: View {

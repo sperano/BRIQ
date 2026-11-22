@@ -2,6 +2,7 @@
 //  EditPartsListPartSheet.swift
 //  BRIQ
 
+import BRIQKit
 import CoreData
 import SwiftUI
 

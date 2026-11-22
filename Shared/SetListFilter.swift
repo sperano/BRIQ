@@ -3,6 +3,7 @@
 //  BRIQ
 //
 
+import BRIQKit
 import Foundation
 
 /// The set list's filter state, reduced to the single place that knows how to
